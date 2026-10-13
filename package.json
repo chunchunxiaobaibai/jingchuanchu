@@ -1,6 +1,6 @@
 {
   "name": "xiaobaifqy-engine",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,18 +17,20 @@
     "build:packages": "tsx scripts/build-packages.ts",
     "dev:singleplayer": "vite --config vite.singleplayer.config.ts",
     "build:singleplayer": "vite build --config vite.singleplayer.config.ts",
-    "pack:packages": "npm run build:packages && tsx scripts/pack-packages.ts"
+    "pack:packages": "npm run build:packages && tsx scripts/pack-packages.ts",
+    "dist:release": "npm run typecheck && npm run pack:packages && tsx scripts/distribution/build.ts",
+    "test:distribution": "npm run dist:release && tsx scripts/distribution/verify.ts"
   },
   "dependencies": {
     "zod": "^4.0.0",
-    "@xiaobai/ecs": "^0.2.0",
-    "@xiaobai/core": "^0.2.0",
-    "@xiaobai/renderer-2d": "^0.2.0",
-    "@xiaobai/input": "^0.2.0",
-    "@xiaobai/assets": "^0.2.0",
-    "@xiaobai/browser": "^0.2.0",
-    "@xiaobai/net": "^0.2.0",
-    "@xiaobai/net-server": "^0.2.0"
+    "@xiaobai/ecs": "^0.2.1",
+    "@xiaobai/core": "^0.2.1",
+    "@xiaobai/renderer-2d": "^0.2.1",
+    "@xiaobai/input": "^0.2.1",
+    "@xiaobai/assets": "^0.2.1",
+    "@xiaobai/browser": "^0.2.1",
+    "@xiaobai/net": "^0.2.1",
+    "@xiaobai/net-server": "^0.2.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.0",
@@ -45,5 +47,6 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "license": "MIT"
 }
