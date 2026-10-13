@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#176b58" />
+    <title>画一下 · 你画我猜</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23176b58'/%3E%3Cpath d='M8 23l3-8L22 5l5 5-11 11z' fill='white'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/">画一下<span>DRAW & GUESS</span></a>
+      <div class="connection">
+        <span id="connection-dot"></span><span id="connection-status" role="status">连接中</span
+        ><button id="reconnect" class="quiet" hidden>重新连接</button>
+      </div>
+    </header>
+    <main>
+      <section id="lobby" class="lobby">
+        <div class="intro">
+          <p class="eyebrow">给朋友的灵魂画作</p>
+          <h1>你画得出，<br />我就猜得到。</h1>
+          <p class="description">一支画笔，一点想象力。<br />叫上朋友，看看谁最懂你的画。</p>
+          <div class="drawing-decoration" aria-hidden="true">
+            <span class="sun">☀</span>
+            <div class="sketch-house">⌂</div>
+            <span class="sketch-label">这是……一栋房子？</span>
+          </div>
+          <p class="footnote">2–10 人 · 每回合 60 秒 · 浏览器直接玩</p>
+        </div>
+        <div class="entry">
+          <h2>一起开画</h2>
+          <p>创建一个房间，或带着房间码来。</p>
+          <form id="create-form">
+            <label for="name">你的昵称</label
+            ><input
+              id="name"
+              name="name"
+              placeholder="大家怎么称呼你？"
+              maxlength="16"
+              required
+              autocomplete="nickname"
+            /><button id="create" class="primary" type="submit" disabled>
+              创建房间 <span aria-hidden="true">↗</span>
+            </button>
+          </form>
+          <div class="divider">已有房间？</div>
+          <form id="join-form">
+            <label for="room-code">房间码</label>
+            <div class="join-row">
+              <input
+                id="room-code"
+                name="room"
+                placeholder="六位房间码"
+                maxlength="6"
+                pattern="[A-Za-z0-9]{6}"
+                required
+                autocomplete="off"
+              /><button id="join" type="submit" disabled>加入</button>
+            </div>
+          </form>
+          <p class="entry-note">房间码可以分享给好友。大家到齐后，由房主开始。</p>
+        </div>
+      </section>
+      <section id="game" hidden>
+        <div class="game-heading">
+          <div>
+            <p class="eyebrow">朋友们的画室</p>
+            <h1>
+              房间 <span id="room-id"></span
+              ><button id="copy-code" class="quiet">复制房间码</button>
+            </h1>
+          </div>
+          <button id="leave" class="quiet">离开房间</button>
+        </div>
+        <div class="play-layout">
+          <aside class="players-panel">
+            <div class="panel-title">
+              <h2>玩家</h2>
+              <span id="player-count"></span>
+            </div>
+            <ol id="players" class="players"></ol>
+            <p class="panel-note">猜中得分，画得好也得分。<br />每个人都能当一次画家。</p>
+          </aside>
+          <div class="drawing-panel">
+            <div class="round-bar">
+              <div>
+                <span id="phase" class="phase">等待开始</span
+                ><strong id="prompt">等朋友们到齐</strong>
+              </div>
+              <div class="round-meta">
+                <span id="round-number"></span><strong id="timer" aria-label="剩余时间">—</strong>
+              </div>
+            </div>
+            <div class="canvas-wrap">
+              <canvas id="canvas" aria-label="游戏画布，绘画者可以使用鼠标或触摸绘画"></canvas>
+              <div id="canvas-message" class="canvas-message">
+                <span>✎</span><strong>画布已经准备好了</strong>
+                <p>至少 2 人加入后，房主就可以开始。</p>
+              </div>
+            </div>
+            <div class="toolbar">
+              <div id="colors" class="colors" role="group" aria-label="画笔颜色"></div>
+              <label class="brush-label" for="brush"
+                >笔粗 <input id="brush" type="range" min="2" max="20" value="5" /></label
+              ><button id="clear" class="quiet" disabled>清空画布</button>
+            </div>
+            <div class="game-actions">
+              <p id="instruction"></p>
+              <button id="action" class="primary" hidden>开始游戏</button>
+            </div>
+          </div>
+          <aside class="guess-panel">
+            <div class="panel-title">
+              <h2>猜猜看</h2>
+              <span>灵感交流区</span>
+            </div>
+            <div
+              id="messages"
+              class="messages"
+              role="log"
+              aria-label="猜词记录"
+              aria-live="polite"
+            ></div>
+            <form id="guess-form">
+              <label class="sr-only" for="guess">输入你猜的词</label
+              ><input
+                id="guess"
+                placeholder="你觉得画的是什么？"
+                maxlength="80"
+                required
+                disabled
+                autocomplete="off"
+              /><button id="send-guess" class="primary" disabled>发送猜测</button>
+            </form>
+          </aside>
+        </div>
+      </section>
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+    </main>
+    <footer>画一下 <span>把想象力画给朋友看。</span></footer>
+    <script type="module" src="/main.ts"></script>
+  </body>
+</html>
