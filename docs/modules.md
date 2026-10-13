@@ -80,7 +80,7 @@ npm run pack:packages
 包输出在各包 `dist/`，安装包输出在根目录 `dist/packages/`。尚未上传 npm registry。外部项目可以选择本地 tgz，并同时提供所选包的内部依赖，例如只使用内核：
 
 ```bash
-npm install /path/to/xiaobai-ecs-0.2.0.tgz /path/to/xiaobai-core-0.2.0.tgz
+npm install /path/to/xiaobai-ecs-0.2.1.tgz /path/to/xiaobai-core-0.2.1.tgz
 ```
 
 `npm run test:packages` 会创建临时外部项目，用本地包离线安装，编译并执行 TS 消费代码，检查未选择的网络依赖没有进入安装结果。

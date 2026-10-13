@@ -12,6 +12,6 @@
     "noEmit": true,
     "customConditions": ["source"]
   },
-  "include": ["packages", "games", "apps", "tests", "*.ts", "scripts"],
+  "include": ["packages", "games", "apps", "tests", "*.ts", "scripts", "examples"],
   "exclude": ["**/dist", "node_modules"]
 }

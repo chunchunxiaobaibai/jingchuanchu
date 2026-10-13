@@ -2,6 +2,17 @@
 
 面向浏览器的 TypeScript ECS 引擎。支持按需组合单机与联机能力；引擎包不依赖游戏代码。仓库包含「拾光」单机示例和基础版「你画我猜」联网示例。
 
+## 使用引擎开发自己的游戏
+
+从 [开发手册](docs/development/README.md) 开始，包含快速入门、完整 API、自定义模块、浏览器与网络接入。
+可以生成包含 8 个安装包、文档、安装器与可运行 TS 项目的分发套件：
+
+```bash
+npm run test:distribution
+```
+
+输出在 `dist/releases/xiaobaifqy-engine-0.2.1.tar.gz`，可直接交给其他开发者。采用 [MIT](LICENSE)，尚未上传公共 npm。
+
 ## 启动
 
 需要 Node.js 22.12 或更高版本，使用 npm。源代码与测试使用严格 TS，页面结构和样式使用 HTML/CSS。
