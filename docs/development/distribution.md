@@ -48,6 +48,8 @@ dist/releases/
 内部依赖发布顺序为 ecs → core → browser/input/assets/renderer-2d/net → net-server。
 使用各包的 tgz 可以保证上传的内容与已验证产物一致。执行 `npm publish ./dist/packages/xiaobaibaifqy-jingchuanchu-ecs-0.3.0.tgz --access public --registry=https://registry.npmjs.org/`，依序发布其他模块。发布同一个名字/版本不可覆盖；首次发布后核对远端 integrity，并在外部项目按包名安装验证。不要把认证配置或凭据放进源码、README 或分发归档。
 
+发布命令成功后，新包可能暂时查询不到。npm 会在包可安装前执行扫描；官方说明通常约 5 分钟，繁忙时可能 15 分钟或更久。等待后再查询和安装，不要因为暂时的 404 重复发布同一个版本。依据：[npm 发布时扫描说明](https://github.blog/changelog/2026-07-28-npm-publish-time-malware-scanning-and-dual-use-metadata/)。
+
 ## 维护版本
 
 root 和所有引擎包使用同一版本，内部依赖范围跟随版本；此发行版为 0.3.0。
