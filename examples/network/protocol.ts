@@ -1,4 +1,4 @@
-import type { Decoder } from '@xiaobai/net';
+import type { Decoder } from '@xiaobaibaifqy/jingchuanchu-net';
 
 export type ClientMessage = { type: 'ping' };
 export type ServerMessage =

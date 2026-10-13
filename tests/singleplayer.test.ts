@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Engine } from '@xiaobai/core';
-import { Position2D } from '@xiaobai/renderer-2d';
-import { keyboardModule } from '@xiaobai/input/module';
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { Position2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { keyboardModule } from '@xiaobaibaifqy/jingchuanchu-input/module';
 import { Collector, collectorModule, resetCollector } from '../games/singleplayer/index.js';
 
 test('singleplayer logic runs headlessly, collects, clamps and resets without networking', () => {

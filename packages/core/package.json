@@ -1,7 +1,7 @@
 {
-  "name": "@xiaobai/core",
-  "version": "0.2.1",
-  "description": "Xiaobai engine core module",
+  "name": "@xiaobaibaifqy/jingchuanchu-core",
+  "version": "0.3.0",
+  "description": "Jingchuanchu (镜川初) TypeScript engine core module",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
@@ -25,6 +25,10 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobai/ecs": "^0.2.1"
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.3.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

@@ -14,7 +14,7 @@ function run(command: string, args: string[], cwd: string) {
 }
 const root = resolve('.');
 const version = (JSON.parse(await readFile('package.json', 'utf8')) as { version: string }).version;
-const archive = resolve('dist/releases', `xiaobaifqy-engine-${version}.tar.gz`);
+const archive = resolve('dist/releases', `jingchuanchu-engine-${version}.tar.gz`);
 const checksum = (await readFile(`${archive}.sha256`, 'utf8')).split(' ')[0];
 assert.equal(
   createHash('sha256')
@@ -22,10 +22,10 @@ assert.equal(
     .digest('hex'),
   checksum,
 );
-const temporary = await mkdtemp(join(tmpdir(), 'xiaobai-distribution-'));
+const temporary = await mkdtemp(join(tmpdir(), 'xiaobaibaifqy-jingchuanchu-distribution-'));
 try {
   run('tar', ['-xzf', archive, '-C', temporary], root);
-  const bundle = join(temporary, `xiaobaifqy-engine-${version}`);
+  const bundle = join(temporary, `jingchuanchu-engine-${version}`);
   const manifest = JSON.parse(await readFile(join(bundle, 'manifest.json'), 'utf8')) as {
     packages: Array<{ name: string; file: string; sha256: string }>;
   };
@@ -83,11 +83,17 @@ try {
   const coreLock = JSON.parse(await readFile(join(core, 'package-lock.json'), 'utf8')) as {
     packages: Record<string, unknown>;
   };
-  for (const forbidden of ['ws', 'zod', '@xiaobai/browser', '@xiaobai/net', '@xiaobai/net-server'])
+  for (const forbidden of [
+    'ws',
+    'zod',
+    '@xiaobaibaifqy/jingchuanchu-browser',
+    '@xiaobaibaifqy/jingchuanchu-net',
+    '@xiaobaibaifqy/jingchuanchu-net-server',
+  ])
     assert.equal(`node_modules/${forbidden}` in coreLock.packages, false);
   await writeFile(
     join(core, 'consumer.ts'),
-    "import { Engine } from '@xiaobai/core';\nimport { component } from '@xiaobai/ecs';\nconst Value = component<number>('Value'); const engine = new Engine(); const entity = engine.world.create(); engine.world.set(entity, Value, 42); if(engine.world.require(entity, Value) !== 42) throw new Error('Invalid ECS'); engine.dispose();\n",
+    "import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';\nimport { component } from '@xiaobaibaifqy/jingchuanchu-ecs';\nconst Value = component<number>('Value'); const engine = new Engine(); const entity = engine.world.create(); engine.world.set(entity, Value, 42); if(engine.world.require(entity, Value) !== 42) throw new Error('Invalid ECS'); engine.dispose();\n",
   );
   await writeFile(
     join(core, 'tsconfig.json'),
@@ -172,7 +178,12 @@ try {
   const starterLock = JSON.parse(await readFile(join(starter, 'package-lock.json'), 'utf8')) as {
     packages: Record<string, unknown>;
   };
-  for (const forbidden of ['ws', 'zod', '@xiaobai/net', '@xiaobai/net-server'])
+  for (const forbidden of [
+    'ws',
+    'zod',
+    '@xiaobaibaifqy/jingchuanchu-net',
+    '@xiaobaibaifqy/jingchuanchu-net-server',
+  ])
     assert.equal(`node_modules/${forbidden}` in starterLock.packages, false);
   // Production build is served by the consumer's own Vite, never the engine workspace.
   const { preview } = (await import(

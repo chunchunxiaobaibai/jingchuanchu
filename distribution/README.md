@@ -1,4 +1,4 @@
-# 小白 TS 2D 引擎 · {{VERSION}}
+# 镜川初 · Jingchuanchu Engine · {{VERSION}}
 
 这是可以交给其他开发者使用的分发套件，采用 MIT 授权。无需克隆引擎仓库。
 
@@ -47,4 +47,4 @@ examples/network 可单独安装并启动 ping 服务；其他 examples 展示�
 
 可把本目录或对应 tar.gz 交付给其他人。manifest.json 和 SHA256SUMS 记录安装包版本与内容校验值。
 本地 file 依赖需要保留 tgz。迁移项目时一起保存安装包，或配置自己的 registry。
-当前套件没有上传 npm，不能假设 @xiaobai 包名已在公共 registry 可用。
+公共包统一命名为 @xiaobaibaifqy/jingchuanchu-*；本地安装器只使用随归档提供的对应版本。

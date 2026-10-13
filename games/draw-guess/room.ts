@@ -1,5 +1,5 @@
-import { Engine, EventBus } from '@xiaobai/core';
-import { component, resource, type Entity } from '@xiaobai/ecs';
+import { Engine, EventBus } from '@xiaobaibaifqy/jingchuanchu-core';
+import { component, resource, type Entity } from '@xiaobaibaifqy/jingchuanchu-ecs';
 import type { RoomSnapshot, ServerMessage, Stroke } from './protocol.js';
 
 export const Player = component<{ id: string; name: string }>('Player');

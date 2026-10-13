@@ -1,7 +1,7 @@
 {
-  "name": "@xiaobai/renderer-2d",
-  "version": "0.2.1",
-  "description": "Xiaobai engine renderer-2d module",
+  "name": "@xiaobaibaifqy/jingchuanchu-renderer-2d",
+  "version": "0.3.0",
+  "description": "Jingchuanchu (镜川初) TypeScript engine renderer-2d module",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
@@ -33,7 +33,11 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobai/core": "^0.2.1",
-    "@xiaobai/ecs": "^0.2.1"
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.3.0",
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.3.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

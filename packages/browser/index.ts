@@ -1,4 +1,4 @@
-import type { Cleanup, Engine, EngineModule, Scope } from '@xiaobai/core';
+import type { Cleanup, Engine, EngineModule, Scope } from '@xiaobaibaifqy/jingchuanchu-core';
 
 /** Injectable host boundary allows the clock to be tested without a DOM. */
 export interface BrowserDriver {

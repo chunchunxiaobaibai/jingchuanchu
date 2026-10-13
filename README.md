@@ -1,8 +1,14 @@
-# 小白 TS 2D 引擎
+# 镜川初 · Jingchuanchu Engine
 
 面向浏览器的 TypeScript ECS 引擎。支持按需组合单机与联机能力；引擎包不依赖游戏代码。仓库包含「拾光」单机示例和基础版「你画我猜」联网示例。
 
 ## 使用引擎开发自己的游戏
+
+公共 npm 安装所需模块，内部依赖由 npm 自动补齐：
+
+```bash
+npm install @xiaobaibaifqy/jingchuanchu-core @xiaobaibaifqy/jingchuanchu-browser @xiaobaibaifqy/jingchuanchu-renderer-2d @xiaobaibaifqy/jingchuanchu-input
+```
 
 从 [开发手册](docs/development/README.md) 开始，包含快速入门、完整 API、自定义模块、浏览器与网络接入。
 可以生成包含 8 个安装包、文档、安装器与可运行 TS 项目的分发套件：
@@ -11,7 +17,7 @@
 npm run test:distribution
 ```
 
-输出在 `dist/releases/xiaobaifqy-engine-0.2.1.tar.gz`，可直接交给其他开发者。采用 [MIT](LICENSE)，尚未上传公共 npm。
+输出在 `dist/releases/jingchuanchu-engine-0.3.0.tar.gz`，可直接交给其他开发者。采用 [MIT](LICENSE)。
 
 ## 启动
 
@@ -34,34 +40,34 @@ npm run dev:singleplayer
 
 ## 独立包
 
-| 包                     | 职责                                                       |
-| ---------------------- | ---------------------------------------------------------- |
-| `@xiaobai/ecs`         | 实体、代际 ID、稀疏集、组件查询、世界资源、延迟命令        |
-| `@xiaobai/core`        | 固定步长、系统顺序与耗时、模块依赖、事件、作用域、生命周期 |
-| `@xiaobai/browser`     | 浏览器帧循环、页面可见性与暂停恢复                         |
-| `@xiaobai/renderer-2d` | Canvas 2D、坐标转换、基础图形、笔画                        |
-| `@xiaobai/input`       | 键盘状态、指针输入与捕获清理                               |
-| `@xiaobai/assets`      | 资源缓存、共享加载、失败重试与释放                         |
-| `@xiaobai/net`         | 浏览器连接、消息解码边界、房间目录与限流                   |
-| `@xiaobai/net-server`  | Node WebSocket、消息大小限制、心跳与发送积压保护           |
+| 包                                        | 职责                                                       |
+| ----------------------------------------- | ---------------------------------------------------------- |
+| `@xiaobaibaifqy/jingchuanchu-ecs`         | 实体、代际 ID、稀疏集、组件查询、世界资源、延迟命令        |
+| `@xiaobaibaifqy/jingchuanchu-core`        | 固定步长、系统顺序与耗时、模块依赖、事件、作用域、生命周期 |
+| `@xiaobaibaifqy/jingchuanchu-browser`     | 浏览器帧循环、页面可见性与暂停恢复                         |
+| `@xiaobaibaifqy/jingchuanchu-renderer-2d` | Canvas 2D、坐标转换、基础图形、笔画                        |
+| `@xiaobaibaifqy/jingchuanchu-input`       | 键盘状态、指针输入与捕获清理                               |
+| `@xiaobaibaifqy/jingchuanchu-assets`      | 资源缓存、共享加载、失败重试与释放                         |
+| `@xiaobaibaifqy/jingchuanchu-net`         | 浏览器连接、消息解码边界、房间目录与限流                   |
+| `@xiaobaibaifqy/jingchuanchu-net-server`  | Node WebSocket、消息大小限制、心跳与发送积压保护           |
 
-包均提供独立公开入口、ESM、TS 声明和源代码，可打包为本地 tgz。未上传 npm registry。ECS 无其他依赖；外部项目只选择单机组合时不会带入网络包。仓库完整安装包含两个示例的依赖，单机页面不加载网络代码。网络服务端的 `ws` 只在服务端包中，游戏协议的 `zod` 留在游戏层。
+包均提供独立公开入口、ESM、TS 声明和源代码，可打包为本地 tgz。可通过公共 npm 包名或本地 tgz 使用。ECS 无其他依赖；外部项目只选择单机组合时不会带入网络包。仓库完整安装包含两个示例的依赖，单机页面不加载网络代码。网络服务端的 `ws` 只在服务端包中，游戏协议的 `zod` 留在游戏层。
 
 安装方法、自定义模块、生命周期与组合示例见 [模块指南](docs/modules.md)。
 
 ## 引擎与游戏的边界
 
 ```text
-apps（页面与服务启动） → games（具体玩法） → @xiaobai/*（引擎）
+apps（页面与服务启动） → games（具体玩法） → @xiaobaibaifqy/jingchuanchu-*（引擎）
 ```
 
 跨引擎包只使用公开包名导入，不访问兄弟目录内部文件。渲染、输入、资源、网络和浏览器运行通过 `EngineModule` 安装：
 
 ```ts
-import { Engine } from '@xiaobai/core';
-import { browserModule } from '@xiaobai/browser';
-import { canvas2DModule } from '@xiaobai/renderer-2d/module';
-import { keyboardModule } from '@xiaobai/input/module';
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { browserModule } from '@xiaobaibaifqy/jingchuanchu-browser';
+import { canvas2DModule } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/module';
+import { keyboardModule } from '@xiaobaibaifqy/jingchuanchu-input/module';
 
 const engine = new Engine();
 engine.install([canvas2DModule({ canvas }), keyboardModule(), yourGameModule(), browserModule()]);

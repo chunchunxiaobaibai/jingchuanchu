@@ -1,8 +1,8 @@
 # API 参考
 
-适用 0.2.1。参数名称对应源码；`T` 表示调用方定义的数据类型。所有引擎模块 ID、组件 token 与系统 ID 都在各自实例范围中使用。
+适用 0.3.0。参数名称对应源码；`T` 表示调用方定义的数据类型。所有引擎模块 ID、组件 token 与系统 ID 都在各自实例范围中使用。
 
-## @xiaobai/ecs
+## @xiaobaibaifqy/jingchuanchu-ecs
 
 ### 类型与 token
 
@@ -40,7 +40,7 @@
 dispose 后 create/set/require/remove/query、资源操作、defer/flush 不可使用。get/isAlive/has/destroy 的无效引用行为如表中所示。
 组件值允许 undefined 时用 has 区分“存在且值为 undefined”与“缺失”。
 
-## @xiaobai/core
+## @xiaobaibaifqy/jingchuanchu-core
 
 ### Engine、System 与更新上下文
 
@@ -102,7 +102,7 @@ EngineEvents 的 started、paused、resumed、stopped、disposed payload 均为 
 
 emit 中新增的订阅不会进入本次通知；清除/取消也不改变已经捕获的本次列表。EventBus 不做 payload 克隆或帧间缓存。
 
-## @xiaobai/browser
+## @xiaobaibaifqy/jingchuanchu-browser
 
 | API           | 参数/返回                                                                                                 | 说明                                                             |
 | ------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
@@ -112,7 +112,7 @@ emit 中新增的订阅不会进入本次通知；清除/取消也不改变已�
 BrowserDriver 的方法：requestFrame(callback: (milliseconds: number) => void): number、cancelFrame(id: number): void、isHidden(): boolean、subscribeVisibility(callback: () => void): () => void。
 默认驱动使用 requestAnimationFrame 和 document.hidden。发生推进异常时停止驱动/引擎并调用 onError；browserModule 默认 onError 输出到 console.error。
 
-## @xiaobai/renderer-2d
+## @xiaobaibaifqy/jingchuanchu-renderer-2d
 
 ### 普通入口
 
@@ -134,7 +134,7 @@ BrowserDriver 的方法：requestFrame(callback: (milliseconds: number) => void)
 `canvas2DModule({ canvas, width?, height?, renderWorld?, background? }): EngineModule`，ID renderer-2d。
 renderWorld 默认 true，内置 render 系统 ID renderer-2d:world，order=100；每帧 clear 后 drawWorld。renderWorld=false 时由游戏自定义绘制。
 
-## @xiaobai/input
+## @xiaobaibaifqy/jingchuanchu-input
 
 | API               | 参数/返回                                                                           | 说明                            |
 | ----------------- | ----------------------------------------------------------------------------------- | ------------------------------- |
@@ -151,7 +151,7 @@ renderWorld 默认 true，内置 render 系统 ID renderer-2d:world，order=100�
 - keyboardModule(options?: { target?: EventTarget; preventDefault?: readonly string[] }): EngineModule，ID keyboard-input，默认 target=window。
 - pointerModule({ id?: string; canvas: HTMLCanvasElement; handlers: PointerHandlers }): EngineModule，默认 ID pointer-input，可以不同 ID 安装多个指针绑定。
 
-## @xiaobai/assets
+## @xiaobaibaifqy/jingchuanchu-assets
 
 `new AssetCache<T>(load: (url: string) => Promise<T>, release?: (asset: T) => void)`。
 
@@ -164,7 +164,7 @@ renderWorld 默认 true，内置 render 系统 ID renderer-2d:world，order=100�
 `/module` 导出 `assetModule<T>({ id?, load, release? }): AssetModule<T>`，默认 ID assets。
 AssetModule<T> 扩展 EngineModule，额外字段 cache: Token<AssetCache<T>>。setup 创建服务，dispose 清理缓存。
 
-## @xiaobai/net
+## @xiaobaibaifqy/jingchuanchu-net
 
 ### BrowserConnection<Client, Server>
 
@@ -199,7 +199,7 @@ AssetModule<T> 扩展 EngineModule，额外字段 cache: Token<AssetCache<T>>。
 `/module`：networkModule<Client, Server>({ id?, url: string | (() => string), decoder, onMessage, onStatus? }): NetworkModule<Client, Server>，默认 ID network。
 额外字段 connection 是服务 token。started 时连接，暂停不关闭，停止/销毁关闭；暂停中新增实例在 resumed 时首次连接。
 
-## @xiaobai/net-server
+## @xiaobaibaifqy/jingchuanchu-net-server
 
 `new WebSocketHost<Client>(http: node:http.Server, decoder: Decoder<Client>, handlers, allowedOrigins?: readonly string[])`。
 handlers 包含 open(peer)、message(peer, message: Client)、close(peer)、error(peer, message: string)，均同步返回 void。allowedOrigins 默认空列表。

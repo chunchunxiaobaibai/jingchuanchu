@@ -3,8 +3,8 @@
 ## 绘制
 
 ```ts
-import { Position2D, Shape2D } from '@xiaobai/renderer-2d';
-import { canvas2DModule, Renderer2D } from '@xiaobai/renderer-2d/module';
+import { Position2D, Shape2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { canvas2DModule, Renderer2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/module';
 
 engine.install([canvas2DModule({ canvas, width: 960, height: 600 })]);
 const object = engine.world.create();
@@ -77,7 +77,7 @@ AssetCache 接受自己的 Promise loader。并发读取相同 URL 共享一次�
 clear 释放所有已登记资源，缓存仍可再次使用；dispose 关闭缓存，此后 get 返回拒绝的 Promise。
 
 ```ts
-import { assetModule } from '@xiaobai/assets/module';
+import { assetModule } from '@xiaobaibaifqy/jingchuanchu-assets/module';
 
 const images = assetModule<ImageBitmap>({
   id: 'images',

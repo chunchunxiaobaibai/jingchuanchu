@@ -1,10 +1,10 @@
 import './style.css';
-import { Engine } from '@xiaobai/core';
-import { browserModule } from '@xiaobai/browser';
-import type { Point } from '@xiaobai/renderer-2d';
-import { canvas2DModule, Renderer2D } from '@xiaobai/renderer-2d/module';
-import { pointerModule } from '@xiaobai/input/module';
-import { networkModule } from '@xiaobai/net/module';
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { browserModule } from '@xiaobaibaifqy/jingchuanchu-browser';
+import type { Point } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { canvas2DModule, Renderer2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/module';
+import { pointerModule } from '@xiaobaibaifqy/jingchuanchu-input/module';
+import { networkModule } from '@xiaobaibaifqy/jingchuanchu-net/module';
 import {
   COLORS,
   serverMessageSchema,

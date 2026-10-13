@@ -3,7 +3,7 @@
 ## 实体是引用，组件是数据
 
 ```ts
-import { World, component } from '@xiaobai/ecs';
+import { World, component } from '@xiaobaibaifqy/jingchuanchu-ecs';
 
 const Position = component<{ x: number; y: number }>('Position');
 const Velocity = component<{ x: number; y: number }>('Velocity');
@@ -43,7 +43,7 @@ Engine 每个固定逻辑步后调用 `flush()`；单独使用 World 时由调�
 ## 世界资源
 
 ```ts
-import { resource } from '@xiaobai/ecs';
+import { resource } from '@xiaobaibaifqy/jingchuanchu-ecs';
 
 const Match = resource<{ elapsed: number }>('Match');
 world.setResource(Match, { elapsed: 0 });

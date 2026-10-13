@@ -1,5 +1,5 @@
-import type { EngineModule } from '@xiaobai/core';
-import { resource } from '@xiaobai/ecs';
+import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
+import { resource } from '@xiaobaibaifqy/jingchuanchu-ecs';
 import { Canvas2D } from './index.js';
 
 export const Renderer2D = resource<Canvas2D>('Renderer2D');

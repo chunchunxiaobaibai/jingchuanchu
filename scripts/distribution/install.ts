@@ -74,7 +74,12 @@ if (args.includes('--help')) {
     for (const dependency of Object.keys(entry.dependencies))
       if (byName.has(dependency)) select(dependency);
   }
-  for (const name of selected) select(name.startsWith('@xiaobai/') ? name : `@xiaobai/${name}`);
+  for (const name of selected)
+    select(
+      name.startsWith('@xiaobaibaifqy/jingchuanchu-')
+        ? name
+        : `@xiaobaibaifqy/jingchuanchu-${name}`,
+    );
   const files: string[] = [];
   for (const name of needed) {
     const entry = byName.get(name)!;

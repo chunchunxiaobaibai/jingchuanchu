@@ -28,7 +28,7 @@ test('engine packages declare dependencies and never import sibling internals or
             resolve(dirname(path), specifier).startsWith(directory + sep),
             `${manifest.name} imports internals: ${specifier}`,
           );
-        else if (specifier.startsWith('@xiaobai/'))
+        else if (specifier.startsWith('@xiaobaibaifqy/jingchuanchu-'))
           assert.ok(
             specifier.split('/').slice(0, 2).join('/') in manifest.dependencies,
             `Undeclared dependency: ${specifier}`,

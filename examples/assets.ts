@@ -1,5 +1,5 @@
-import { Engine } from '@xiaobai/core';
-import { assetModule } from '@xiaobai/assets/module';
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { assetModule } from '@xiaobaibaifqy/jingchuanchu-assets/module';
 
 let loads = 0;
 const released: string[] = [];

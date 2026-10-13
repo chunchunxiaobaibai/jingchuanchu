@@ -1,16 +1,22 @@
-# @xiaobai/input
+# @xiaobaibaifqy/jingchuanchu-input
 
 键盘与指针输入。/module 提供 keyboardModule、pointerModule 和 Keyboard 服务 token。
 
 ## 安装
 
-当前通过引擎分发套件的 install.mjs 安装，可选择本包并自动补齐内部依赖，尚未上传公共 npm。也可以同时将本包与所需内部包的 tgz 传给 npm install。
+公共 npm 安装：
+
+```bash
+npm install @xiaobaibaifqy/jingchuanchu-input
+```
+
+也可通过镜川初分发套件的 install.mjs 选择模块，自动补齐内部依赖。本地 tgz 安装时需同时提供所需内部包。
 
 ## 使用
 
 ```ts
-import { Scope } from '@xiaobai/core';
-import { KeyboardInput } from '@xiaobai/input';
+import { Scope } from '@xiaobaibaifqy/jingchuanchu-core';
+import { KeyboardInput } from '@xiaobaibaifqy/jingchuanchu-input';
 const scope = new Scope();
 const input = new KeyboardInput(window, ['ArrowLeft', 'ArrowRight']);
 scope.own(() => input.dispose());

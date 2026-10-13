@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Engine, EventBus, Scope } from '@xiaobai/core';
+import { Engine, EventBus, Scope } from '@xiaobaibaifqy/jingchuanchu-core';
 
 test('fixed steps, ordering, pause and large-frame clamp', () => {
   const engine = new Engine({ tickRate: 10, maxSteps: 3 });

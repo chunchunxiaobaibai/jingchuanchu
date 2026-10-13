@@ -1,15 +1,21 @@
-# @xiaobai/net
+# @xiaobaibaifqy/jingchuanchu-net
 
 浏览器消息连接、Decoder、房间目录与限流。/module 提供 networkModule，不内置具体游戏协议。
 
 ## 安装
 
-当前通过引擎分发套件的 install.mjs 安装，可选择本包并自动补齐内部依赖，尚未上传公共 npm。也可以同时将本包与所需内部包的 tgz 传给 npm install。
+公共 npm 安装：
+
+```bash
+npm install @xiaobaibaifqy/jingchuanchu-net
+```
+
+也可通过镜川初分发套件的 install.mjs 选择模块，自动补齐内部依赖。本地 tgz 安装时需同时提供所需内部包。
 
 ## 使用
 
 ```ts
-import { RoomDirectory } from '@xiaobai/net';
+import { RoomDirectory } from '@xiaobaibaifqy/jingchuanchu-net';
 const rooms = new RoomDirectory<{ started: boolean }>();
 rooms.create('room-1', { started: false });
 rooms.join('room-1', 'player-1');

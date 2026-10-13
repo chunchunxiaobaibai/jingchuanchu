@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { resolve as resolvePath } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { WebSocketHost } from '@xiaobai/net-server';
+import { WebSocketHost } from '@xiaobaibaifqy/jingchuanchu-net-server';
 import { clientDecoder } from './protocol.js';
 
 export async function createPingServer(port = 3002) {

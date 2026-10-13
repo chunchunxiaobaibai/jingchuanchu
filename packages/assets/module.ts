@@ -1,5 +1,5 @@
-import type { EngineModule } from '@xiaobai/core';
-import { resource, type Token } from '@xiaobai/ecs';
+import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
+import { resource, type Token } from '@xiaobaibaifqy/jingchuanchu-ecs';
 import { AssetCache } from './index.js';
 
 export interface AssetModule<T> extends EngineModule {

@@ -1,5 +1,18 @@
 # 更新记录
 
+## 0.3.0 · 镜川初
+
+### 调整
+
+- 引擎正式命名为「镜川初 · Jingchuanchu Engine」。
+- 公共包统一为 `@xiaobaibaifqy/jingchuanchu-*`，同步迁移源码、游戏、模板、依赖和文档。
+- 包默认发布到公共 npm registry，使用 MIT 授权。
+
+### 迁移
+
+- 原 `@xiaobai/core` 改为 `@xiaobaibaifqy/jingchuanchu-core`，其他模块按相同规则更名；`/module` 子路径保留。
+- 原本地包 0.2.1 用户需要更新依赖和 import；引擎运行接口保持原有契约。
+
 ## 0.2.1
 
 ### 新增

@@ -1,5 +1,5 @@
-import type { EngineModule } from '@xiaobai/core';
-import { resource, type Token } from '@xiaobai/ecs';
+import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
+import { resource, type Token } from '@xiaobaibaifqy/jingchuanchu-ecs';
 import { BrowserConnection, type Decoder } from './index.js';
 
 export interface NetworkModule<Client, Server> extends EngineModule {

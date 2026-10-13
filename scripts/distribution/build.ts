@@ -14,7 +14,7 @@ interface PackageManifest {
 const root = JSON.parse(await readFile('package.json', 'utf8')) as { version: string };
 if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(root.version))
   throw new Error('Invalid release version');
-const name = `xiaobaifqy-engine-${root.version}`;
+const name = `jingchuanchu-engine-${root.version}`;
 const parent = resolve('dist/releases');
 const output = join(parent, name);
 const license = await readFile('LICENSE', 'utf8');
@@ -39,7 +39,7 @@ for (const directory of await readdir('packages')) {
   await access(join(packagePath, 'README.md'));
   for (const dependency of Object.keys(manifest.dependencies))
     if (
-      dependency.startsWith('@xiaobai/') &&
+      dependency.startsWith('@xiaobaibaifqy/jingchuanchu-') &&
       manifest.dependencies[dependency] !== `^${root.version}`
     )
       throw new Error(`Dependency version mismatch: ${manifest.name}`);
@@ -108,7 +108,7 @@ await writeFile(
   join(output, 'manifest.json'),
   JSON.stringify(
     {
-      name: 'xiaobaifqy-engine',
+      name: 'jingchuanchu-engine',
       version: root.version,
       license: 'MIT',
       sourceRevision: revision.status === 0 ? revision.stdout.trim() : null,

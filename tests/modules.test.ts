@@ -1,11 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Engine } from '@xiaobai/core';
-import { resource } from '@xiaobai/ecs';
-import { browserModule, type BrowserDriver } from '@xiaobai/browser';
-import { assetModule } from '@xiaobai/assets/module';
-import { keyboardModule, Keyboard } from '@xiaobai/input/module';
-import { networkModule } from '@xiaobai/net/module';
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { resource } from '@xiaobaibaifqy/jingchuanchu-ecs';
+import { browserModule, type BrowserDriver } from '@xiaobaibaifqy/jingchuanchu-browser';
+import { assetModule } from '@xiaobaibaifqy/jingchuanchu-assets/module';
+import { keyboardModule, Keyboard } from '@xiaobaibaifqy/jingchuanchu-input/module';
+import { networkModule } from '@xiaobaibaifqy/jingchuanchu-net/module';
 
 test('modules install in batches, enforce dependencies and roll back provided services', () => {
   const engine = new Engine();

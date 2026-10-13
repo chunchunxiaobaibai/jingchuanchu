@@ -1,6 +1,6 @@
 # 引擎开发手册
 
-适用版本：0.2.1。读者可以是游戏开发者，也可以是在引擎上增加模块的开发者。
+适用版本：0.3.0。读者可以是游戏开发者，也可以是在引擎上增加模块的开发者。
 引擎、示例和文档按 MIT 授权，许可证原文见分发根目录 `LICENSE`。
 
 ## 阅读顺序
@@ -35,7 +35,7 @@ TS 最低版本依据：[NoInfer 官方说明](https://www.typescriptlang.org/do
 ## 分发目录
 
 ```text
-xiaobaifqy-engine-0.2.1/
+jingchuanchu-engine-0.3.0/
   README.md              分发安装说明
   LICENSE                MIT 授权
   manifest.json          包版本、依赖、文件名和 SHA-256

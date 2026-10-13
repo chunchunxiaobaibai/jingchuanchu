@@ -1,7 +1,7 @@
-import type { EngineModule } from '@xiaobai/core';
-import { resource, type Entity } from '@xiaobai/ecs';
-import { Position2D, Shape2D, type Point } from '@xiaobai/renderer-2d';
-import { Keyboard } from '@xiaobai/input/module';
+import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
+import { resource, type Entity } from '@xiaobaibaifqy/jingchuanchu-ecs';
+import { Position2D, Shape2D, type Point } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { Keyboard } from '@xiaobaibaifqy/jingchuanchu-input/module';
 
 export const Game = resource<{ player: Entity; target: Point | null }>('MyGame');
 export function gameModule(): EngineModule {

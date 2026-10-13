@@ -5,7 +5,7 @@
 解压分发归档，保留 `packages` 与 `starters` 的相对位置：
 
 ```bash
-cd xiaobaifqy-engine-0.2.1/starters/browser
+cd jingchuanchu-engine-0.3.0/starters/browser
 npm install
 npm run dev
 ```
@@ -13,14 +13,14 @@ npm run dev
 访问 http://localhost:5175 。方向键或 WASD 移动圆形角色，点击画布设置目的地。暂停按钮控制 Engine。
 `npm run check` 验证 TS，`npm run build` 生成 `dist` 静态网页，`npm run preview` 在 4175 端口预览构建结果。
 
-安装时从归档中的本地 tgz 获取引擎，Vite 和 TypeScript 从 npm 获取。引擎包尚未上传公共 npm；不要把此步骤替换为 `npm install @xiaobai/core`。
+安装时从归档中的本地 tgz 获取引擎，Vite 和 TypeScript 从 npm 获取。现有项目也可以通过公共 npm 安装 `@xiaobaibaifqy/jingchuanchu-core` 等所需模块。
 
 ## 路线二：接入自己的项目
 
 在你自己的项目目录运行安装器，下面路径替换成实际解压位置：
 
 ```bash
-node /path/to/xiaobaifqy-engine-0.2.1/install.mjs --preset singleplayer
+node /path/to/jingchuanchu-engine-0.3.0/install.mjs --preset singleplayer
 ```
 
 预设及用途：

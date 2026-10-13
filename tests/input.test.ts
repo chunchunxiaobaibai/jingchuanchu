@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Scope } from '@xiaobai/core';
-import { bindPointer } from '@xiaobai/input';
+import { Scope } from '@xiaobaibaifqy/jingchuanchu-core';
+import { bindPointer } from '@xiaobaibaifqy/jingchuanchu-input';
 
 test('pointer input finishes once and releases active capture on module cleanup', () => {
   class Canvas extends EventTarget {

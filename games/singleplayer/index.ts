@@ -1,7 +1,7 @@
-import type { EngineModule } from '@xiaobai/core';
-import { component, resource, type Entity, type World } from '@xiaobai/ecs';
-import { Position2D, Shape2D, type Point } from '@xiaobai/renderer-2d';
-import { Keyboard } from '@xiaobai/input/module';
+import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
+import { component, resource, type Entity, type World } from '@xiaobaibaifqy/jingchuanchu-ecs';
+import { Position2D, Shape2D, type Point } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { Keyboard } from '@xiaobaibaifqy/jingchuanchu-input/module';
 
 const Star = component<boolean>('Star');
 export interface CollectorState {

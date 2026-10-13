@@ -1,15 +1,21 @@
-# @xiaobai/assets
+# @xiaobaibaifqy/jingchuanchu-assets
 
 Promise 资源缓存、共享加载、失败重试与释放。/module 提供 assetModule。
 
 ## 安装
 
-当前通过引擎分发套件的 install.mjs 安装，可选择本包并自动补齐内部依赖，尚未上传公共 npm。也可以同时将本包与所需内部包的 tgz 传给 npm install。
+公共 npm 安装：
+
+```bash
+npm install @xiaobaibaifqy/jingchuanchu-assets
+```
+
+也可通过镜川初分发套件的 install.mjs 选择模块，自动补齐内部依赖。本地 tgz 安装时需同时提供所需内部包。
 
 ## 使用
 
 ```ts
-import { AssetCache } from '@xiaobai/assets';
+import { AssetCache } from '@xiaobaibaifqy/jingchuanchu-assets';
 const cache = new AssetCache(async (url: string) => ({ url }));
 const asset = await cache.get('level-1');
 console.log(asset.url);

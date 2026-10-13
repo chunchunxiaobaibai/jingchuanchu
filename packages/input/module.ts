@@ -1,5 +1,5 @@
-import type { EngineModule } from '@xiaobai/core';
-import { resource } from '@xiaobai/ecs';
+import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
+import { resource } from '@xiaobaibaifqy/jingchuanchu-ecs';
 import { KeyboardInput, bindPointer, type PointerHandlers } from './index.js';
 
 export const Keyboard = resource<KeyboardInput>('KeyboardInput');

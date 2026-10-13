@@ -1,7 +1,7 @@
 {
-  "name": "@xiaobai/ecs",
-  "version": "0.2.1",
-  "description": "Xiaobai engine ecs module",
+  "name": "@xiaobaibaifqy/jingchuanchu-ecs",
+  "version": "0.3.0",
+  "description": "Jingchuanchu (镜川初) TypeScript engine ecs module",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
@@ -24,5 +24,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

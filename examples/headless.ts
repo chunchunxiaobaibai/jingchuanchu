@@ -1,5 +1,5 @@
-import { Engine } from '@xiaobai/core';
-import { component } from '@xiaobai/ecs';
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { component } from '@xiaobaibaifqy/jingchuanchu-ecs';
 
 const Position = component<{ x: number }>('Position');
 const Velocity = component<{ x: number }>('Velocity');

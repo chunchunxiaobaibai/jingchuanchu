@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { AssetCache } from '@xiaobai/assets';
+import { AssetCache } from '@xiaobaibaifqy/jingchuanchu-assets';
 
 test('asset cache shares loads, evicts failures and releases resources', async () => {
   let loads = 0;

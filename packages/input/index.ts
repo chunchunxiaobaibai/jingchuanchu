@@ -1,4 +1,4 @@
-import type { Scope } from '@xiaobai/core';
+import type { Scope } from '@xiaobaibaifqy/jingchuanchu-core';
 export interface PointerHandlers {
   down(event: PointerEvent): void;
   move(event: PointerEvent): void;

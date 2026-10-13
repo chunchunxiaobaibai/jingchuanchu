@@ -4,26 +4,26 @@
 
 包决定项目引用哪些代码；`EngineModule` 决定实例启用哪些功能。所有包均有 ESM、TS 声明和独立公开入口。仅安装 ECS，不会引入渲染或网络；单机需要的包也不会安装 `ws`、`zod` 或联网游戏规则。
 
-| 包                     | 普通入口                                    | 模块入口                                           | 内部依赖         |
-| ---------------------- | ------------------------------------------- | -------------------------------------------------- | ---------------- |
-| `@xiaobai/ecs`         | World、组件/资源 token                      | 无                                                 | 无               |
-| `@xiaobai/core`        | Engine、Scope、EventBus                     | 自定义 EngineModule 接口                           | ecs              |
-| `@xiaobai/browser`     | runBrowser、BrowserDriver、browserModule    | 同普通入口                                         | core             |
-| `@xiaobai/renderer-2d` | Canvas2D、Position2D、Shape2D               | `/module`：canvas2DModule、Renderer2D              | core、ecs        |
-| `@xiaobai/input`       | KeyboardInput、bindPointer                  | `/module`：keyboardModule、pointerModule、Keyboard | core、ecs        |
-| `@xiaobai/assets`      | AssetCache                                  | `/module`：assetModule                             | core、ecs        |
-| `@xiaobai/net`         | BrowserConnection、RoomDirectory、RateLimit | `/module`：networkModule                           | core、ecs        |
-| `@xiaobai/net-server`  | WebSocketHost                               | 显式异步 close，由服务入口管理                     | net；外部依赖 ws |
+| 包                                        | 普通入口                                    | 模块入口                                           | 内部依赖         |
+| ----------------------------------------- | ------------------------------------------- | -------------------------------------------------- | ---------------- |
+| `@xiaobaibaifqy/jingchuanchu-ecs`         | World、组件/资源 token                      | 无                                                 | 无               |
+| `@xiaobaibaifqy/jingchuanchu-core`        | Engine、Scope、EventBus                     | 自定义 EngineModule 接口                           | ecs              |
+| `@xiaobaibaifqy/jingchuanchu-browser`     | runBrowser、BrowserDriver、browserModule    | 同普通入口                                         | core             |
+| `@xiaobaibaifqy/jingchuanchu-renderer-2d` | Canvas2D、Position2D、Shape2D               | `/module`：canvas2DModule、Renderer2D              | core、ecs        |
+| `@xiaobaibaifqy/jingchuanchu-input`       | KeyboardInput、bindPointer                  | `/module`：keyboardModule、pointerModule、Keyboard | core、ecs        |
+| `@xiaobaibaifqy/jingchuanchu-assets`      | AssetCache                                  | `/module`：assetModule                             | core、ecs        |
+| `@xiaobaibaifqy/jingchuanchu-net`         | BrowserConnection、RoomDirectory、RateLimit | `/module`：networkModule                           | core、ecs        |
+| `@xiaobaibaifqy/jingchuanchu-net-server`  | WebSocketHost                               | 显式异步 close，由服务入口管理                     | net；外部依赖 ws |
 
 普通入口可直接使用，不强制安装到 Engine。模块入口负责注册服务/系统以及清理。浏览器包没有网络依赖；Node WebSocket 实现不会进入浏览器入口。`zod` 仅供当前游戏协议使用。
 
 ## 单机组合
 
 ```ts
-import { Engine } from '@xiaobai/core';
-import { browserModule } from '@xiaobai/browser';
-import { canvas2DModule } from '@xiaobai/renderer-2d/module';
-import { keyboardModule } from '@xiaobai/input/module';
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { browserModule } from '@xiaobaibaifqy/jingchuanchu-browser';
+import { canvas2DModule } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/module';
+import { keyboardModule } from '@xiaobaibaifqy/jingchuanchu-input/module';
 import { collectorModule } from './my-game.js';
 
 const engine = new Engine();
@@ -37,7 +37,7 @@ engine.start();
 ## 增加网络
 
 ```ts
-import { networkModule } from '@xiaobai/net/module';
+import { networkModule } from '@xiaobaibaifqy/jingchuanchu-net/module';
 
 const networking = networkModule<ClientMessage, ServerMessage>({
   url: 'wss://your-game.example/ws',
@@ -70,17 +70,17 @@ engine.start();
 
 ## 开发与独立使用
 
-工作区通过 npm workspaces 链接包，所有跨包引用使用 `@xiaobai/*`，不跨目录导入内部源码。开发使用 `source` 条件加载 TS；生产默认入口加载编译后的 JS，TS 消费者获得对应声明。
+工作区通过 npm workspaces 链接包，所有跨包引用使用 `@xiaobaibaifqy/jingchuanchu-*`，不跨目录导入内部源码。开发使用 `source` 条件加载 TS；生产默认入口加载编译后的 JS，TS 消费者获得对应声明。
 
 ```bash
 npm run build:packages
 npm run pack:packages
 ```
 
-包输出在各包 `dist/`，安装包输出在根目录 `dist/packages/`。尚未上传 npm registry。外部项目可以选择本地 tgz，并同时提供所选包的内部依赖，例如只使用内核：
+包输出在各包 `dist/`，安装包输出在根目录 `dist/packages/`。可通过公共 npm 包名或本地 tgz 使用。外部项目可以选择本地 tgz，并同时提供所选包的内部依赖，例如只使用内核：
 
 ```bash
-npm install /path/to/xiaobai-ecs-0.2.1.tgz /path/to/xiaobai-core-0.2.1.tgz
+npm install /path/to/xiaobaibaifqy-jingchuanchu-ecs-0.3.0.tgz /path/to/xiaobaibaifqy-jingchuanchu-core-0.3.0.tgz
 ```
 
 `npm run test:packages` 会创建临时外部项目，用本地包离线安装，编译并执行 TS 消费代码，检查未选择的网络依赖没有进入安装结果。

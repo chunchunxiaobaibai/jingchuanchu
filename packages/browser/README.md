@@ -1,16 +1,22 @@
-# @xiaobai/browser
+# @xiaobaibaifqy/jingchuanchu-browser
 
 浏览器循环与页面可见性。依赖 core；不默认启动网络。
 
 ## 安装
 
-当前通过引擎分发套件的 install.mjs 安装，可选择本包并自动补齐内部依赖，尚未上传公共 npm。也可以同时将本包与所需内部包的 tgz 传给 npm install。
+公共 npm 安装：
+
+```bash
+npm install @xiaobaibaifqy/jingchuanchu-browser
+```
+
+也可通过镜川初分发套件的 install.mjs 选择模块，自动补齐内部依赖。本地 tgz 安装时需同时提供所需内部包。
 
 ## 使用
 
 ```ts
-import { Engine } from '@xiaobai/core';
-import { browserModule } from '@xiaobai/browser';
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { browserModule } from '@xiaobaibaifqy/jingchuanchu-browser';
 const engine = new Engine();
 engine.install([browserModule()]);
 engine.start();

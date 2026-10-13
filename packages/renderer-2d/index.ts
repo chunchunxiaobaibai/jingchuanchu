@@ -1,4 +1,4 @@
-import { component, type World } from '@xiaobai/ecs';
+import { component, type World } from '@xiaobaibaifqy/jingchuanchu-ecs';
 
 export interface Point {
   x: number;

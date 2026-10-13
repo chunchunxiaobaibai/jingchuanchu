@@ -1,8 +1,8 @@
 # 常见问题
 
-## 安装时出现 @xiaobai 包 404
+## 安装时出现 @xiaobaibaifqy 包 404
 
-目前未上传公共 npm。只安装一个 core tgz 时，npm 仍需要找到 ecs。使用分发 install.mjs 自动补齐全部所需本地包，或一次把所需 tgz 都传给 npm。
+确认使用 `@xiaobaibaifqy/jingchuanchu-*` 名称，旧的 `@xiaobai/*` 为本地开发名称。只安装一个 core tgz 时，npm 仍需要找到 ecs。使用分发 install.mjs 自动补齐全部所需本地包，或一次把所需 tgz 都传给 npm。
 
 ## 移动项目后 npm ci 找不到 tgz
 
@@ -32,7 +32,7 @@ token 按身份区分，不按字符串名称。只在共享组件文件中定�
 
 ## 安装模块出现重复或缺失依赖
 
-依赖写模块 ID，例如 keyboard-input，不是 @xiaobai/input。先安装依赖或同批提供。已经安装的 ID 不可重复；运行状态先 pause/stop 再 install。
+依赖写模块 ID，例如 keyboard-input，不是 @xiaobaibaifqy/jingchuanchu-input。先安装依赖或同批提供。已经安装的 ID 不可重复；运行状态先 pause/stop 再 install。
 没有单模块卸载；要更换整套组合，dispose 旧 Engine 后创建新实例。
 
 ## pause 后网络仍然收到消息

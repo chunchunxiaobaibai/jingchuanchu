@@ -1,7 +1,7 @@
 {
-  "name": "@xiaobai/net-server",
-  "version": "0.2.1",
-  "description": "Xiaobai engine net-server module",
+  "name": "@xiaobaibaifqy/jingchuanchu-net-server",
+  "version": "0.3.0",
+  "description": "Jingchuanchu (镜川初) TypeScript engine net-server module",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
@@ -25,7 +25,11 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobai/net": "^0.2.1",
+    "@xiaobaibaifqy/jingchuanchu-net": "^0.3.0",
     "ws": "^8.18.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

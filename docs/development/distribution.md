@@ -3,7 +3,7 @@
 ## 交付给其他开发者
 
 当前采用本地分发归档，不需要 npm 账号、作用域权限或引擎仓库访问权。
-把 `xiaobaifqy-engine-0.2.1.tar.gz` 与对应 `.sha256` 文件一起交给使用者。解压后打开 README 和手册，选择安装模块或运行 starter。
+把 `jingchuanchu-engine-0.3.0.tar.gz` 与对应 `.sha256` 文件一起交给使用者。解压后打开 README 和手册，选择安装模块或运行 starter。
 
 归档含 npm tgz、每包 README/LICENSE/源码/ESM/声明、整套开发文档、安装器和示例。单机无需安装 ws 或联网游戏规则；服务端安装会正常从 npm 获取 ws。
 SHA-256 检查确认文件与分发清单一致，不代替发行者身份的验证。
@@ -23,9 +23,9 @@ npm run test:distribution
 
 ```text
 dist/releases/
-  xiaobaifqy-engine-0.2.1/          可直接查看与使用的目录
-  xiaobaifqy-engine-0.2.1.tar.gz    交付归档
-  xiaobaifqy-engine-0.2.1.tar.gz.sha256
+  jingchuanchu-engine-0.3.0/          可直接查看与使用的目录
+  jingchuanchu-engine-0.3.0.tar.gz    交付归档
+  jingchuanchu-engine-0.3.0.tar.gz.sha256
 ```
 
 生产机器需要 Node >=22.12、npm、tar，构建与测试使用仓库锁文件。归档不包含 node_modules、游戏房间数据、环境配置或个人浏览器资料。
@@ -41,14 +41,14 @@ dist/releases/
 
 ## 如需发布 npm
 
-打包和验证不等于上传。当前没有执行 npm publish。发布前需要实际确认 @xiaobai 作用域权限、名称是否可用以及目标 registry，不能把本地包名当作已经注册的公开包。
+发布目标为公共 registry `https://registry.npmjs.org/`，包名为 `@xiaobaibaifqy/jingchuanchu-*`。每次发布前核对登录账号、目标版本与安装包，使用已验证的 tgz；包配置已指定 public 访问权限。
 
 内部依赖发布顺序为 ecs → core → browser/input/assets/renderer-2d/net → net-server。
-使用各包的 tgz 可以保证上传的内容与已验证产物一致。在获得明确发布授权并完成 registry 配置后，对每个包使用 npm publish；公共作用域包需要相应的公开访问配置。不要把认证配置或凭据放进源码、README 或分发归档。
+使用各包的 tgz 可以保证上传的内容与已验证产物一致。执行 `npm publish ./dist/packages/xiaobaibaifqy-jingchuanchu-ecs-0.3.0.tgz --access public --registry=https://registry.npmjs.org/`，依序发布其他模块。发布同一个名字/版本不可覆盖；首次发布后核对远端 integrity，并在外部项目按包名安装验证。不要把认证配置或凭据放进源码、README 或分发归档。
 
 ## 维护版本
 
-root 和所有引擎包使用同一版本，内部依赖范围跟随版本；此发行版为 0.2.1。
+root 和所有引擎包使用同一版本，内部依赖范围跟随版本；此发行版为 0.3.0。
 改变 API 时更新 CHANGELOG、API 参考、模板与消费测试，重新生成包，不直接修改已生成的 dist。
 外部项目应保存 lockfile；升级时更新引擎包及其内部依赖，并运行自己游戏的类型检查、逻辑测试和浏览器验证。
 

@@ -1,6 +1,6 @@
 {
-  "name": "xiaobaifqy-engine",
-  "version": "0.2.1",
+  "name": "jingchuanchu-engine",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -23,14 +23,14 @@
   },
   "dependencies": {
     "zod": "^4.0.0",
-    "@xiaobai/ecs": "^0.2.1",
-    "@xiaobai/core": "^0.2.1",
-    "@xiaobai/renderer-2d": "^0.2.1",
-    "@xiaobai/input": "^0.2.1",
-    "@xiaobai/assets": "^0.2.1",
-    "@xiaobai/browser": "^0.2.1",
-    "@xiaobai/net": "^0.2.1",
-    "@xiaobai/net-server": "^0.2.1"
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.3.0",
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.3.0",
+    "@xiaobaibaifqy/jingchuanchu-renderer-2d": "^0.3.0",
+    "@xiaobaibaifqy/jingchuanchu-input": "^0.3.0",
+    "@xiaobaibaifqy/jingchuanchu-assets": "^0.3.0",
+    "@xiaobaibaifqy/jingchuanchu-browser": "^0.3.0",
+    "@xiaobaibaifqy/jingchuanchu-net": "^0.3.0",
+    "@xiaobaibaifqy/jingchuanchu-net-server": "^0.3.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.0",

@@ -1,5 +1,5 @@
-import { Engine, EventBus, type EngineModule } from '@xiaobai/core';
-import { resource } from '@xiaobai/ecs';
+import { Engine, EventBus, type EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
+import { resource } from '@xiaobaibaifqy/jingchuanchu-ecs';
 
 export const Score = resource<{ value: number }>('GameScore');
 export const scoringModule = (): EngineModule => ({

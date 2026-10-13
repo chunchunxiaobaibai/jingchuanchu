@@ -18,15 +18,15 @@ for (const selection of [
   ['ecs', 'core'],
   ['ecs', 'core', 'browser', 'input', 'renderer-2d', 'assets'],
 ]) {
-  const directory = await mkdtemp(join(tmpdir(), 'xiaobai-consumer-'));
+  const directory = await mkdtemp(join(tmpdir(), 'xiaobaibaifqy-jingchuanchu-consumer-'));
   try {
     const dependencies: Record<string, string> = {};
     for (const name of selection) {
       const manifest = JSON.parse(
         await readFile(resolve('packages', name, 'package.json'), 'utf8'),
       ) as { version: string };
-      dependencies[`@xiaobai/${name}`] =
-        `file:${resolve('dist/packages', `xiaobai-${name}-${manifest.version}.tgz`)}`;
+      dependencies[`@xiaobaibaifqy/jingchuanchu-${name}`] =
+        `file:${resolve('dist/packages', `xiaobaibaifqy-jingchuanchu-${name}-${manifest.version}.tgz`)}`;
     }
     await writeFile(
       join(directory, 'package.json'),
@@ -37,8 +37,8 @@ for (const selection of [
       ['install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund'],
       directory,
     );
-    const source = `import { Engine } from '@xiaobai/core';
-import { component } from '@xiaobai/ecs';
+    const source = `import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { component } from '@xiaobaibaifqy/jingchuanchu-ecs';
 const Position = component<{ x: number }>('Position');
 const engine = new Engine();
 const entity = engine.world.create();
@@ -49,10 +49,10 @@ if (engine.world.require(entity, Position).x !== 2) throw new Error('Packaged EC
 engine.dispose();
 ${
   selection.length > 2
-    ? `import { browserModule } from '@xiaobai/browser';
-import { canvas2DModule } from '@xiaobai/renderer-2d/module';
-import { keyboardModule } from '@xiaobai/input/module';
-import { assetModule } from '@xiaobai/assets/module';
+    ? `import { browserModule } from '@xiaobaibaifqy/jingchuanchu-browser';
+import { canvas2DModule } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/module';
+import { keyboardModule } from '@xiaobaibaifqy/jingchuanchu-input/module';
+import { assetModule } from '@xiaobaibaifqy/jingchuanchu-assets/module';
 if (![browserModule, canvas2DModule, keyboardModule, assetModule].every(value => typeof value === 'function')) throw new Error('Missing public module');`
     : ''
 }
@@ -82,7 +82,12 @@ if (![browserModule, canvas2DModule, keyboardModule, assetModule].every(value =>
     const lock = JSON.parse(await readFile(join(directory, 'package-lock.json'), 'utf8')) as {
       packages: Record<string, unknown>;
     };
-    for (const forbidden of ['ws', 'zod', '@xiaobai/net', '@xiaobai/net-server'])
+    for (const forbidden of [
+      'ws',
+      'zod',
+      '@xiaobaibaifqy/jingchuanchu-net',
+      '@xiaobaibaifqy/jingchuanchu-net-server',
+    ])
       assert.equal(
         `node_modules/${forbidden}` in lock.packages,
         false,

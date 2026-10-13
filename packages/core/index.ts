@@ -1,4 +1,4 @@
-import { World, type Token } from '@xiaobai/ecs';
+import { World, type Token } from '@xiaobaibaifqy/jingchuanchu-ecs';
 
 export type Cleanup = () => void;
 export class Scope {

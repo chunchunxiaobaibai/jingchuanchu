@@ -2,8 +2,8 @@ import { randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
-import { WebSocketHost } from '@xiaobai/net-server';
-import { RateLimit, RoomDirectory, type Peer } from '@xiaobai/net';
+import { WebSocketHost } from '@xiaobaibaifqy/jingchuanchu-net-server';
+import { RateLimit, RoomDirectory, type Peer } from '@xiaobaibaifqy/jingchuanchu-net';
 import { DrawGuessRoom } from '../../games/draw-guess/room.js';
 import {
   clientMessageSchema,
