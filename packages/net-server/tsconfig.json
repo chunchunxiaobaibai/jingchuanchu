@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": ".",
+    "outDir": "dist",
+    "declaration": true,
+    "sourceMap": true,
+    "customConditions": [],
+    "lib": ["ES2022"],
+    "types": ["node"]
+  },
+  "include": ["*.ts"],
+  "exclude": ["dist"]
+}

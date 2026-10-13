@@ -1,0 +1,29 @@
+{
+  "name": "@xiaobai/core",
+  "version": "0.2.0",
+  "description": "Xiaobai engine core module",
+  "type": "module",
+  "license": "UNLICENSED",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "source": {
+        "types": "./index.ts",
+        "default": "./index.ts"
+      },
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "*.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@xiaobai/ecs": "^0.2.0"
+  }
+}

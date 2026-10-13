@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { World, component, resource } from '../packages/ecs/index.js';
+import { World, component, resource } from '@xiaobai/ecs';
 
 test('reused index cannot be accessed by an old entity handle', () => {
   const world = new World();

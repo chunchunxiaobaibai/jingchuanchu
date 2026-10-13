@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { IncomingMessage, Server } from 'node:http';
 import { WebSocket, WebSocketServer } from 'ws';
-import { RateLimit, type Decoder, type Peer } from './index.js';
+import { RateLimit, type Decoder, type Peer } from '@xiaobai/net';
 
 export class WebSocketHost<Client> {
   private readonly server: WebSocketServer;

@@ -1,0 +1,38 @@
+{
+  "name": "@xiaobai/input",
+  "version": "0.2.0",
+  "description": "Xiaobai engine input module",
+  "type": "module",
+  "license": "UNLICENSED",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "source": {
+        "types": "./index.ts",
+        "default": "./index.ts"
+      },
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./module": {
+      "source": {
+        "types": "./module.ts",
+        "default": "./module.ts"
+      },
+      "types": "./dist/module.d.ts",
+      "default": "./dist/module.js"
+    }
+  },
+  "files": [
+    "dist",
+    "*.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@xiaobai/core": "^0.2.0",
+    "@xiaobai/ecs": "^0.2.0"
+  }
+}

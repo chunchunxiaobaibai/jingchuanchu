@@ -1,5 +1,5 @@
-import { Engine, EventBus } from '../../packages/core/index.js';
-import { component, resource, type Entity } from '../../packages/ecs/index.js';
+import { Engine, EventBus } from '@xiaobai/core';
+import { component, resource, type Entity } from '@xiaobai/ecs';
 import type { RoomSnapshot, ServerMessage, Stroke } from './protocol.js';
 
 export const Player = component<{ id: string; name: string }>('Player');
@@ -56,17 +56,21 @@ export class DrawGuessRoom {
       {
         id: 'draw-guess',
         setup: (engine, scope) => {
-          engine.world.setResource(Round, {
-            phase: 'lobby',
-            hostId: '',
-            drawerId: null,
-            roundId: 0,
-            turn: -1,
-            order: [],
-            endsAt: 0,
-            word: '',
-            revision: 0,
-          });
+          engine.provide(
+            Round,
+            {
+              phase: 'lobby',
+              hostId: '',
+              drawerId: null,
+              roundId: 0,
+              turn: -1,
+              order: [],
+              endsAt: 0,
+              word: '',
+              revision: 0,
+            },
+            scope,
+          );
           engine.addSystem(
             {
               id: 'round-timeout',

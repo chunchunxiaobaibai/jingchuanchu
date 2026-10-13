@@ -1,7 +1,10 @@
 import './style.css';
-import { Engine } from '../../packages/core/index.js';
-import { Canvas2D, bindPointer, runBrowser, type Point } from '../../packages/browser/index.js';
-import { BrowserConnection } from '../../packages/net/index.js';
+import { Engine } from '@xiaobai/core';
+import { browserModule } from '@xiaobai/browser';
+import type { Point } from '@xiaobai/renderer-2d';
+import { canvas2DModule, Renderer2D } from '@xiaobai/renderer-2d/module';
+import { pointerModule } from '@xiaobai/input/module';
+import { networkModule } from '@xiaobai/net/module';
 import {
   COLORS,
   serverMessageSchema,
@@ -21,7 +24,8 @@ import {
 } from './view.js';
 
 const engine = new Engine();
-const renderer = new Canvas2D(refs.canvas);
+engine.install([canvas2DModule({ canvas: refs.canvas, renderWorld: false })]);
+const renderer = engine.world.getResource(Renderer2D);
 let state: RoomSnapshot | undefined;
 let playerId = '';
 let clockOffset = 0;
@@ -91,10 +95,11 @@ const receive = (message: ServerMessage): void => {
       break;
   }
 };
-const connection = new BrowserConnection<ClientMessage, ServerMessage>(
-  serverMessageSchema,
-  receive,
-  (status) => {
+const network = networkModule<ClientMessage, ServerMessage>({
+  decoder: serverMessageSchema,
+  url: () => `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/ws`,
+  onMessage: receive,
+  onStatus: (status) => {
     renderConnection(status);
     if (status === 'closed' || status === 'error') {
       state = undefined;
@@ -104,10 +109,11 @@ const connection = new BrowserConnection<ClientMessage, ServerMessage>(
       notify('连接已断开。重新连接后，可使用房间码再次加入。', true);
     }
   },
-);
+});
+engine.install([network]);
+const connection = engine.world.getResource(network.connection);
 const connect = (): void =>
   connection.connect(`${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/ws`);
-engine.scope.own(() => connection.close());
 
 for (const [index, value] of COLORS.entries()) {
   const button = document.createElement('button');
@@ -151,25 +157,26 @@ const move = (event: PointerEvent): void => {
   dirty = true;
   if (active.length >= 64) flushStroke();
 };
-bindPointer(
-  refs.canvas,
-  {
-    down: (event) => {
-      if (!canDraw()) return;
-      active = [renderer.toPoint(event.clientX, event.clientY)];
-      strokeColor = color;
-      strokeWidth = Number(refs.brush.value);
-      hasNewPoints = true;
-      dirty = true;
+engine.install([
+  pointerModule({
+    canvas: refs.canvas,
+    handlers: {
+      down: (event) => {
+        if (!canDraw()) return;
+        active = [renderer.toPoint(event.clientX, event.clientY)];
+        strokeColor = color;
+        strokeWidth = Number(refs.brush.value);
+        hasNewPoints = true;
+        dirty = true;
+      },
+      move,
+      up: (event) => {
+        move(event);
+        flushStroke(true);
+      },
     },
-    move,
-    up: (event) => {
-      move(event);
-      flushStroke(true);
-    },
-  },
-  engine.scope,
-);
+  }),
+]);
 const strokeTimer = setInterval(() => flushStroke(), 80);
 engine.scope.own(() => clearInterval(strokeTimer));
 
@@ -237,8 +244,12 @@ document.addEventListener('visibilitychange', hidden);
 engine.scope.own(() => document.removeEventListener('visibilitychange', hidden));
 window.addEventListener('pagehide', () => engine.dispose(), { once: true });
 renderRoom(undefined, playerId);
-connect();
-runBrowser(engine, (error) => {
-  console.error(error);
-  notify('画布运行异常，请刷新页面。', true);
-});
+engine.install([
+  browserModule({
+    onError: (error) => {
+      console.error(error);
+      notify('画布运行异常，请刷新页面。', true);
+    },
+  }),
+]);
+engine.start();

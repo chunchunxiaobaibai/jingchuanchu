@@ -9,7 +9,9 @@
     "exactOptionalPropertyTypes": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "customConditions": ["source"]
   },
-  "include": ["packages", "games", "apps", "tests", "*.ts"]
+  "include": ["packages", "games", "apps", "tests", "*.ts", "scripts"],
+  "exclude": ["**/dist", "node_modules"]
 }

@@ -7,7 +7,7 @@ import {
   type ServerMessage,
   type ClientMessage,
 } from '../games/draw-guess/protocol.js';
-import { RateLimit, RoomDirectory } from '../packages/net/index.js';
+import { RateLimit, RoomDirectory } from '@xiaobai/net';
 
 async function client(port: number) {
   const socket = new WebSocket(`ws://127.0.0.1:${port}/ws`);

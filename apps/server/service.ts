@@ -2,8 +2,8 @@ import { randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
-import { WebSocketHost } from '../../packages/net/server.js';
-import { RateLimit, RoomDirectory, type Peer } from '../../packages/net/index.js';
+import { WebSocketHost } from '@xiaobai/net-server';
+import { RateLimit, RoomDirectory, type Peer } from '@xiaobai/net';
 import { DrawGuessRoom } from '../../games/draw-guess/room.js';
 import {
   clientMessageSchema,
@@ -42,7 +42,7 @@ export async function createGameServer(
     let file: string;
     try {
       const path = decodeURIComponent(new URL(request.url ?? '/', 'http://localhost').pathname);
-      file = resolve(staticDir, '.' + (path === '/' ? '/index.html' : path));
+      file = resolve(staticDir, '.' + (path.endsWith('/') ? `${path}index.html` : path));
     } catch {
       response.writeHead(400);
       response.end('Bad request');

@@ -63,27 +63,35 @@ export class RateLimit {
 
 export class BrowserConnection<Client, Server> {
   private socket: WebSocket | undefined;
+  private state: 'idle' | 'connecting' | 'open' | 'closed' | 'error' = 'idle';
   constructor(
     private readonly decoder: Decoder<Server>,
     private readonly onMessage: (message: Server) => void,
     private readonly onStatus: (status: 'connecting' | 'open' | 'closed' | 'error') => void,
   ) {}
+  get status(): 'idle' | 'connecting' | 'open' | 'closed' | 'error' {
+    return this.state;
+  }
+  private updateStatus(status: 'connecting' | 'open' | 'closed' | 'error'): void {
+    this.state = status;
+    this.onStatus(status);
+  }
   connect(url: string): void {
     this.close();
-    this.onStatus('connecting');
+    this.updateStatus('connecting');
     const socket = new WebSocket(url);
     this.socket = socket;
-    socket.onopen = () => this.onStatus('open');
+    socket.onopen = () => this.updateStatus('open');
     socket.onmessage = (event) => {
       try {
         this.onMessage(this.decoder.parse(JSON.parse(String(event.data))));
       } catch {
-        this.onStatus('error');
+        this.updateStatus('error');
         socket.close(1002, 'Invalid server message');
       }
     };
-    socket.onclose = () => this.onStatus('closed');
-    socket.onerror = () => this.onStatus('error');
+    socket.onclose = () => this.updateStatus('closed');
+    socket.onerror = () => this.updateStatus('error');
   }
   send(message: Client): boolean {
     if (this.socket?.readyState !== WebSocket.OPEN || this.socket.bufferedAmount > 256 * 1024)
@@ -95,6 +103,7 @@ export class BrowserConnection<Client, Server> {
     const socket = this.socket;
     this.socket = undefined;
     if (socket) {
+      this.state = 'closed';
       socket.onopen = null;
       socket.onmessage = null;
       socket.onclose = null;

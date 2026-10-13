@@ -5,8 +5,9 @@
     "outDir": "dist/server",
     "rootDir": ".",
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "customConditions": []
   },
-  "include": ["apps/server", "packages", "games"],
-  "exclude": ["apps/client"]
+  "include": ["apps/server", "games/draw-guess"],
+  "exclude": ["apps/client", "games/singleplayer"]
 }

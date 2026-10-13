@@ -85,7 +85,7 @@ export class World {
     this.free.push(entity.index);
     return true;
   }
-  set<T>(entity: Entity, token: Token<T>, value: T): void {
+  set<T>(entity: Entity, token: Token<T>, value: NoInfer<T>): void {
     this.assertAlive(entity);
     let store = this.stores.get(token.key);
     if (!store) {
@@ -126,7 +126,7 @@ export class World {
     for (const entity of entities)
       if (this.isAlive(entity) && stores.every((store) => store!.has(entity.index))) yield entity;
   }
-  setResource<T>(token: Token<T>, value: T): void {
+  setResource<T>(token: Token<T>, value: NoInfer<T>): void {
     this.assertOpen();
     this.resources.set(token.key, value);
   }
@@ -134,6 +134,14 @@ export class World {
     this.assertOpen();
     if (!this.resources.has(token.key)) throw new Error(`Missing resource: ${token.name}`);
     return this.resources.get(token.key) as T;
+  }
+  hasResource<T>(token: Token<T>): boolean {
+    this.assertOpen();
+    return this.resources.has(token.key);
+  }
+  removeResource<T>(token: Token<T>): boolean {
+    this.assertOpen();
+    return this.resources.delete(token.key);
   }
   defer(command: (world: World) => void): void {
     this.assertOpen();

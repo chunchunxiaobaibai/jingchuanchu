@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Engine, EventBus, Scope } from '../packages/core/index.js';
+import { Engine, EventBus, Scope } from '@xiaobai/core';
 
 test('fixed steps, ordering, pause and large-frame clamp', () => {
   const engine = new Engine({ tickRate: 10, maxSteps: 3 });
@@ -150,4 +150,33 @@ test('deferred disposal skips remaining commands and render systems', () => {
   engine.start();
   engine.advance(engine.step);
   assert.equal(laterRan, false);
+});
+
+test('event failures still notify other listeners and startup failures stop activated modules', () => {
+  const engine = new Engine();
+  let stopped = 0;
+  let started = 0;
+  const off = engine.events.on('started', () => {
+    throw new Error('module activation failed');
+  });
+  engine.events.on('started', () => {
+    started++;
+  });
+  engine.events.on('stopped', () => {
+    stopped++;
+  });
+  assert.throws(() => engine.start());
+  assert.equal(engine.status, 'stopped');
+  assert.equal(started, 1);
+  assert.equal(stopped, 1);
+  off();
+  engine.start();
+  engine.pause();
+  engine.events.on('resumed', () => {
+    throw new Error('resume failed');
+  });
+  assert.throws(() => engine.resume());
+  assert.equal(engine.status, 'stopped');
+  assert.equal(stopped, 2);
+  engine.dispose();
 });

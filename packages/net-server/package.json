@@ -1,0 +1,30 @@
+{
+  "name": "@xiaobai/net-server",
+  "version": "0.2.0",
+  "description": "Xiaobai engine net-server module",
+  "type": "module",
+  "license": "UNLICENSED",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "source": {
+        "types": "./index.ts",
+        "default": "./index.ts"
+      },
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "*.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@xiaobai/net": "^0.2.0",
+    "ws": "^8.18.0"
+  }
+}
