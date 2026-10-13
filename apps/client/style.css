@@ -234,6 +234,10 @@ main {
   display: flex;
   gap: 10px;
 }
+.join-row button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
 .join-row input {
   text-transform: uppercase;
   letter-spacing: 2px;
