@@ -43,6 +43,8 @@ dist/releases/
 
 发布目标为公共 registry `https://registry.npmjs.org/`，包名为 `@xiaobaibaifqy/jingchuanchu-*`。每次发布前核对登录账号、目标版本与安装包，使用已验证的 tgz；包配置已指定 public 访问权限。
 
+账号需要满足 npm 的发布认证要求，只有登录成功还不够。若收到“Two-factor authentication … required”错误，在 Windows 浏览器的 npm Account 页面启用 2FA，再用 `npm login --auth-type=web --browser=false --registry=https://registry.npmjs.org/` 重新登录；复制终端链接到 Windows 浏览器完成验证。不要把密码、token 或恢复码发给其他人。
+
 内部依赖发布顺序为 ecs → core → browser/input/assets/renderer-2d/net → net-server。
 使用各包的 tgz 可以保证上传的内容与已验证产物一致。执行 `npm publish ./dist/packages/xiaobaibaifqy-jingchuanchu-ecs-0.3.0.tgz --access public --registry=https://registry.npmjs.org/`，依序发布其他模块。发布同一个名字/版本不可覆盖；首次发布后核对远端 integrity，并在外部项目按包名安装验证。不要把认证配置或凭据放进源码、README 或分发归档。
 
