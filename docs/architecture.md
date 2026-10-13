@@ -2,16 +2,21 @@
 
 ## 能力与依赖
 
-| 模块       | 职责                                          | 依赖           |
-| ---------- | --------------------------------------------- | -------------- |
-| core       | 事件、作用域、时间、系统与模块生命周期        | 无             |
-| ecs        | 代际实体 ID、稀疏集、组件查询、资源、命令队列 | 无             |
-| browser    | 浏览器主循环、Canvas 2D、指针输入、资源缓存   | core、ecs      |
-| net        | 可校验的消息传输、房间容量与成员管理          | 无             |
-| draw-guess | 玩家组件、回合、画布、猜词、计分与协议        | core、ecs、net |
-| apps       | 浏览器 UI 与 Node WebSocket/HTTP 启动入口     | 上述模块       |
+| 模块        | 职责                                          | 依赖           |
+| ----------- | --------------------------------------------- | -------------- |
+| core        | 事件、作用域、时间、系统与模块生命周期        | ecs            |
+| ecs         | 代际实体 ID、稀疏集、组件查询、资源、命令队列 | 无             |
+| browser     | 浏览器主循环、页面可见性与生命周期适配        | core           |
+| renderer-2d | Canvas 2D、基础图形、坐标与笔画               | core、ecs      |
+| input       | 键盘、指针与输入清理                          | core、ecs      |
+| assets      | 资源缓存与加载器模块                          | core、ecs      |
+| net         | 可校验的消息传输、房间容量与成员管理          | core、ecs      |
+| net-server  | Node WebSocket 适配                           | net、ws        |
+| draw-guess  | 玩家组件、回合、画布、猜词、计分与协议        | core、ecs、net |
+| apps        | 浏览器 UI 与 Node WebSocket/HTTP 启动入口     | 上述模块       |
 
 实现顺序：ECS → 调度与生命周期 → 浏览器适配 → 网络 → 游戏规则 → UI 与联网验证。
+独立包与单机/联机组合的接口契约见 [模块指南](modules.md)。内核不依赖 DOM 或网络；包依赖通过自动测试检查。开发入口选择 TS source 条件，生产入口使用编译后的 ESM。
 引擎不得依赖游戏；游戏代码同样使用 TypeScript。组件由 typed token 定义，数据与逻辑分离。示例：`const Score = component<{ value: number }>('Score')`。
 
 ## 首版验收
