@@ -1,9 +1,9 @@
 {
   "name": "@xiaobai/net-server",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Xiaobai engine net-server module",
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "sideEffects": false,
   "exports": {
     ".": {
@@ -18,13 +18,14 @@
   "files": [
     "dist",
     "*.ts",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobai/net": "^0.2.0",
+    "@xiaobai/net": "^0.2.1",
     "ws": "^8.18.0"
   }
 }
