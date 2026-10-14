@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "customConditions": [
+      "source"
+    ]
+  },
+  "include": [
+    "games",
+    "apps",
+    "tests",
+    "*.ts"
+  ],
+  "exclude": [
+    "**/dist",
+    "node_modules"
+  ]
+}

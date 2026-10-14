@@ -41,6 +41,8 @@ dist/releases/
 
 ## 如需发布 npm
 
+维护者完整流程见 [npm 发布手册](../maintainers/npm-publishing.md)，GitHub 源码准备见 [GitHub 上传说明](../maintainers/github.md)。当前 0.3.0 已公开发布；下面 0.3.0 命令是历史格式示例，不能再次上传相同版本。实际发布需统一更新为尚未公开的新版本。
+
 发布目标为公共 registry `https://registry.npmjs.org/`，包名为 `@xiaobaibaifqy/jingchuanchu-*`。每次发布前核对登录账号、目标版本与安装包，使用已验证的 tgz；包配置已指定 public 访问权限。
 
 账号需要满足 npm 的发布认证要求，只有登录成功还不够。若收到“Two-factor authentication … required”错误，在 Windows 浏览器的 npm Account 页面启用 2FA，再用 `npm login --auth-type=web --browser=false --registry=https://registry.npmjs.org/` 重新登录；复制终端链接到 Windows 浏览器完成验证。不要把密码、token 或恢复码发给其他人。

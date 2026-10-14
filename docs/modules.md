@@ -32,7 +32,7 @@ engine.start();
 // 游戏结束或页面卸载时：engine.dispose();
 ```
 
-`canvas` 是应用持有的 HTMLCanvasElement；`collectorModule` 是你的游戏模块。这里没有网络客户端或游戏服务器。实际可运行示例见 `apps/client/singleplayer`。
+`canvas` 是应用持有的 HTMLCanvasElement；`collectorModule` 是你的游戏模块。这里没有网络客户端或游戏服务器。可运行 TS 项目见仓库 `templates/browser`，分发归档对应 `starters/browser`；历史完整游戏保存在仓库 `archive/legacy-demos`。
 
 ## 增加网络
 

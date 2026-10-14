@@ -1,46 +1,35 @@
-# TS 2D 引擎与基础版你画我猜
+# 引擎架构
 
-## 能力与依赖
+镜川初是面向网页 2D 游戏的 TS 引擎，ECS 数据、运行循环和浏览器能力分层。具体玩法、账号、分数、回合及消息协议由游戏提供。
 
-| 模块        | 职责                                          | 依赖           |
-| ----------- | --------------------------------------------- | -------------- |
-| core        | 事件、作用域、时间、系统与模块生命周期        | ecs            |
-| ecs         | 代际实体 ID、稀疏集、组件查询、资源、命令队列 | 无             |
-| browser     | 浏览器主循环、页面可见性与生命周期适配        | core           |
-| renderer-2d | Canvas 2D、基础图形、坐标与笔画               | core、ecs      |
-| input       | 键盘、指针与输入清理                          | core、ecs      |
-| assets      | 资源缓存与加载器模块                          | core、ecs      |
-| net         | 可校验的消息传输、房间容量与成员管理          | core、ecs      |
-| net-server  | Node WebSocket 适配                           | net、ws        |
-| draw-guess  | 玩家组件、回合、画布、猜词、计分与协议        | core、ecs、net |
-| apps        | 浏览器 UI 与 Node WebSocket/HTTP 启动入口     | 上述模块       |
+## 包边界
 
-实现顺序：ECS → 调度与生命周期 → 浏览器适配 → 网络 → 游戏规则 → UI 与联网验证。
-独立包与单机/联机组合的接口契约见 [模块指南](modules.md)。内核不依赖 DOM 或网络；包依赖通过自动测试检查。开发入口选择 TS source 条件，生产入口使用编译后的 ESM。
-引擎不得依赖游戏；游戏代码同样使用 TypeScript。组件由 typed token 定义，数据与逻辑分离。示例：`const Score = component<{ value: number }>('Score')`。
+```text
+游戏 TypeScript 模块
+  → browser / renderer-2d / input / assets / net
+  → core
+  → ecs
 
-## 首版验收
+Node 游戏服务 → net-server → net
+```
 
-- 旧实体引用不能访问复用后的实体；组件查询与稀疏集移除正确。
-- 系统顺序稳定，结构变更可延迟到逻辑步末尾；固定步长更新限制补帧。
-- 模块依赖检查、反向释放，事件订阅和资源可清理。
-- 2D Canvas 支持坐标转换、笔画、ECS 图形绘制；指针支持触摸与鼠标。
-- 网络使用运行时 schema 校验、消息大小限制、心跳、发送积压保护。
-- 创建/加入房间，最多 10 人；房主开始，至少 2 人，轮流绘画。
-- 服务器保管答案；其他玩家仅收到提示，重复猜中不能重复计分。
-- 绘画权限、回合 ID、输入范围和频率由服务端校验。
-- 超时/全部猜中后公布答案；房主进入下一回合，一轮每人画一次。
-- 退出和断线释放成员；重新加入获取房间与画布快照（不恢复旧身份）。
+renderer、input、assets、net 同时直接使用 ECS 的公开入口。browser 依赖 core；net-server 的唯一外部运行依赖为 ws。引擎不依赖 archive、游戏规则或 Zod。
 
-## 边界与验证
+- ECS：typed token、World 所属与代际实体 handle、稀疏集、查询快照、资源和延迟命令。
+- core：固定逻辑步与独立渲染步、稳定系统顺序、模块依赖验证、安装回滚、生命周期事件及 Scope 清理。
+- 浏览器模块：接入 Canvas、键盘、指针、资源加载和 requestAnimationFrame，由应用提供 DOM 对象。
+- 网络模块：传输与 decoder 边界；具体身份、房间状态同步及断线恢复由游戏定义。
 
-房间仅驻留内存，单服务进程，无账号、持久化、匹配或部署。房主断线转移；绘画者断线结束当前回合。
-逻辑、协议及 UI 代码全部为 TS；HTML/CSS 用于页面结构与样式。
-构建 `npm run build`，类型检查 `npm run typecheck`，单元/真实 WebSocket 测试 `npm test`，浏览器测试 `npm run test:e2e`。
-先验证内核，再验证真实网络和两个浏览器客户端。始终验证外部数据，不提交环境密钥，不编辑第三方源码。
+查询会保存实体 handle 快照，防止遍历期间回收复用的实体进入旧查询。模块失败时反向清理本批登记资源；直接修改既有世界的数据不具备自动事务回滚。
 
-## 官方参考
+## 维护与交付
 
-- [TypeScript strict](https://www.typescriptlang.org/tsconfig/strict)
-- [Vite server proxy](https://vite.dev/config/server-options)
-- [ws API 与 maxPayload](https://github.com/websockets/ws/blob/master/doc/ws.md)
+`packages/` 是唯一 npm 包源码；跨包只导入公开包名。根 workspace 为构建、测试和打包提供工具，不作为 npm 产品发布。
+
+`tests/` 检查引擎行为和包边界。`examples/` 与 `templates/` 是外部消费契约的可运行参考，参与分发验证。完整游戏单独保存在 `archive/legacy-demos`，默认使用公共 npm 的 0.3.0，不参与根类型检查、构建或测试。
+
+`pack:packages` 生成每包 tgz，`dist:release` 生成带校验、文档和模板的 tar.gz。只发布已验证的 tgz；历史产物不覆盖现有公开版本。
+
+## 当前限制
+
+没有编辑器、物理、音频、精灵动画、场景管理、异步 setup 或单模块卸载。Canvas 提供基础图形与笔画，网络提供连接与服务端传输基础，未提供通用状态同步协议。优化建议见 [讨论方案](optimization-plan.md)。
