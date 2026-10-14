@@ -16,7 +16,7 @@
 
 维护者另见 [npm 发布手册](../maintainers/npm-publishing.md) 和 [GitHub 上传说明](../maintainers/github.md)。
 
-新版扩展见 [0.4.0 兼容扩展](extensions-0.4.md)。
+新版扩展见 [0.4.0 兼容扩展](extensions-0.4.md)，表单闪屏相关接入见 [渲染更新指南](rendering-updates.md)。
 
 ## 当前提供什么
 

@@ -31,6 +31,8 @@ window.addEventListener('pagehide', () => engine.dispose(), { once: true });
 
 本仓库 0.4.0 尚未上传 npm，新增能力请使用本地 tgz 或分发套件；公共包当前为 0.3.0。完整契约见分发套件 `docs/development/extensions-0.4.md`。
 
+新增 `/dom` 子入口的 `setText` 与 `createKeyedList`，按实际文本/行数据更新并复用列表节点。实例应只在容器挂载时创建，详见分发手册 `docs/development/rendering-updates.md`。
+
 ## 授权
 
 MIT，见 [LICENSE](LICENSE)。

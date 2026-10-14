@@ -36,3 +36,15 @@
 - 性能原始样本和隔离实验见 performance；此前已经采集的 Chromium 图集/相机/翻转/像素比结果保留作历史证据。
 
 用户在本次迭代期间指定后续浏览器验证由自己进行；该约定写入 AGENTS.md。约定生效后未再次启动浏览器或执行 Playwright/Chromium 测试，最新收尾采用 test:distribution:node，后续网页使用验证留给用户。
+
+## 表单输入闪屏：引擎侧修复
+
+2026-10-14，按网络异常传播 → DOM 更新 → 指针事件 → Canvas 初始化 → 定向输入/场景验证处理。
+
+- 网络同步/异步业务回调错误按 handler 报告，不误关闭有效连接；错误回调自身的拒绝只记录，不递归通知。
+- browser/dom 新增 setText/createKeyedList；HUD 相同值不写 DOM，列表保留 keyed 节点。
+- 指针可分别处理正常 up 与取消/失捕/窗口失焦/Scope 销毁；键盘清理焦点和输入法状态。
+- 相同尺寸的 resize/Renderer 重建不赋值画布宽高，新增可选 shouldRender 条件。
+- 类型检查通过；连接、输入、DOM/Canvas 更新及场景相关 11 项测试分批通过，没有运行浏览器或全量回归。
+
+问题页面不在本机，未验证其最终视觉表现，也没有修改归档游戏页面。修复位于本地未发布 0.4.0，公共 npm 0.3.0 尚未包含这些变更。接入方法见 development/rendering-updates.md。

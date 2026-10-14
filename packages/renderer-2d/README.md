@@ -31,6 +31,8 @@ renderer.stroke({ color: '#176b58', width: 5, points: [{ x: 20, y: 20 }] });
 
 本仓库 0.4.0 尚未上传 npm，新增能力请使用本地 tgz 或分发套件；公共包当前为 0.3.0。完整契约见分发套件 `docs/development/extensions-0.4.md`。
 
+相同尺寸的 resize/重复初始化保留画布缓冲，canvas2DModule 可用 `shouldRender` 跳过不需要的清空和重绘；动画场景默认持续渲染。
+
 ## 授权
 
 MIT，见 [LICENSE](LICENSE)。

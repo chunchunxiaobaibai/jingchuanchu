@@ -7,6 +7,7 @@ export class Canvas2D {
   private logicalWidth: number;
   private logicalHeight: number;
   private pixelRatio = 1;
+  private initialized = false;
   get width(): number {
     return this.logicalWidth;
   }
@@ -32,12 +33,25 @@ export class Canvas2D {
   ): void {
     if (![width, height, pixelRatio].every((value) => Number.isFinite(value) && value > 0))
       throw new Error('Invalid canvas dimensions');
+    const ratio = Math.min(pixelRatio, 2);
+    const bufferWidth = Math.round(width * ratio);
+    const bufferHeight = Math.round(height * ratio);
+    const changed =
+      !this.initialized ||
+      this.logicalWidth !== width ||
+      this.logicalHeight !== height ||
+      this.pixelRatio !== ratio ||
+      this.canvas.width !== bufferWidth ||
+      this.canvas.height !== bufferHeight;
+    if (!changed) return;
     this.logicalWidth = width;
     this.logicalHeight = height;
-    this.pixelRatio = Math.min(pixelRatio, 2);
-    this.canvas.width = Math.round(width * this.pixelRatio);
-    this.canvas.height = Math.round(height * this.pixelRatio);
-    this.context.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, 0, 0);
+    this.pixelRatio = ratio;
+    // Assigning even the same width/height clears the buffer and resets context state.
+    if (this.canvas.width !== bufferWidth) this.canvas.width = bufferWidth;
+    if (this.canvas.height !== bufferHeight) this.canvas.height = bufferHeight;
+    this.context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    this.initialized = true;
   }
   toWorldPoint(clientX: number, clientY: number, camera: Camera2D): Point {
     return camera.screenToWorld(this.toPoint(clientX, clientY));
