@@ -61,13 +61,24 @@ export class RateLimit {
   }
 }
 
+export type ConnectionErrorKind = 'decode' | 'handler' | 'transport';
+export interface ConnectionFailure {
+  kind: ConnectionErrorKind;
+  cause: unknown;
+}
+export interface ConnectionOptions {
+  onError?: (failure: ConnectionFailure) => void;
+}
+
 export class BrowserConnection<Client, Server> {
   private socket: WebSocket | undefined;
+  lastError: ConnectionFailure | undefined;
   private state: 'idle' | 'connecting' | 'open' | 'closed' | 'error' = 'idle';
   constructor(
     private readonly decoder: Decoder<Server>,
     private readonly onMessage: (message: Server) => void,
     private readonly onStatus: (status: 'connecting' | 'open' | 'closed' | 'error') => void,
+    private readonly options: ConnectionOptions = {},
   ) {}
   get status(): 'idle' | 'connecting' | 'open' | 'closed' | 'error' {
     return this.state;
@@ -83,15 +94,34 @@ export class BrowserConnection<Client, Server> {
     this.socket = socket;
     socket.onopen = () => this.updateStatus('open');
     socket.onmessage = (event) => {
+      let message: Server;
       try {
-        this.onMessage(this.decoder.parse(JSON.parse(String(event.data))));
-      } catch {
+        message = this.decoder.parse(JSON.parse(String(event.data)));
+      } catch (cause) {
+        this.report('decode', cause);
         this.updateStatus('error');
         socket.close(1002, 'Invalid server message');
+        return;
+      }
+      try {
+        this.onMessage(message);
+      } catch (cause) {
+        this.report('handler', cause);
       }
     };
     socket.onclose = () => this.updateStatus('closed');
-    socket.onerror = () => this.updateStatus('error');
+    socket.onerror = (cause) => {
+      this.report('transport', cause);
+      this.updateStatus('error');
+    };
+  }
+  private report(kind: ConnectionErrorKind, cause: unknown): void {
+    this.lastError = { kind, cause };
+    try {
+      this.options.onError?.(this.lastError);
+    } catch (error) {
+      this.lastError = { kind: 'handler', cause: error };
+    }
   }
   send(message: Client): boolean {
     if (this.socket?.readyState !== WebSocket.OPEN || this.socket.bufferedAmount > 256 * 1024)

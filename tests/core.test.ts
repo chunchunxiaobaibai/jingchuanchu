@@ -180,3 +180,65 @@ test('event failures still notify other listeners and startup failures stop acti
   assert.equal(stopped, 2);
   engine.dispose();
 });
+
+test('system constraints validate before activation; diagnostics are optional', () => {
+  const engine = new Engine({ diagnostics: false });
+  const calls: string[] = [];
+  engine.addSystem({ id: 'first', after: ['last'], update: () => calls.push('first') });
+  engine.addSystem({ id: 'last', update: () => calls.push('last') });
+  engine.start();
+  engine.advance(engine.step);
+  assert.deepEqual(calls, ['last', 'first']);
+  assert.equal(engine.timings.length, 0);
+  assert.deepEqual(
+    engine.getSystems().map((s) => s.id),
+    ['last', 'first'],
+  );
+  engine.dispose();
+  for (const systems of [
+    [{ id: 'a', after: ['missing'], update() {} }],
+    [
+      { id: 'a', after: ['b'], update() {} },
+      { id: 'b', after: ['a'], update() {} },
+    ],
+    [
+      { id: 'a', after: ['b'], update() {} },
+      { id: 'b', phase: 'render' as const, update() {} },
+    ],
+  ]) {
+    const broken = new Engine();
+    for (const system of systems) broken.addSystem(system);
+    assert.throws(() => broken.start());
+    assert.equal(broken.status, 'stopped');
+    broken.dispose();
+  }
+});
+
+test('deferred failure stops the engine and preserves the original cause', () => {
+  const engine = new Engine();
+  const cause = new Error('defer');
+  let rendered = false;
+  engine.addSystem({
+    id: 'queue',
+    update({ world }) {
+      world.defer(() => {
+        throw cause;
+      });
+    },
+  });
+  engine.addSystem({
+    id: 'render',
+    phase: 'render',
+    update() {
+      rendered = true;
+    },
+  });
+  engine.start();
+  assert.throws(
+    () => engine.advance(engine.step),
+    (error: unknown) => error instanceof Error && error.cause === cause,
+  );
+  assert.equal(engine.status, 'stopped');
+  assert.equal(rendered, false);
+  engine.dispose();
+});

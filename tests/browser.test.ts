@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import type { CancellationSignal } from '@xiaobaibaifqy/jingchuanchu-core';
 import { AssetCache } from '@xiaobaibaifqy/jingchuanchu-assets';
 
 test('asset cache shares loads, evicts failures and releases resources', async () => {
@@ -25,4 +26,44 @@ test('asset cache shares loads, evicts failures and releases resources', async (
   await Promise.resolve();
   assert.deepEqual(released, ['image']);
   await assert.rejects(cache.get('next'));
+});
+
+test('retained resources survive clear; late loads release exactly once and report cleanup errors', async () => {
+  let complete!: (value: string) => void;
+  let signal!: CancellationSignal;
+  const released: string[] = [];
+  const cache = new AssetCache(
+    (_, abort) => {
+      signal = abort;
+      return new Promise<string>((resolve) => {
+        complete = resolve;
+      });
+    },
+    (asset) => {
+      released.push(asset);
+    },
+  );
+  const held = cache.retain('image');
+  assert.equal(cache.getStatus('image'), 'loading');
+  cache.clear();
+  assert.equal(signal.aborted, false);
+  assert.equal(cache.delete('image'), false);
+  held.release();
+  held.release();
+  assert.equal(signal.aborted, true);
+  complete('late');
+  await held.promise;
+  await Promise.resolve();
+  assert.deepEqual(released, ['late']);
+  cache.dispose();
+  const broken = new AssetCache(
+    async () => 42,
+    () => {
+      throw new Error('release');
+    },
+  );
+  await broken.get('x');
+  broken.dispose();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  assert.equal(broken.releaseErrors.length, 1);
 });

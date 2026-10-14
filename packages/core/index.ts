@@ -26,6 +26,46 @@ export class Scope {
   }
 }
 
+export interface CancellationSignal {
+  readonly aborted: boolean;
+  readonly reason: unknown;
+  subscribe(listener: () => void): Cleanup;
+  throwIfAborted(): void;
+}
+export class Cancellation implements CancellationSignal {
+  private listeners = new Set<Cleanup>();
+  aborted = false;
+  reason: unknown;
+  subscribe(listener: Cleanup): Cleanup {
+    if (this.aborted) {
+      listener();
+      return () => {};
+    }
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
+  }
+  throwIfAborted(): void {
+    if (this.aborted) throw this.reason;
+  }
+  cancel(reason: unknown = new Error('Cancelled')): void {
+    if (this.aborted) return;
+    this.aborted = true;
+    this.reason = reason;
+    const listeners = [...this.listeners];
+    this.listeners.clear();
+    const errors: unknown[] = [];
+    for (const listener of listeners)
+      try {
+        listener();
+      } catch (error) {
+        errors.push(error);
+      }
+    if (errors.length) throw new AggregateError(errors, 'Cancellation listener failed');
+  }
+}
+
 export class EventBus<Events extends object> {
   private readonly listeners = new Map<keyof Events, Set<(payload: unknown) => void>>();
   on<K extends keyof Events>(
@@ -73,6 +113,8 @@ export interface System {
   id: string;
   phase?: 'fixed' | 'render';
   order?: number;
+  before?: readonly string[];
+  after?: readonly string[];
   update(context: UpdateContext): void;
 }
 export interface EngineModule {
@@ -93,6 +135,18 @@ export interface EngineEvents {
   disposed: undefined;
 }
 
+export class SystemError extends Error {
+  constructor(
+    readonly systemId: string,
+    readonly phase: 'fixed' | 'render',
+    readonly tick: number,
+    cause: unknown,
+  ) {
+    super(`System failed: ${systemId}`, { cause });
+    this.name = 'SystemError';
+  }
+}
+
 export class Engine {
   readonly world = new World();
   readonly scope = new Scope();
@@ -105,7 +159,9 @@ export class Engine {
   private state: EngineStatus = 'stopped';
   private readonly installed = new Set<string>();
   private installing = false;
-  constructor(readonly options: { tickRate?: number; maxSteps?: number } = {}) {
+  constructor(
+    readonly options: { tickRate?: number; maxSteps?: number; diagnostics?: boolean } = {},
+  ) {
     const rate = options.tickRate ?? 30;
     const maxSteps = options.maxSteps ?? 5;
     if (!Number.isFinite(rate) || rate <= 0 || !Number.isInteger(maxSteps) || maxSteps < 1)
@@ -117,6 +173,48 @@ export class Engine {
   }
   hasModule(id: string): boolean {
     return this.installed.has(id);
+  }
+  getModules(): readonly string[] {
+    return [...this.installed];
+  }
+  getSystems(): readonly { id: string; phase: 'fixed' | 'render'; order: number }[] {
+    return this.orderedSystems().map((system) => ({
+      id: system.id,
+      phase: system.phase ?? 'fixed',
+      order: system.order ?? 0,
+    }));
+  }
+  private orderedSystems(): System[] {
+    const remaining = [...this.systems];
+    if (!remaining.some((system) => system.before?.length || system.after?.length))
+      return remaining;
+    const byId = new Map(remaining.map((system) => [system.id, system]));
+    const edges = new Map(remaining.map((system) => [system.id, new Set<string>()]));
+    const incoming = new Map(remaining.map((system) => [system.id, 0]));
+    const edge = (from: string, to: string): void => {
+      const a = byId.get(from);
+      const b = byId.get(to);
+      if (!a || !b) throw new Error(`Missing system: ${!a ? from : to}`);
+      if ((a.phase ?? 'fixed') !== (b.phase ?? 'fixed'))
+        throw new Error('System dependency crosses phases');
+      if (!edges.get(from)!.has(to)) {
+        edges.get(from)!.add(to);
+        incoming.set(to, incoming.get(to)! + 1);
+      }
+    };
+    for (const system of remaining) {
+      for (const id of system.before ?? []) edge(system.id, id);
+      for (const id of system.after ?? []) edge(id, system.id);
+    }
+    const result: System[] = [];
+    while (remaining.length) {
+      const index = remaining.findIndex((system) => incoming.get(system.id) === 0);
+      if (index < 0) throw new Error('System dependency cycle');
+      const system = remaining.splice(index, 1)[0]!;
+      result.push(system);
+      for (const id of edges.get(system.id)!) incoming.set(id, incoming.get(id)! - 1);
+    }
+    return result;
   }
   /** Services registered by modules are removed on rollback and engine disposal. */
   provide<T>(token: Token<T>, value: NoInfer<T>, scope: Scope): void {
@@ -193,6 +291,7 @@ export class Engine {
     this.assertOpen();
     if (this.installing) throw new Error('Cannot start during module installation');
     if (this.state === 'running') return;
+    this.orderedSystems();
     this.accumulator = 0;
     this.begin('started');
   }
@@ -206,6 +305,7 @@ export class Engine {
   resume(): void {
     this.assertOpen();
     if (this.state === 'paused') {
+      this.orderedSystems();
       this.accumulator = 0;
       this.begin('resumed');
     }
@@ -227,7 +327,20 @@ export class Engine {
       this.tick++;
       this.run('fixed', this.step, 0);
       if (this.state !== 'running') return;
-      this.world.flush();
+      try {
+        this.world.flush();
+      } catch (cause) {
+        const cleanupErrors: unknown[] = [];
+        if (this.status !== 'disposed')
+          try {
+            this.stop();
+          } catch (error) {
+            cleanupErrors.push(error);
+          }
+        throw new Error('Deferred command failed', {
+          cause: cleanupErrors.length ? new AggregateError([cause, ...cleanupErrors]) : cause,
+        });
+      }
       if (this.state !== 'running') return;
       this.accumulator = Math.max(0, this.accumulator - this.step);
     }
@@ -249,17 +362,29 @@ export class Engine {
     }
   }
   private run(phase: 'fixed' | 'render', delta: number, alpha: number): void {
-    for (const system of [...this.systems]) {
+    for (const system of this.orderedSystems()) {
       if (this.state !== 'running') break;
       if ((system.phase ?? 'fixed') !== phase) continue;
-      const started = performance.now();
+      const started = this.options.diagnostics === false ? 0 : performance.now();
       try {
         system.update({ world: this.world, delta, tick: this.tick, alpha });
       } catch (cause) {
-        if (this.status !== 'disposed') this.stop();
-        throw new Error(`System failed: ${system.id}`, { cause });
+        const errors = [cause];
+        if (this.status !== 'disposed')
+          try {
+            this.stop();
+          } catch (error) {
+            errors.push(error);
+          }
+        throw new SystemError(
+          system.id,
+          phase,
+          this.tick,
+          errors.length === 1 ? cause : new AggregateError(errors),
+        );
       }
-      this.timings.push({ id: system.id, milliseconds: performance.now() - started });
+      if (this.options.diagnostics !== false)
+        this.timings.push({ id: system.id, milliseconds: performance.now() - started });
     }
   }
   private begin(event: 'started' | 'resumed'): void {
