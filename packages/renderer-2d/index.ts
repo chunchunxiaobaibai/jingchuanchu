@@ -1,37 +1,46 @@
-import { component, type World } from '@xiaobaibaifqy/jingchuanchu-ecs';
-
-export interface Point {
-  x: number;
-  y: number;
-}
-export interface Stroke {
-  points: Point[];
-  color: string;
-  width: number;
-}
-export const Position2D = component<Point>('Position2D');
-export const Shape2D = component<{
-  kind: 'circle' | 'rect';
-  color: string;
-  width: number;
-  height: number;
-  layer: number;
-}>('Shape2D');
-
+import type { World } from '@xiaobaibaifqy/jingchuanchu-ecs';
+import { Position2D, Shape2D, type Point, type Stroke } from './components.js';
+export { Position2D, Shape2D, type Point, type Stroke } from './components.js';
+import { Transform2D, Sprite2D, Camera2D, createTransformResolver, multiply } from './features.js';
 export class Canvas2D {
   readonly context: CanvasRenderingContext2D;
+  private logicalWidth: number;
+  private logicalHeight: number;
+  private pixelRatio = 1;
+  get width(): number {
+    return this.logicalWidth;
+  }
+  get height(): number {
+    return this.logicalHeight;
+  }
   constructor(
     readonly canvas: HTMLCanvasElement,
-    readonly width = 960,
-    readonly height = 600,
+    width = 960,
+    height = 600,
   ) {
     const context = canvas.getContext('2d');
     if (!context) throw new Error('Canvas 2D is unavailable');
     this.context = context;
-    const ratio = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = width * ratio;
-    canvas.height = height * ratio;
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    this.logicalWidth = width;
+    this.logicalHeight = height;
+    this.resize(width, height);
+  }
+  resize(
+    width = this.width,
+    height = this.height,
+    pixelRatio = window.devicePixelRatio || 1,
+  ): void {
+    if (![width, height, pixelRatio].every((value) => Number.isFinite(value) && value > 0))
+      throw new Error('Invalid canvas dimensions');
+    this.logicalWidth = width;
+    this.logicalHeight = height;
+    this.pixelRatio = Math.min(pixelRatio, 2);
+    this.canvas.width = Math.round(width * this.pixelRatio);
+    this.canvas.height = Math.round(height * this.pixelRatio);
+    this.context.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, 0, 0);
+  }
+  toWorldPoint(clientX: number, clientY: number, camera: Camera2D): Point {
+    return camera.screenToWorld(this.toPoint(clientX, clientY));
   }
   toPoint(clientX: number, clientY: number): Point {
     const rect = this.canvas.getBoundingClientRect();
@@ -64,20 +73,69 @@ export class Canvas2D {
     for (const point of stroke.points.slice(1)) ctx.lineTo(point.x, point.y);
     ctx.stroke();
   }
-  drawWorld(world: World): void {
-    const entities = [...world.query(Position2D, Shape2D)].sort(
-      (a, b) => world.require(a, Shape2D).layer - world.require(b, Shape2D).layer,
-    );
-    for (const entity of entities) {
-      const position = world.require(entity, Position2D);
-      const shape = world.require(entity, Shape2D);
+  drawWorld(world: World, camera?: Camera2D): void {
+    const resolve = createTransformResolver(world);
+    const view = camera?.matrix;
+    const shapes = Array.from(world.query(Position2D, Shape2D), (entity) => ({
+      entity,
+      shape: world.require(entity, Shape2D),
+      position: world.require(entity, Position2D),
+    }));
+    for (const entity of world.query(Transform2D, Shape2D))
+      if (!world.has(entity, Position2D))
+        shapes.push({ entity, shape: world.require(entity, Shape2D), position: { x: 0, y: 0 } });
+    const sprites = Array.from(world.query(Sprite2D), (entity) => ({
+      entity,
+      sprite: world.require(entity, Sprite2D),
+    }));
+    const items = [
+      ...shapes.map((item) => ({ ...item, layer: item.shape.layer })),
+      ...sprites.map((item) => ({ ...item, layer: item.sprite.layer ?? 0 })),
+    ].sort((a, b) => a.layer - b.layer);
+    for (const item of items) {
       const ctx = this.context;
-      ctx.fillStyle = shape.color;
-      if (shape.kind === 'rect') ctx.fillRect(position.x, position.y, shape.width, shape.height);
-      else {
-        ctx.beginPath();
-        ctx.arc(position.x, position.y, shape.width / 2, 0, Math.PI * 2);
-        ctx.fill();
+      const transformed = !!camera || world.has(item.entity, Transform2D) || 'sprite' in item;
+      if (transformed) {
+        const matrix = view ? multiply(view, resolve(item.entity)) : resolve(item.entity);
+        ctx.save();
+        ctx.transform(...matrix);
+      }
+      try {
+        if ('shape' in item) {
+          const { shape, position } = item;
+          const x = transformed ? 0 : position.x,
+            y = transformed ? 0 : position.y;
+          ctx.fillStyle = shape.color;
+          if (shape.kind === 'rect') ctx.fillRect(x, y, shape.width, shape.height);
+          else {
+            ctx.beginPath();
+            ctx.arc(x, y, shape.width / 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        } else {
+          const sprite = item.sprite;
+          if (sprite.width <= 0 || sprite.height <= 0) continue;
+          ctx.globalAlpha = Math.max(0, Math.min(1, sprite.opacity ?? 1));
+          ctx.scale(sprite.flipX ? -1 : 1, sprite.flipY ? -1 : 1);
+          const x = -(sprite.anchorX ?? 0) * sprite.width,
+            y = -(sprite.anchorY ?? 0) * sprite.height;
+          if (sprite.frame) {
+            const frame = sprite.frame;
+            ctx.drawImage(
+              sprite.image,
+              frame.x,
+              frame.y,
+              frame.width,
+              frame.height,
+              x,
+              y,
+              sprite.width,
+              sprite.height,
+            );
+          } else ctx.drawImage(sprite.image, x, y, sprite.width, sprite.height);
+        }
+      } finally {
+        if (transformed) ctx.restore();
       }
     }
   }

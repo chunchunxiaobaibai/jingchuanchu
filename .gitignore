@@ -8,3 +8,4 @@ playwright-report/
 archive/artifacts/
 .npmrc
 *.pem
+tests/fixtures/baseline/

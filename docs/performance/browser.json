@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "canvasWidth": 128,
+  "canvasHeight": 64,
+  "baseline": {
+    "medianMs": 26.699999999720603,
+    "minMs": 22.899999999906868,
+    "maxMs": 33.799999999813735
+  },
+  "current": {
+    "medianMs": 11.799999999813735,
+    "minMs": 10.399999999906868,
+    "maxMs": 13.099999999627471
+  }
+}

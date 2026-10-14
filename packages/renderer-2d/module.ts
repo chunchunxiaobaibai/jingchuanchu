@@ -1,6 +1,7 @@
 import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
 import { resource } from '@xiaobaibaifqy/jingchuanchu-ecs';
 import { Canvas2D } from './index.js';
+import type { Camera2D } from './features.js';
 
 export const Renderer2D = resource<Canvas2D>('Renderer2D');
 export function canvas2DModule(options: {
@@ -9,6 +10,7 @@ export function canvas2DModule(options: {
   height?: number;
   renderWorld?: boolean;
   background?: string;
+  camera?: Camera2D;
 }): EngineModule {
   return {
     id: 'renderer-2d',
@@ -23,7 +25,7 @@ export function canvas2DModule(options: {
             order: 100,
             update({ world }) {
               renderer.clear(options.background);
-              renderer.drawWorld(world);
+              renderer.drawWorld(world, options.camera);
             },
           },
           scope,

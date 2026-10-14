@@ -5,7 +5,7 @@
 解压分发归档，保留 `packages` 与 `starters` 的相对位置：
 
 ```bash
-cd jingchuanchu-engine-0.3.0/starters/browser
+cd jingchuanchu-engine-0.4.0/starters/browser
 npm install
 npm run dev
 ```
@@ -20,7 +20,7 @@ npm run dev
 在你自己的项目目录运行安装器，下面路径替换成实际解压位置：
 
 ```bash
-node /path/to/jingchuanchu-engine-0.3.0/install.mjs --preset singleplayer
+node /path/to/jingchuanchu-engine-0.4.0/install.mjs --preset singleplayer
 ```
 
 预设及用途：

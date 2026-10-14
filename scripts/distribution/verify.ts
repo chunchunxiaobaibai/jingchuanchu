@@ -185,50 +185,52 @@ try {
     '@xiaobaibaifqy/jingchuanchu-net-server',
   ])
     assert.equal(`node_modules/${forbidden}` in starterLock.packages, false);
-  // Production build is served by the consumer's own Vite, never the engine workspace.
-  const { preview } = (await import(
-    resolve(starter, 'node_modules/vite/dist/node/index.js')
-  )) as typeof import('vite');
-  const previewServer = await preview({ root: starter, preview: { port: 0, host: '127.0.0.1' } });
-  const address = previewServer.httpServer.address();
-  if (!address || typeof address === 'string') throw new Error('Missing preview address');
-  const browser = await chromium.launch();
-  try {
-    const page = await browser.newPage();
-    let sockets = 0;
-    const errors: string[] = [];
-    page.on('websocket', () => {
-      sockets++;
-    });
-    page.on('pageerror', (error) => {
-      errors.push(error.message);
-    });
-    await page.goto(`http://127.0.0.1:${address.port}`);
-    const before = await page.locator('canvas').screenshot();
-    await page.locator('canvas').focus();
-    await page.keyboard.down('ArrowRight');
-    await page.waitForTimeout(200);
-    await page.keyboard.up('ArrowRight');
-    assert.equal((await page.locator('canvas').screenshot()).equals(before), false);
-    await page.getByRole('button', { name: '暂停', exact: true }).click();
-    assert.equal(await page.locator('#status').innerText(), '已暂停');
-    await page.getByRole('button', { name: '继续', exact: true }).click();
-    await page.setViewportSize({ width: 320, height: 740 });
-    assert.equal(
-      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
-      true,
-    );
-    await page.screenshot({
-      path: resolve('test-results/distribution-starter.png'),
-      fullPage: true,
-    });
-    assert.equal(sockets, 0);
-    assert.deepEqual(errors, []);
-  } finally {
-    await browser.close();
-    await new Promise<void>((resolveClose, reject) =>
-      previewServer.httpServer.close((error) => (error ? reject(error) : resolveClose())),
-    );
+  if (!process.argv.includes('--skip-browser')) {
+    // Production build is served by the consumer's own Vite, never the engine workspace.
+    const { preview } = (await import(
+      resolve(starter, 'node_modules/vite/dist/node/index.js')
+    )) as typeof import('vite');
+    const previewServer = await preview({ root: starter, preview: { port: 0, host: '127.0.0.1' } });
+    const address = previewServer.httpServer.address();
+    if (!address || typeof address === 'string') throw new Error('Missing preview address');
+    const browser = await chromium.launch();
+    try {
+      const page = await browser.newPage();
+      let sockets = 0;
+      const errors: string[] = [];
+      page.on('websocket', () => {
+        sockets++;
+      });
+      page.on('pageerror', (error) => {
+        errors.push(error.message);
+      });
+      await page.goto(`http://127.0.0.1:${address.port}`);
+      const before = await page.locator('canvas').screenshot();
+      await page.locator('canvas').focus();
+      await page.keyboard.down('ArrowRight');
+      await page.waitForTimeout(200);
+      await page.keyboard.up('ArrowRight');
+      assert.equal((await page.locator('canvas').screenshot()).equals(before), false);
+      await page.getByRole('button', { name: '暂停', exact: true }).click();
+      assert.equal(await page.locator('#status').innerText(), '已暂停');
+      await page.getByRole('button', { name: '继续', exact: true }).click();
+      await page.setViewportSize({ width: 320, height: 740 });
+      assert.equal(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+        true,
+      );
+      await page.screenshot({
+        path: resolve('test-results/distribution-starter.png'),
+        fullPage: true,
+      });
+      assert.equal(sockets, 0);
+      assert.deepEqual(errors, []);
+    } finally {
+      await browser.close();
+      await new Promise<void>((resolveClose, reject) =>
+        previewServer.httpServer.close((error) => (error ? reject(error) : resolveClose())),
+      );
+    }
   }
   const networking = join(bundle, 'examples/network');
   // Vite preview sets NODE_ENV=production in this process; the example's TS check still needs its development types.
@@ -265,7 +267,7 @@ try {
   );
   run(process.execPath, ['verify.mjs'], networking);
   console.log(
-    'Distribution verification passed: archive/license/docs, selected installer, checksums, headless/examples, isolated browser starter, real network roundtrip',
+    `Distribution verification passed: archive/license/docs, selected installer, checksums, headless/examples, starter compilation, ${process.argv.includes('--skip-browser') ? 'browser skipped by user preference' : 'browser starter'}, real network roundtrip`,
   );
 } finally {
   await rm(temporary, { recursive: true, force: true });

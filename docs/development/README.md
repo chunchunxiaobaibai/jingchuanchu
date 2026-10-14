@@ -1,6 +1,6 @@
 # 引擎开发手册
 
-适用版本：0.3.0。读者可以是游戏开发者，也可以是在引擎上增加模块的开发者。
+适用版本：0.4.0（本地未发布版本）；公共 npm 当前仍为 0.3.0。读者可以是游戏开发者，也可以是在引擎上增加模块的开发者。
 引擎、示例和文档按 MIT 授权，许可证原文见分发根目录 `LICENSE`。
 
 ## 阅读顺序
@@ -16,6 +16,8 @@
 
 维护者另见 [npm 发布手册](../maintainers/npm-publishing.md) 和 [GitHub 上传说明](../maintainers/github.md)。
 
+新版扩展见 [0.4.0 兼容扩展](extensions-0.4.md)。
+
 ## 当前提供什么
 
 8 个按需引用的 ESM 包：ecs、core、browser、renderer-2d、input、assets、net、net-server。
@@ -23,7 +25,7 @@
 主仓库包含引擎、回归测试、分发模板与最小接入示例；两个历史完整游戏单独保存在 `archive/legacy-demos`，拥有独立的依赖配置。分发安装器只安装选择的模块及其依赖。
 
 游戏代码只调用公开包入口，不能修改引擎内置文件。角色、得分、关卡、回合等规则放在游戏模块。
-引擎目前没有编辑器、完整物理、音频、账号系统、通用同步协议、异步 setup 或单模块动态卸载。
+引擎目前没有编辑器、完整物理、音频、账号系统、通用同步协议、异步 EngineModule.setup 或单模块动态卸载；已提供精灵动画、基础碰撞及场景 prepare/setup。
 
 ## 运行条件
 
@@ -37,7 +39,7 @@ TS 最低版本依据：[NoInfer 官方说明](https://www.typescriptlang.org/do
 ## 分发目录
 
 ```text
-jingchuanchu-engine-0.3.0/
+jingchuanchu-engine-0.4.0/
   README.md              分发安装说明
   LICENSE                MIT 授权
   manifest.json          包版本、依赖、文件名和 SHA-256

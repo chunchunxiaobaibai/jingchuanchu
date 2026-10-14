@@ -34,6 +34,12 @@ await host.close();
 
 包提供 ESM、TypeScript 声明与源码。TS >=5.4；浏览器功能需要对应浏览器 API，服务端开发使用 Node >=22.12。完整 API、模块组合和可运行模板在分发套件 docs/development 中。
 
+## 0.4.0 扩展
+
+WebSocketHost 的构造、处理器与 close 保留。客户端可选的应用层心跳需要游戏 decoder 与 message 处理器接收并回应；服务端原有 WebSocket 控制帧心跳仍由本包负责。房间身份和重连恢复依然属于游戏规则。
+
+本仓库 0.4.0 尚未上传 npm，新增能力请使用本地 tgz 或分发套件；公共包当前为 0.3.0。完整契约见分发套件 `docs/development/extensions-0.4.md`。
+
 ## 授权
 
 MIT，见 [LICENSE](LICENSE)。

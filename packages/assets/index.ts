@@ -21,29 +21,35 @@ export class AssetCache<T> {
     if (this.closed) return Promise.reject(new Error('Asset cache is disposed'));
     const existing = this.entries.get(url);
     if (existing && existing.status !== 'failed') return existing.promise;
+    if (existing) {
+      this.entries.delete(url);
+      this.remove(existing);
+    }
+    let resolve!: (value: T) => void;
+    let reject!: (reason: unknown) => void;
     const entry: Entry<T> = {
-      promise: undefined as unknown as Promise<T>,
+      promise: new Promise<T>((success, failure) => {
+        resolve = success;
+        reject = failure;
+      }),
       controller: new Cancellation(),
       status: 'loading',
       references: 0,
       removed: false,
     };
     this.entries.set(url, entry);
+    const failed = (error: unknown): void => {
+      entry.status = 'failed';
+      reject(error);
+    };
     try {
-      entry.promise = Promise.resolve(this.load(url, entry.controller));
-    } catch (error) {
-      entry.promise = Promise.reject(error);
-    }
-    entry.promise = entry.promise.then(
-      (asset) => {
+      void Promise.resolve(this.load(url, entry.controller)).then((asset) => {
         entry.status = 'ready';
-        return asset;
-      },
-      (error) => {
-        entry.status = 'failed';
-        throw error;
-      },
-    );
+        resolve(asset);
+      }, failed);
+    } catch (error) {
+      failed(error);
+    }
     return entry.promise;
   }
   getStatus(url: string): AssetStatus {
@@ -74,8 +80,8 @@ export class AssetCache<T> {
     return true;
   }
   clear(): void {
-    for (const [url, entry] of this.entries)
-      if (this.closed || entry.references === 0) {
+    for (const [url, entry] of [...this.entries])
+      if (this.entries.get(url) === entry && (this.closed || entry.references === 0)) {
         this.entries.delete(url);
         this.remove(entry);
       }

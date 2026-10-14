@@ -39,6 +39,7 @@ for (const selection of [
     );
     const source = `import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
 import { component } from '@xiaobaibaifqy/jingchuanchu-ecs';
+import { SceneManager } from '@xiaobaibaifqy/jingchuanchu-core/scenes';
 const Position = component<{ x: number }>('Position');
 const engine = new Engine();
 const entity = engine.world.create();
@@ -47,13 +48,30 @@ engine.addSystem({ id: 'move', update({ world }) { world.require(entity, Positio
 engine.start(); engine.advance(engine.step);
 if (engine.world.require(entity, Position).x !== 2) throw new Error('Packaged ECS failed');
 engine.dispose();
+const sceneEngine = new Engine({diagnostics:false}); const scenes = new SceneManager(sceneEngine);
+await scenes.switchTo({id:'consumer',setup(context){context.create();context.addSystem({id:'scene-system',update(){}});}});
+if(sceneEngine.world.size!==1)throw new Error('Scene consumer failed');
+sceneEngine.dispose();
 ${
   selection.length > 2
     ? `import { browserModule } from '@xiaobaibaifqy/jingchuanchu-browser';
 import { canvas2DModule } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/module';
 import { keyboardModule } from '@xiaobaibaifqy/jingchuanchu-input/module';
 import { assetModule } from '@xiaobaibaifqy/jingchuanchu-assets/module';
-if (![browserModule, canvas2DModule, keyboardModule, assetModule].every(value => typeof value === 'function')) throw new Error('Missing public module');`
+if (![browserModule, canvas2DModule, keyboardModule, assetModule].every(value => typeof value === 'function')) throw new Error('Missing public module');
+import { Transform2D, Sprite2D, Animation2D, Camera2D, animationModule } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/features';
+import { Collider2D, detectCollisions } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/collision';
+import { AssetCache } from '@xiaobaibaifqy/jingchuanchu-assets';
+const featureEngine = new Engine({tickRate:2}); const sprite=featureEngine.world.create();
+featureEngine.world.set(sprite,Transform2D,{x:0,y:0});
+featureEngine.world.set(sprite,Sprite2D,{image:{} as CanvasImageSource,width:16,height:16});
+featureEngine.world.set(sprite,Animation2D,{fps:2,frames:[{x:0,y:0,width:16,height:16},{x:16,y:0,width:16,height:16}]});
+featureEngine.world.set(sprite,Collider2D,{kind:'circle',radius:8});
+featureEngine.install([animationModule()]);featureEngine.start();featureEngine.advance(.5);
+if(featureEngine.world.require(sprite,Sprite2D).frame?.x!==16)throw new Error('Packaged animation failed');
+if(detectCollisions(featureEngine.world).length!==0)throw new Error('Packaged collision failed');
+if(new Camera2D(10,0,2).screenToWorld({x:20,y:0}).x!==20)throw new Error('Packaged camera failed');
+const assets=new AssetCache(async(url:string)=>url);const lease=assets.retain('sprite');await lease.promise;assets.clear();if(assets.getStatus('sprite')!=='ready')throw new Error('Packaged retain failed');lease.release();assets.dispose();featureEngine.dispose();`
     : ''
 }
 `;

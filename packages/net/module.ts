@@ -12,7 +12,7 @@ export function networkModule<Client, Server>(
     decoder: Decoder<Server>;
     onMessage(message: Server): void;
     onStatus?: (status: 'connecting' | 'open' | 'closed' | 'error') => void;
-  } & ConnectionOptions,
+  } & ConnectionOptions<Client, Server>,
 ): NetworkModule<Client, Server> {
   const id = options.id ?? 'network';
   const connection = resource<BrowserConnection<Client, Server>>(`${id}:connection`);

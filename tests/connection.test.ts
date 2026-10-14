@@ -61,3 +61,93 @@ test('business handler failures do not close valid transport; invalid messages d
     restore();
   }
 });
+
+test('explicit queued sends coalesce with bounds; retry cancels on close', async () => {
+  const restore = sockets();
+  const connection = new BrowserConnection<string, unknown>(
+    { parse: (value) => value },
+    () => {},
+    () => {},
+    { reconnect: { delayMs: 5, maxAttempts: 2 }, maxQueuedMessages: 2, maxQueuedBytes: 100 },
+  );
+  try {
+    connection.connect('ws://test');
+    assert.equal(connection.send('first', { queue: true, key: 'pointer' }), true);
+    assert.equal(connection.send('latest', { queue: true, key: 'pointer' }), true);
+    assert.equal(connection.send('reliable', { queue: true }), true);
+    assert.equal(connection.send('overflow', { queue: true }), false);
+    const first = Socket.instances[0]!;
+    first.open();
+    assert.deepEqual(first.sent, ['"latest"', '"reliable"']);
+    first.onclose?.({ code: 1006 });
+    await new Promise((resolve) => setTimeout(resolve, 15));
+    assert.equal(Socket.instances.length, 2);
+    const second = Socket.instances[1]!;
+    second.onclose?.({ code: 1006 });
+    connection.close();
+    await new Promise((resolve) => setTimeout(resolve, 15));
+    assert.equal(Socket.instances.length, 2);
+    assert.equal(connection.stats.queuedMessages, 0);
+  } finally {
+    connection.close();
+    restore();
+  }
+});
+
+test('backpressure drains bounded queues and heartbeats close silent sockets', async () => {
+  const restore = sockets();
+  const connection = new BrowserConnection<string, string>(
+    { parse: (value) => String(value) },
+    () => {},
+    () => {},
+    {
+      maxBufferedBytes: 4,
+      heartbeat: {
+        intervalMs: 5,
+        timeoutMs: 15,
+        message: () => 'ping',
+        isResponse: (value) => value === 'pong',
+      },
+    },
+  );
+  try {
+    connection.connect('ws://test');
+    const socket = Socket.instances[0]!;
+    socket.open();
+    socket.bufferedAmount = 10;
+    assert.equal(connection.send('no'), false);
+    assert.equal(connection.send('queued', { queue: true }), true);
+    socket.bufferedAmount = 0;
+    await new Promise((resolve) => setTimeout(resolve, 18));
+    assert(socket.sent.includes('"queued"'));
+    await new Promise((resolve) => setTimeout(resolve, 15));
+    assert.equal(socket.closed, true);
+    assert.equal(connection.lastError?.kind, 'heartbeat');
+  } finally {
+    connection.close();
+    restore();
+  }
+});
+
+test('reentrant manual reconnect from status callbacks cannot leave a second retry behind', async () => {
+  const restore = sockets();
+  let connection!: BrowserConnection<string, unknown>;
+  connection = new BrowserConnection(
+    { parse: (value) => value },
+    () => {},
+    (status) => {
+      if (status === 'closed') connection.connect('ws://replacement');
+    },
+    { reconnect: { delayMs: 5 } },
+  );
+  try {
+    connection.connect('ws://first');
+    Socket.instances[0]!.onclose?.({ code: 1006 });
+    await new Promise((resolve) => setTimeout(resolve, 15));
+    assert.equal(Socket.instances.length, 2);
+    assert.equal(Socket.instances[1]!.url, 'ws://replacement');
+  } finally {
+    connection.close();
+    restore();
+  }
+});

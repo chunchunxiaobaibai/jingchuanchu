@@ -2,7 +2,7 @@
 
 面向网页 2D 游戏的 TypeScript ECS 引擎。引擎与具体玩法解耦，按需组合单机、渲染、输入、资源及联机功能。引擎与游戏都使用 TypeScript。
 
-当前公共 npm 版本为 **0.3.0**，采用 [MIT](LICENSE) 授权。8 个包均提供 ESM、类型声明和源码；除服务端使用 `ws` 外，没有第三方运行依赖。
+当前公共 npm 版本为 **0.3.0**；本仓库正在准备未发布的 **0.4.0**，包含兼容扩展与优化，采用 [MIT](LICENSE) 授权。8 个包均提供 ESM、类型声明和源码；除服务端使用 `ws` 外，没有第三方运行依赖。
 
 ## 安装与开发游戏
 
@@ -71,20 +71,21 @@ npm run pack:packages
 npm run dist:release
 ```
 
-安装包输出到 `dist/packages/`；完整交付套件输出到 `dist/releases/jingchuanchu-engine-0.3.0.tar.gz`，包含 8 个 tgz、校验清单、按需安装器、开发手册与可运行 starter。
+安装包输出到 `dist/packages/`；完整交付套件输出到 `dist/releases/jingchuanchu-engine-0.4.0.tar.gz`，包含 8 个 tgz、校验清单、按需安装器、开发手册与可运行 starter。
 
-完整外部消费验证：
+默认不启动浏览器的完整外部消费验证：
 
 ```bash
-npx playwright install chromium
-npm run test:distribution
+npm run test:distribution:node
 ```
 
-Linux 需要 Chromium 运行库。此验证会解压归档，在独立项目检查类型、包边界、模板浏览器操作和真实网络通信。
+此验证会解压归档，在独立项目检查类型、包边界、模板静态构建和真实网络通信。浏览器操作由用户后续验证；只有明确需要时运行 test:2d 或 test:distribution（需 Chromium 及 Linux 运行库）。项目约定见 AGENTS.md。
 
 - [npm 发布手册](docs/maintainers/npm-publishing.md)：版本维护、WSL 登录、按依赖顺序发布与远端核对。
 - [GitHub 上传说明](docs/maintainers/github.md)：源码范围、仓库关联和首推。
 - [架构说明](docs/architecture.md)、[验证记录](docs/validation.md)、[更新记录](CHANGELOG.md)。
-- [引擎优化讨论方案](docs/optimization-plan.md)：稳定性、性能和 2D 能力的分阶段建议，尚未实现。
+- [引擎优化讨论方案](docs/optimization-plan.md)：稳定性、性能和 2D 能力的分阶段落地记录。
 
-根包为 `private`，分发对象是 `packages/` 内的 8 个包。0.3.0 已发布且不可覆盖；本次仓库归档不自动产生新版本或重新上传 npm。
+根包为 `private`，分发对象是 `packages/` 内的 8 个包。0.3.0 已发布且不可覆盖；本地 0.4.0 尚未上传 npm，使用新能力请先消费本地 tgz 或分发套件。
+
+0.4.0 新增接口与兼容说明见 [扩展手册](docs/development/extensions-0.4.md)。验证公开名称：`npm run test:api`；真实 Chromium 2D 验证：`npm run test:2d`；性能原始数据见 [测量报告](docs/performance/README.md)。

@@ -1,6 +1,6 @@
 {
   "name": "@xiaobaibaifqy/jingchuanchu-net-server",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Jingchuanchu (镜川初) TypeScript engine net-server module",
   "type": "module",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-net": "^0.3.0",
+    "@xiaobaibaifqy/jingchuanchu-net": "^0.4.0",
     "ws": "^8.18.0"
   },
   "publishConfig": {

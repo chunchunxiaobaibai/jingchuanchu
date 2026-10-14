@@ -32,4 +32,4 @@ renderer、input、assets、net 同时直接使用 ECS 的公开入口。browser
 
 ## 当前限制
 
-没有编辑器、物理、音频、精灵动画、场景管理、异步 setup 或单模块卸载。Canvas 提供基础图形与笔画，网络提供连接与服务端传输基础，未提供通用状态同步协议。优化建议见 [讨论方案](optimization-plan.md)。
+本地 0.4.0 提供精灵动画、场景与基础碰撞。没有编辑器、刚体物理、音频、异步 EngineModule.setup 或单模块卸载。网络策略可选启用，未提供通用状态同步或身份恢复协议。优化记录见 [讨论方案](optimization-plan.md)。

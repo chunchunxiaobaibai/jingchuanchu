@@ -5,12 +5,12 @@
 ## 发布对象与现状
 
 - 账号/作用域：`xiaobaibaifqy` / `@xiaobaibaifqy`。
-- 当前已公开版本：8 个 `@xiaobaibaifqy/jingchuanchu-*` 包的 **0.3.0**。
+- 当前已公开版本：8 个 `@xiaobaibaifqy/jingchuanchu-*` 包的 **0.3.0**；本地候选为尚未上传的 **0.4.0**。
 - 根 package.json 为 `private: true`；不能在根目录直接执行无参数的 `npm publish`。
 - 发布对象是 `dist/packages/*.tgz`；完整 tar.gz 是面向开发者的交付套件，不上传 npm。
 - archive、测试、构建工具及游戏不进入引擎包。包的 `files` 白名单包含 dist、根 TS 源码、README 与 LICENSE；打包时还会包含 package.json。
 
-0.3.0 已占用，不可覆盖。本次目录整理不发布新版本。下一次改变包内容或 npm README，需要用新版本发布；不要移动现有 Git 标签。
+0.3.0 已占用，不可覆盖。本地优化版本不自动发布。下一次改变包内容或 npm README，需要用新版本发布；不要移动现有 Git 标签。
 
 ## 1. 维护版本和元数据
 
@@ -34,19 +34,18 @@ npm ci
 npm run build
 npm test
 npm run format:check
-npx playwright install chromium
-npm run test:distribution
+npm run test:distribution:node
 ```
 
-Linux 需浏览器运行库，tar 需在 PATH 中。完整分发验证包含包文件白名单、许可证、校验值、按需安装、外部 TS 编译、浏览器 starter 与真实网络通信。
+Linux 需浏览器运行库，tar 需在 PATH 中。默认分发验证不启动浏览器，包含包文件白名单、许可证、校验值、按需安装、外部 TS 编译、starter 静态构建与真实网络通信。浏览器部分留给用户按需验证。
 
 检查每个 tgz 内容，确认是目标版本，例如：
 
 ```bash
-npm publish ./dist/packages/xiaobaibaifqy-jingchuanchu-ecs-0.3.0.tgz --dry-run --json --registry=https://registry.npmjs.org/
+npm publish ./dist/packages/xiaobaibaifqy-jingchuanchu-ecs-0.4.0.tgz --dry-run --json --registry=https://registry.npmjs.org/
 ```
 
-以上是 0.3.0 产物的**预检示例**，不会上传；正式发布必须替换为未发布的新版本。
+以上是本地 0.4.0 产物的**预检示例**，不会上传；正式发布需确认目标版本仍未被上传。
 
 ## 3. Git 发行标记
 
@@ -73,10 +72,10 @@ npm login --auth-type=web --browser=false --registry=https://registry.npmjs.org/
 
 按依赖顺序：ecs → core → browser、renderer-2d、input、assets、net → net-server。
 
-下面是 Bash 示例，**仅用于实际决定发布新版本时**。把 `0.3.1` 改成已验证且尚未上传的版本，核对账号后执行：
+下面是 Bash 示例，**仅用于实际决定发布新版本时**。将示例 `0.4.0` 核对为已验证且尚未上传的版本，核对账号后执行：
 
 ```bash
-release_version=0.3.1
+release_version=0.4.0
 for module in ecs core browser renderer-2d input assets net net-server; do
   npm publish "./dist/packages/xiaobaibaifqy-jingchuanchu-${module}-${release_version}.tgz" \
     --access public --registry=https://registry.npmjs.org/ --browser=false || exit 1

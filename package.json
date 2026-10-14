@@ -1,6 +1,6 @@
 {
   "name": "jingchuanchu-engine",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,17 +13,22 @@
     "build:packages": "tsx scripts/build-packages.ts",
     "pack:packages": "npm run build:packages && tsx scripts/pack-packages.ts",
     "dist:release": "npm run typecheck && npm run pack:packages && tsx scripts/distribution/build.ts",
-    "test:distribution": "npm run dist:release && tsx scripts/distribution/verify.ts"
+    "test:distribution": "npm run dist:release && tsx scripts/distribution/verify.ts",
+    "test:api": "tsx scripts/verify-api.ts",
+    "test:2d": "tsx scripts/verify-2d.ts",
+    "benchmark": "tsx --conditions=source scripts/benchmark.ts",
+    "benchmark:isolated": "tsx --conditions=source scripts/benchmark-isolated.ts",
+    "test:distribution:node": "npm run dist:release && tsx scripts/distribution/verify.ts --skip-browser"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.3.0",
-    "@xiaobaibaifqy/jingchuanchu-core": "^0.3.0",
-    "@xiaobaibaifqy/jingchuanchu-renderer-2d": "^0.3.0",
-    "@xiaobaibaifqy/jingchuanchu-input": "^0.3.0",
-    "@xiaobaibaifqy/jingchuanchu-assets": "^0.3.0",
-    "@xiaobaibaifqy/jingchuanchu-browser": "^0.3.0",
-    "@xiaobaibaifqy/jingchuanchu-net": "^0.3.0",
-    "@xiaobaibaifqy/jingchuanchu-net-server": "^0.3.0"
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-renderer-2d": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-input": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-assets": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-browser": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-net": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-net-server": "^0.4.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.0",

@@ -67,3 +67,28 @@ test('retained resources survive clear; late loads release exactly once and repo
   await new Promise((resolve) => setTimeout(resolve, 0));
   assert.equal(broken.releaseErrors.length, 1);
 });
+
+test('clearing a load tolerates a synchronous cancellation retry without looping', async () => {
+  let cache!: AssetCache<string>;
+  let attempts = 0;
+  const releases: string[] = [];
+  cache = new AssetCache(
+    async (url, signal) => {
+      attempts++;
+      if (attempts === 1)
+        signal.subscribe(() => {
+          void cache.get(url);
+        });
+      return url;
+    },
+    (value) => releases.push(value),
+  );
+  const first = cache.get('image');
+  cache.clear();
+  await first;
+  await cache.get('image');
+  assert.equal(attempts, 2);
+  cache.dispose();
+  await Promise.resolve();
+  assert.deepEqual(releases, ['image', 'image']);
+});

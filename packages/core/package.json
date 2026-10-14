@@ -1,6 +1,6 @@
 {
   "name": "@xiaobaibaifqy/jingchuanchu-core",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Jingchuanchu (镜川初) TypeScript engine core module",
   "type": "module",
   "license": "MIT",
@@ -13,6 +13,14 @@
       },
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./scenes": {
+      "source": {
+        "types": "./scenes.ts",
+        "default": "./scenes.ts"
+      },
+      "types": "./dist/scenes.d.ts",
+      "default": "./dist/scenes.js"
     }
   },
   "files": [
@@ -25,7 +33,7 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.3.0"
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.4.0"
   },
   "publishConfig": {
     "access": "public",

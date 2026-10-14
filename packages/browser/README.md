@@ -25,6 +25,12 @@ window.addEventListener('pagehide', () => engine.dispose(), { once: true });
 
 包提供 ESM、TypeScript 声明与源码。TS >=5.4；浏览器功能需要对应浏览器 API，服务端开发使用 Node >=22.12。完整 API、模块组合和可运行模板在分发套件 docs/development 中。
 
+## 0.4.0 扩展
+
+原 browserModule/runBrowser 调用方式保留。新的相机、精灵和场景能力在 renderer-2d/features 与 core/scenes 中按需接入，不需要让浏览器循环依赖联网。
+
+本仓库 0.4.0 尚未上传 npm，新增能力请使用本地 tgz 或分发套件；公共包当前为 0.3.0。完整契约见分发套件 `docs/development/extensions-0.4.md`。
+
 ## 授权
 
 MIT，见 [LICENSE](LICENSE)。
