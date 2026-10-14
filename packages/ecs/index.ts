@@ -53,6 +53,7 @@ class SparseSet<T> {
 export class World {
   private readonly id = Symbol('World');
   private readonly generations: number[] = [];
+  private readonly handles: Array<Entity | undefined> = [];
   private readonly alive = new Set<number>();
   private readonly free: number[] = [];
   private readonly stores = new Map<symbol, SparseSet<unknown>>();
@@ -67,7 +68,9 @@ export class World {
     const index = this.free.pop() ?? this.generations.length;
     this.generations[index] ??= 0;
     this.alive.add(index);
-    return Object.freeze({ worldId: this.id, index, generation: this.generations[index]! });
+    const entity = Object.freeze({ worldId: this.id, index, generation: this.generations[index]! });
+    this.handles[index] = entity;
+    return entity;
   }
   isAlive(entity: Entity): boolean {
     return (
@@ -81,6 +84,7 @@ export class World {
     if (!this.isAlive(entity)) return false;
     for (const store of this.stores.values()) store.delete(entity.index);
     this.alive.delete(entity.index);
+    this.handles[entity.index] = undefined;
     this.generations[entity.index]!++;
     this.free.push(entity.index);
     return true;
@@ -100,8 +104,9 @@ export class World {
   }
   require<T>(entity: Entity, token: Token<T>): T {
     this.assertAlive(entity);
-    if (!this.has(entity, token)) throw new Error(`Missing component: ${token.name}`);
-    return this.get(entity, token) as T;
+    const store = this.stores.get(token.key);
+    if (!store?.has(entity.index)) throw new Error(`Missing component: ${token.name}`);
+    return store.get(entity.index) as T;
   }
   has<T>(entity: Entity, token: Token<T>): boolean {
     return this.isAlive(entity) && (this.stores.get(token.key)?.has(entity.index) ?? false);
@@ -120,9 +125,7 @@ export class World {
     );
     const candidates = smallest ? [...smallest.indices] : [...this.alive];
     // Snapshot handles prevent recycled indices from entering an active traversal.
-    const entities = candidates.map((index) =>
-      Object.freeze({ worldId: this.id, index, generation: this.generations[index]! }),
-    );
+    const entities = candidates.map((index) => this.handles[index]!);
     for (const entity of entities)
       if (this.isAlive(entity) && stores.every((store) => store!.has(entity.index))) yield entity;
   }
@@ -159,6 +162,7 @@ export class World {
   dispose(): void {
     this.disposed = true;
     this.alive.clear();
+    this.handles.length = 0;
     this.stores.clear();
     this.resources.clear();
     this.commands = [];

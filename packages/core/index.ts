@@ -34,8 +34,14 @@ export interface CancellationSignal {
 }
 export class Cancellation implements CancellationSignal {
   private listeners = new Set<Cleanup>();
-  aborted = false;
-  reason: unknown;
+  private cancelled = false;
+  private cause: unknown;
+  get aborted(): boolean {
+    return this.cancelled;
+  }
+  get reason(): unknown {
+    return this.cause;
+  }
   subscribe(listener: Cleanup): Cleanup {
     if (this.aborted) {
       listener();
@@ -51,8 +57,8 @@ export class Cancellation implements CancellationSignal {
   }
   cancel(reason: unknown = new Error('Cancelled')): void {
     if (this.aborted) return;
-    this.aborted = true;
-    this.reason = reason;
+    this.cancelled = true;
+    this.cause = reason;
     const listeners = [...this.listeners];
     this.listeners.clear();
     const errors: unknown[] = [];
@@ -153,7 +159,8 @@ export class Engine {
   readonly events = new EventBus<EngineEvents>();
   readonly timings: SystemTiming[] = [];
   readonly step: number;
-  private readonly systems: System[] = [];
+  private systems: System[] = [];
+  private scheduled: System[] | undefined;
   private accumulator = 0;
   private tick = 0;
   private state: EngineStatus = 'stopped';
@@ -185,9 +192,10 @@ export class Engine {
     }));
   }
   private orderedSystems(): System[] {
+    if (this.scheduled) return this.scheduled;
     const remaining = [...this.systems];
     if (!remaining.some((system) => system.before?.length || system.after?.length))
-      return remaining;
+      return (this.scheduled = this.systems);
     const byId = new Map(remaining.map((system) => [system.id, system]));
     const edges = new Map(remaining.map((system) => [system.id, new Set<string>()]));
     const incoming = new Map(remaining.map((system) => [system.id, 0]));
@@ -214,7 +222,7 @@ export class Engine {
       result.push(system);
       for (const id of edges.get(system.id)!) incoming.set(id, incoming.get(id)! - 1);
     }
-    return result;
+    return (this.scheduled = result);
   }
   /** Services registered by modules are removed on rollback and engine disposal. */
   provide<T>(token: Token<T>, value: NoInfer<T>, scope: Scope): void {
@@ -231,11 +239,15 @@ export class Engine {
     this.assertOpen();
     if (this.systems.some((item) => item.id === system.id))
       throw new Error(`Duplicate system: ${system.id}`);
-    this.systems.push(system);
+    this.scheduled = undefined;
+    this.systems = [...this.systems, system];
     this.systems.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     scope.own(() => {
       const index = this.systems.indexOf(system);
-      if (index >= 0) this.systems.splice(index, 1);
+      if (index >= 0) {
+        this.systems = this.systems.filter((item) => item !== system);
+        this.scheduled = undefined;
+      }
     });
   }
   install(modules: readonly EngineModule[]): void {
@@ -358,11 +370,31 @@ export class Engine {
         this.world.dispose();
         this.events.clear();
         this.installed.clear();
+        this.systems = [];
+        this.scheduled = [];
       }
     }
   }
   private run(phase: 'fixed' | 'render', delta: number, alpha: number): void {
-    for (const system of this.orderedSystems()) {
+    let systems: System[];
+    try {
+      systems = this.orderedSystems();
+    } catch (cause) {
+      const errors = [cause];
+      if (this.status !== 'disposed')
+        try {
+          this.stop();
+        } catch (error) {
+          errors.push(error);
+        }
+      throw new SystemError(
+        'scheduler',
+        phase,
+        this.tick,
+        errors.length === 1 ? cause : new AggregateError(errors),
+      );
+    }
+    for (const system of systems) {
       if (this.state !== 'running') break;
       if ((system.phase ?? 'fixed') !== phase) continue;
       const started = this.options.diagnostics === false ? 0 : performance.now();

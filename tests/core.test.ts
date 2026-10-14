@@ -242,3 +242,43 @@ test('deferred failure stops the engine and preserves the original cause', () =>
   assert.equal(rendered, false);
   engine.dispose();
 });
+
+test('active traversal is stable across scoped system removal and registration', () => {
+  const engine = new Engine({ diagnostics: false }),
+    scope = new Scope(),
+    calls: string[] = [];
+  let changed = false;
+  engine.addSystem({
+    id: 'mutate',
+    update() {
+      calls.push('mutate');
+      if (!changed) {
+        changed = true;
+        scope.dispose();
+        engine.addSystem({
+          id: 'new',
+          update() {
+            calls.push('new');
+          },
+        });
+      }
+    },
+  });
+  engine.addSystem(
+    {
+      id: 'removed',
+      update() {
+        calls.push('removed');
+      },
+    },
+    scope,
+  );
+  engine.start();
+  engine.advance(engine.step);
+  assert.deepEqual(calls, ['mutate', 'removed']);
+  calls.length = 0;
+  engine.advance(engine.step);
+  assert.deepEqual(calls, ['mutate', 'new']);
+  engine.dispose();
+  assert.deepEqual(engine.getSystems(), []);
+});
