@@ -30,6 +30,8 @@ BrowserConnection 与 networkModule 新增可选重连、应用层心跳、错�
 
 本仓库 0.4.0 尚未上传 npm，新增能力请使用本地 tgz 或分发套件；公共包当前为 0.3.0。完整契约见分发套件 `docs/development/extensions-0.4.md`。
 
+onMessage/onStatus 的同步异常与返回 Promise 的拒绝都会按 handler 报告，不按解析异常关闭连接；onError 自身失败不会递归触发错误通知。
+
 ## 授权
 
 MIT，见 [LICENSE](LICENSE)。

@@ -134,12 +134,25 @@ export class BrowserConnection<Client, Server> {
   }
   private updateStatus(status: 'connecting' | 'open' | 'closed' | 'error'): void {
     this.state = status;
+    this.invokeHandler(() => this.onStatus(status));
+  }
+  private captureRejection(result: unknown, onRejected: (cause: unknown) => void): void {
+    if (
+      result &&
+      (typeof result === 'object' || typeof result === 'function') &&
+      typeof (result as { then?: unknown }).then === 'function'
+    ) {
+      void Promise.resolve(result).catch(onRejected);
+    }
+  }
+  private invokeHandler(callback: () => unknown): void {
     try {
-      this.onStatus(status);
+      this.captureRejection(callback(), (cause) => this.report('handler', cause));
     } catch (cause) {
       this.report('handler', cause);
     }
   }
+
   connect(url: string): void {
     this.close();
     this.url = url;
@@ -184,15 +197,13 @@ export class BrowserConnection<Client, Server> {
         return;
       }
       this.received++;
-      try {
+      this.invokeHandler(() => {
         if (!this.options.heartbeat?.isResponse || this.options.heartbeat.isResponse(message)) {
           clearTimeout(this.heartbeatTimeout);
           this.heartbeatTimeout = undefined;
         }
-        this.onMessage(message);
-      } catch (cause) {
-        this.report('handler', cause);
-      }
+        return this.onMessage(message);
+      });
     };
     socket.onclose = (event) => {
       if (this.socket !== socket) return;
@@ -263,7 +274,9 @@ export class BrowserConnection<Client, Server> {
   private report(kind: ConnectionErrorKind, cause: unknown): void {
     this.lastError = { kind, cause };
     try {
-      this.options.onError?.(this.lastError);
+      this.captureRejection(this.options.onError?.(this.lastError), (cause) => {
+        this.lastError = { kind: 'handler', cause };
+      });
     } catch (error) {
       this.lastError = { kind: 'handler', cause: error };
     }

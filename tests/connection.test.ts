@@ -151,3 +151,36 @@ test('reentrant manual reconnect from status callbacks cannot leave a second ret
     restore();
   }
 });
+
+test('asynchronous UI callbacks report handler failures without disconnecting', async () => {
+  const restore = sockets(),
+    errors: string[] = [];
+  const connection = new BrowserConnection<unknown, unknown>(
+    { parse: (value) => value },
+    async () => {
+      throw new Error('async message UI');
+    },
+    async (status) => {
+      if (status === 'open') throw new Error('async status UI');
+    },
+    {
+      onError: async (failure) => {
+        errors.push(failure.kind);
+        throw new Error('async error UI');
+      },
+    },
+  );
+  try {
+    connection.connect('ws://test');
+    const socket = Socket.instances[0]!;
+    socket.open();
+    socket.onmessage?.({ data: '{"ok":true}' });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    assert.deepEqual(errors, ['handler', 'handler']);
+    assert.equal(connection.status, 'open');
+    assert.equal(socket.closed, false);
+  } finally {
+    connection.close();
+    restore();
+  }
+});
