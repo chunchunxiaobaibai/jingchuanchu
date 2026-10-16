@@ -1,5 +1,18 @@
 # 常见问题
 
+## Windows 打包出现 tar: Cannot connect to D: resolve failed
+
+这是部分 GNU tar 把归档参数中的 Windows 盘符冒号解释成远程主机地址，不代表引擎在连接网络服务器。分发脚本应在 dist/releases 工作目录下，以相对文件名生成归档；当前源码已按此方式修正，同时兼容系统 tar。
+
+如果使用旧的 v0.4.0 源码且已经生成 dist/releases/jingchuanchu-engine-0.4.0 目录，可在仓库根目录的 PowerShell 或 Bash 手动完成最后一步：
+
+```bash
+cd dist/releases
+tar -czf jingchuanchu-engine-0.4.0.tar.gz jingchuanchu-engine-0.4.0
+```
+
+这条手动命令只生成归档，不生成新的 SHA-256 文件；不要沿用旧归档的校验文件。需要完整归档和配套校验时，应用脚本修复后在仓库根目录执行 `npx tsx scripts/distribution/build.ts`，无需重新编译已经成功生成的各包。
+
 ## 安装时出现 @xiaobaibaifqy 包 404
 
 确认使用 `@xiaobaibaifqy/jingchuanchu-*` 名称，旧的 `@xiaobai/*` 为本地开发名称。只安装一个 core tgz 时，npm 仍需要找到 ecs。使用分发 install.mjs 自动补齐全部所需本地包，或一次把所需 tgz 都传给 npm。

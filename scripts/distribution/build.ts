@@ -133,9 +133,15 @@ await writeFile(
   join(output, 'SHA256SUMS'),
   entries.map((entry) => `${entry.sha256}  packages/${entry.file}`).join('\n') + '\n',
 );
-const archive = join(parent, `${name}.tar.gz`);
-const packed = spawnSync('tar', ['-czf', archive, '-C', parent, name], { stdio: 'inherit' });
-if (packed.status !== 0) throw packed.error ?? new Error('Release archive failed; tar is required');
+const archiveName = `${name}.tar.gz`;
+const archive = join(parent, archiveName);
+// GNU tar interprets a colon in -f as a remote host; keep Windows drive letters out of it.
+const packed = spawnSync('tar', ['-czf', archiveName, name], {
+  cwd: parent,
+  stdio: 'inherit',
+});
+if (packed.status !== 0)
+  throw packed.error ?? new Error('Release archive failed; check the tar output above');
 const digest = createHash('sha256')
   .update(await readFile(archive))
   .digest('hex');
