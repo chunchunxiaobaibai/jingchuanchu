@@ -20,7 +20,9 @@ npm run dev
 
 随后可用 `npm run generate -- view score-panel`、`npm run generate -- scene menu` 创建功能，`npm run build` 打包游戏。无需编译引擎或登录 npm；开发依赖仍需下载或已有缓存。迁移独立游戏时保留其引用的 tgz，或按 [应用套件手册](docs/development/application-suite.md) 保存到 vendor。
 
-## 从 GitHub 开始
+## 从源码构建
+
+希望自行构建或修改引擎时，按下列流程创建游戏。构建固定版本可在 clone 时加上 `--branch v0.4.0`，默认分支 dev 则跟随最新源码。完整的环境准备、各构建命令区别、产物位置、游戏打包及升级步骤见 [源码构建指南](docs/development/build-from-source.md)。
 
 准备 Node.js >=22.12、npm、Git 和 tar。在 Windows 或 WSL 中选择一个环境完成依赖安装与构建，不共用两种平台安装的 node_modules。
 
@@ -147,3 +149,7 @@ npm run test:distribution:node
 0.4.0 新增接口与兼容说明见 [扩展手册](docs/development/extensions-0.4.md)。验证公开名称：`npm run test:api`；真实 Chromium 2D 验证：`npm run test:2d`；性能原始数据见 [测量报告](docs/performance/README.md)。
 
 默认原生 TS 模板按 app、contracts、game、ui 和 styles 分层，UI 使用自动关联的 HTML/TS/CSS 或 Less 三文件组件。结构、组件资源与类型检查接入模板 check/build，跨层依赖、内联代码、未知绑定及资源歧义会阻止构建。详见 [游戏项目规范](docs/development/project-structure.md)。维护模板使用 `npm run check:templates`、`npm run test:project`；生成套件后通过 `npm run test:template` 验证独立消费与静态构建。
+
+## 下一阶段实施
+
+2D 应用框架的范围、模块规格与新旧边界见 [SPEC](SPEC.md)；依赖顺序与检查点见 [plan](tasks/plan.md)，完成状态见 [todo](tasks/todo.md)。新规格描述待实现能力，现有 0.4.0 使用方式与已发布附件保持原样。

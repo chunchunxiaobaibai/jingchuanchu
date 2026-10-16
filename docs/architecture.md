@@ -37,3 +37,5 @@ renderer、input、assets、net 同时直接使用 ECS 的公开入口。browser
 ## 可选应用与开发工具
 
 app → core/ecs/browser/input，负责类型化命令、展示快照、场景与视图实例；核心包不反向依赖 app。tooling 仅在开发/构建期关联三文件、编译 Less/CSS、生成项目和代码，通过注入组件资源与 app 协作。运行时不依赖 tooling/Vite/Less。共 10 个交付包，原有 8 包及入口保留。具体接口见 [应用套件](development/application-suite.md)。
+
+下一阶段应用模型以 [SPEC](../SPEC.md) 和对应模块规格为准；本文以上内容描述现有 0.4.0 实现，不把新路由/Store/主题列为已实现。

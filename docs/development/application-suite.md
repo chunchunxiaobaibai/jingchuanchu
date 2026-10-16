@@ -1,4 +1,6 @@
-# 原生 TypeScript 应用套件与脚手架
+# 0.4.0 应用套件与脚手架
+
+本文是现有版本的使用手册。下一阶段的组件、路由、响应式和主题契约以 [SPEC](../../SPEC.md) 为准；旧目录与绑定规则不约束新模型。
 
 本地 0.4.0 新增可选 `@xiaobaibaifqy/jingchuanchu-app` 运行包和 `@xiaobaibaifqy/jingchuanchu-tooling` 开发工具包。原有 8 个引擎包、函数名及入口保留。新包尚未上传公共 npm，请使用本地套件。
 
@@ -122,7 +124,7 @@ npm run generate -- view settings --parent src/ui/components/GameApp/GameApp.ts
 
 ## 迁移现有手工模板
 
-保留原核心 API 和自建项目；迁移为主动选择，不改写外部 my-game。为新项目添加 app 运行依赖、tooling 开发依赖和 Vite 插件，把手工 UI 挂载改为 defineView，删除业务 TS 对 HTML/CSS Modules 的导入，把 module.css 换成普通 CSS/Less，将样式类写回 HTML。把旧 render 函数改为 text/attributes 绑定，事件改成 actions 或 context.on；清理由 context.own 登记。场景可暂时适配既有 Scene.setup，如模板中的 PlayScene，再逐步迁移声明。
+保留原核心 API 和自建项目；迁移由使用者主动选择。为新项目添加 app 运行依赖、tooling 开发依赖和 Vite 插件，把手工 UI 挂载改为 defineView，删除业务 TS 对 HTML/CSS Modules 的导入，把 module.css 换成普通 CSS/Less，将样式类写回 HTML。把旧 render 函数改为 text/attributes 绑定，事件改成 actions 或 context.on；清理由 context.own 登记。场景可暂时适配既有 Scene.setup，如模板中的 PlayScene，再逐步迁移声明。
 
 模板仍保留旧 GameView/GameHud 手工组件用于对照迁移，但新启动路径只使用 GameApp/GameControls。不要把两套 UI 同时挂载。原结构检查继续支持手工 CSS Modules；新组件的资源和作用域由编译器检查。
 

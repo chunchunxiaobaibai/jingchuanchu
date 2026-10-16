@@ -1,8 +1,8 @@
 # 快速入门
 
-## 从 GitHub 源码创建游戏（当前推荐）
+## 从 GitHub 源码创建游戏
 
-当前 0.4.0 使用 GitHub 源码和本地套件交付，暂不发布 npm。先克隆并构建引擎，再创建独立游戏项目：
+当前 0.4.0 使用 GitHub 源码和预构建套件交付，暂不发布 npm。希望自行构建时，先克隆并构建引擎，再创建独立游戏项目；详细步骤与产物位置见 [源码构建指南](build-from-source.md)。只想直接开发游戏，可使用下文的预构建归档。
 
 ```bash
 git clone https://github.com/chunchunxiaobaibai/jingchuanchu.git
