@@ -1,19 +1,18 @@
-# 从这里开始制作游戏
+# 镜川初应用套件模板
 
-此示例在分发归档的 `starters/browser` 中可以直接使用：
+本地 0.4.0 的 TS 浏览器项目：app/contracts/game/ui/styles 分层，defineGame/defineScene/defineInput/defineView 与 bootstrapGame 完成组装。
 
 ```bash
 npm install
+npm run check
+npm run build
 npm run dev
+npm run generate -- view score-panel
+npm run generate -- scene menu
 ```
 
-访问 http://localhost:5175 。`npm run build` 会先进行严格 TS 检查，再输出静态网页到 `dist`。
+Vite 插件自动关联组件同名 HTML 和 CSS/Less；不手动 import 模板/样式。check 执行结构、组件资源/绑定和 TS 检查。组件可使用 data-text、data-attr-*、data-on-* 和 data-ref。普通 CSS 由编译器隔离，Less 可导入共享变量。CLI create 可通过 --style less 自动配置。
 
-- `src/main.ts`：安装引擎功能模块、接入 DOM 输入和页面生命周期。
-- `src/game.ts`：自定义游戏模块、实体数据和移动规则。
-- `src/style.css`：页面样式。
+使用分发套件中的模板或 CLI --bundle 创建项目；新 app/tooling 尚未发布 npm。直接克隆本目录开发时需先在引擎仓库构建包，再使用本地依赖。
 
-首先修改 `src/game.ts`，添加自己的组件、实体和系统。无须修改引擎包。
-完整手册见分发根目录的 `docs/development/README.md`。本示例不连接游戏服务器。
-
-本仓库的 `templates/browser` 是打包输入；请使用生成后的分发归档，生成过程会把引擎依赖改为对应本地 tgz，并固定开发工具版本。
+UI 不访问 Engine/World；展示状态与命令契约在 contracts/application.ts，应用控制在 app/game.ts，固定步玩法在 game。旧 GameView/GameHud 保留作手工模板迁移参考，新启动路径仅用 GameApp/GameControls。浏览器验证由使用者执行。

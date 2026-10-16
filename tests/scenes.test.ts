@@ -2,6 +2,47 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
 import { SceneManager } from '@xiaobaibaifqy/jingchuanchu-core/scenes';
+
+for (const action of ['switch', 'dispose'] as const)
+  test(`scene preparation settles on ${action} even when the loader ignores cancellation`, async () => {
+    const engine = new Engine();
+    const scenes = new SceneManager(engine);
+    let rejectLoad!: (reason: unknown) => void;
+    let setups = 0;
+    const pending = scenes.switchTo({
+      id: 'slow',
+      prepare: () =>
+        new Promise<void>((_, reject) => {
+          rejectLoad = reject;
+        }),
+      setup() {
+        setups++;
+      },
+    });
+    const outcome = pending.then(
+      () => 'activated',
+      () => 'cancelled',
+    );
+    try {
+      if (action === 'switch') await scenes.switchTo({ id: 'next', setup() {} });
+      else scenes.dispose();
+      assert.equal(
+        await Promise.race([
+          outcome,
+          new Promise<string>((resolve) => setImmediate(() => resolve('pending'))),
+        ]),
+        'cancelled',
+      );
+      // A late failure must remain handled after the transition has already rejected.
+      rejectLoad(new Error('late load failure'));
+      await new Promise<void>((resolve) => setImmediate(resolve));
+      assert.equal(setups, 0);
+      assert.equal(scenes.id, action === 'switch' ? 'next' : undefined);
+    } finally {
+      engine.dispose();
+    }
+  });
+
 test('scenes own entities and systems, preserve old scenes on failure and dispose superseded preparation', async () => {
   const engine = new Engine(),
     scenes = new SceneManager(engine);

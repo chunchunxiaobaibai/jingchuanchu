@@ -1,0 +1,30 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+import { SceneManager } from '@xiaobaibaifqy/jingchuanchu-core/scenes';
+import { Position2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { createGameScene } from '../templates/browser/src/game/scenes/createGameScene.js';
+
+test('native template scene moves from intents, pauses and cleans up without DOM', async () => {
+  const engine = new Engine({ tickRate: 10 });
+  let input = { x: 1, y: 0 };
+  const game = createGameScene(() => input);
+  const scenes = new SceneManager(engine);
+  await scenes.switchTo(game.scene);
+  const player = [...engine.world.query(Position2D)][0]!;
+  engine.start();
+  engine.advance(0.1);
+  assert.equal(engine.world.require(player, Position2D).x, 504);
+  engine.pause();
+  engine.advance(0.1);
+  assert.equal(engine.world.require(player, Position2D).x, 504);
+  input = { x: 0, y: 0 };
+  game.dispatch({ type: 'move-to', x: 510, y: 300 });
+  engine.resume();
+  engine.advance(0.1);
+  assert.equal(engine.world.require(player, Position2D).x, 510);
+  scenes.dispose();
+  assert.equal(engine.world.size, 0);
+  assert.equal(engine.getSystems().length, 0);
+  engine.dispose();
+});

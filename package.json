@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "test:packages": "npm run pack:packages && tsx scripts/verify-packages.ts",
+    "test:project": "tsx --conditions=source --test tests/project-structure.test.ts tests/template-game.test.ts",
+    "check:templates": "node templates/browser/scripts/check-project.mjs templates/browser && node packages/tooling/cli.mjs check templates/browser && tsc -p templates/browser/tsconfig.json",
+    "test:template": "tsx scripts/verify-template.ts",
     "typecheck": "tsc --noEmit",
     "test": "tsx --conditions=source --test tests/*.test.ts",
     "build": "npm run typecheck && npm run build:packages",
@@ -12,32 +15,40 @@
     "format:check": "prettier --check .",
     "build:packages": "tsx scripts/build-packages.ts",
     "pack:packages": "npm run build:packages && tsx scripts/pack-packages.ts",
-    "dist:release": "npm run typecheck && npm run pack:packages && tsx scripts/distribution/build.ts",
+    "dist:release": "npm run typecheck && npm run pack:packages && npm run check:templates && tsx scripts/distribution/build.ts",
     "test:distribution": "npm run dist:release && tsx scripts/distribution/verify.ts",
     "test:api": "tsx scripts/verify-api.ts",
     "test:2d": "tsx scripts/verify-2d.ts",
     "benchmark": "tsx --conditions=source scripts/benchmark.ts",
     "benchmark:isolated": "tsx --conditions=source scripts/benchmark-isolated.ts",
-    "test:distribution:node": "npm run dist:release && tsx scripts/distribution/verify.ts --skip-browser"
+    "test:distribution:node": "npm run dist:release && tsx scripts/distribution/verify.ts --skip-browser",
+    "test:app": "tsx --conditions=source --test tests/app*.test.ts",
+    "test:app:distribution": "tsx scripts/verify-app-suite.ts"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.4.0",
-    "@xiaobaibaifqy/jingchuanchu-core": "^0.4.0",
-    "@xiaobaibaifqy/jingchuanchu-renderer-2d": "^0.4.0",
-    "@xiaobaibaifqy/jingchuanchu-input": "^0.4.0",
     "@xiaobaibaifqy/jingchuanchu-assets": "^0.4.0",
     "@xiaobaibaifqy/jingchuanchu-browser": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-input": "^0.4.0",
     "@xiaobaibaifqy/jingchuanchu-net": "^0.4.0",
-    "@xiaobaibaifqy/jingchuanchu-net-server": "^0.4.0"
+    "@xiaobaibaifqy/jingchuanchu-net-server": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-renderer-2d": "^0.4.0",
+    "@xiaobaibaifqy/jingchuanchu-app": "^0.4.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.0",
     "@types/node": "^24.0.0",
     "@types/ws": "^8.18.0",
+    "parse5": "^8.0.1",
+    "postcss": "^8.5.30",
+    "postcss-selector-parser": "^7.1.6",
     "prettier": "^3.9.10",
     "tsx": "^4.20.0",
     "typescript": "^5.9.0",
-    "vite": "^7.1.0"
+    "vite": "^7.1.0",
+    "@xiaobaibaifqy/jingchuanchu-tooling": "^0.4.0",
+    "happy-dom": "^20.0.0"
   },
   "engines": {
     "node": ">=22.12.0"

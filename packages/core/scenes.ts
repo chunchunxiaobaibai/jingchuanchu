@@ -53,7 +53,21 @@ export class SceneManager {
     const resources = new Map<symbol, unknown>();
     candidate.scope.own(() => resources.clear());
     try {
-      await scene.prepare?.(candidate.cancellation);
+      const preparation = scene.prepare?.(candidate.cancellation);
+      let unsubscribe = () => {};
+      try {
+        // End the transition even if the loader never observes cancellation.
+        await Promise.race([
+          preparation,
+          new Promise<never>((_, reject) => {
+            unsubscribe = candidate.cancellation.subscribe(() => {
+              reject(candidate.cancellation.reason);
+            });
+          }),
+        ]);
+      } finally {
+        unsubscribe();
+      }
       candidate.cancellation.throwIfAborted();
       if (this.pending !== candidate || this.closed) throw new Error('Scene transition superseded');
       scene.setup({

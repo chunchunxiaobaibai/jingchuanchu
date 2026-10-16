@@ -1,5 +1,7 @@
 # 引擎开发手册
 
+当前通过 [GitHub 源码](https://github.com/chunchunxiaobaibai/jingchuanchu) 和本地构建套件使用 0.4.0，暂不发布 npm。首次使用请从 [源码快速入门](getting-started.md) 开始；仓库上传、Release 附件与 npm 发布是分别进行的操作，见 [GitHub 交付说明](../maintainers/github-delivery.md)。
+
 适用版本：0.4.0（本地未发布版本）；公共 npm 当前仍为 0.3.0。读者可以是游戏开发者，也可以是在引擎上增加模块的开发者。
 引擎、示例和文档按 MIT 授权，许可证原文见分发根目录 `LICENSE`。
 
@@ -14,15 +16,20 @@
 7. [分发与版本维护](distribution.md)：打包、校验、交付及 registry 发布。
 8. [常见问题](troubleshooting.md)：安装、类型检查、画布、生命周期与网络问题。
 
-维护者另见 [npm 发布手册](../maintainers/npm-publishing.md) 和 [GitHub 上传说明](../maintainers/github.md)。
+维护者另见 [npm 发布手册](../maintainers/npm-publishing.md)。本地分发不需要 npm 账号或发布权限。
+
+当前阶段、已修复的生命周期问题及后续优化顺序见 [2026-10-16 引擎审查](engine-review-2026-10-16.md)。
 
 新版扩展见 [0.4.0 兼容扩展](extensions-0.4.md)，表单闪屏相关接入见 [渲染更新指南](rendering-updates.md)。
+原生 TS 模板的目录、三文件组件、依赖检查与旧项目迁移见 [游戏项目规范](project-structure.md)。
+
+应用套件、自动三文件关联、CSS/Less、生命周期与 create/generate 命令见 [应用开发套件](application-suite.md)。
 
 ## 当前提供什么
 
-8 个按需引用的 ESM 包：ecs、core、browser、renderer-2d、input、assets、net、net-server。
+8 个原有引擎包，加可选 app 运行包与 tooling 开发工具包。tooling 作为 devDependency 使用，包含编译器、Less、Vite 和 CLI；不进入核心运行包依赖。
 除网络服务端使用 `ws` 外，引擎运行代码没有第三方依赖。开发工具不进入游戏运行包。
-主仓库包含引擎、回归测试、分发模板与最小接入示例；两个历史完整游戏单独保存在 `archive/legacy-demos`，拥有独立的依赖配置。分发安装器只安装选择的模块及其依赖。
+主仓库包含引擎、回归测试、分发模板与最小接入示例。具体游戏在独立项目中开发，分发安装器只安装选择的模块及其依赖。
 
 游戏代码只调用公开包入口，不能修改引擎内置文件。角色、得分、关卡、回合等规则放在游戏模块。
 引擎目前没有编辑器、完整物理、音频、账号系统、通用同步协议、异步 EngineModule.setup 或单模块动态卸载；已提供精灵动画、基础碰撞及场景 prepare/setup。

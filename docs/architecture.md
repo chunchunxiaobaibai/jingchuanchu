@@ -26,10 +26,14 @@ renderer、input、assets、net 同时直接使用 ECS 的公开入口。browser
 
 `packages/` 是唯一 npm 包源码；跨包只导入公开包名。根 workspace 为构建、测试和打包提供工具，不作为 npm 产品发布。
 
-`tests/` 检查引擎行为和包边界。`examples/` 与 `templates/` 是外部消费契约的可运行参考，参与分发验证。完整游戏单独保存在 `archive/legacy-demos`，默认使用公共 npm 的 0.3.0，不参与根类型检查、构建或测试。
+`tests/` 检查引擎行为和包边界。`examples/` 与 `templates/` 是外部消费契约的可运行参考，参与分发验证。仓库只保留引擎开发与交付所需内容，具体游戏在独立项目中开发。
 
 `pack:packages` 生成每包 tgz，`dist:release` 生成带校验、文档和模板的 tar.gz。只发布已验证的 tgz；历史产物不覆盖现有公开版本。
 
 ## 当前限制
 
-本地 0.4.0 提供精灵动画、场景与基础碰撞。没有编辑器、刚体物理、音频、异步 EngineModule.setup 或单模块卸载。网络策略可选启用，未提供通用状态同步或身份恢复协议。优化记录见 [讨论方案](optimization-plan.md)。
+本地 0.4.0 提供精灵动画、场景与基础碰撞。没有编辑器、刚体物理、音频、异步 EngineModule.setup 或单模块卸载。网络策略可选启用，未提供通用状态同步或身份恢复协议。性能证据见 [测量报告](performance/README.md)。
+
+## 可选应用与开发工具
+
+app → core/ecs/browser/input，负责类型化命令、展示快照、场景与视图实例；核心包不反向依赖 app。tooling 仅在开发/构建期关联三文件、编译 Less/CSS、生成项目和代码，通过注入组件资源与 app 协作。运行时不依赖 tooling/Vite/Less。共 10 个交付包，原有 8 包及入口保留。具体接口见 [应用套件](development/application-suite.md)。

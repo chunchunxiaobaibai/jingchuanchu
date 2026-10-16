@@ -29,7 +29,7 @@ try {
   const manifest = JSON.parse(await readFile(join(bundle, 'manifest.json'), 'utf8')) as {
     packages: Array<{ name: string; file: string; sha256: string }>;
   };
-  assert.equal(manifest.packages.length, 8);
+  assert.equal(manifest.packages.length, 10);
   const license = await readFile(join(bundle, 'LICENSE'), 'utf8');
   for (const entry of manifest.packages) {
     const file = join(bundle, 'packages', entry.file);
@@ -50,7 +50,9 @@ try {
       assert.ok(list.includes(required), `${entry.name} missing ${required}`);
     for (const path of list)
       assert.ok(
-        /^package\/(?:dist\/|README\.md$|LICENSE$|package\.json$|[^/]+\.ts$)/.test(path),
+        /^package\/(?:dist\/|README\.md$|LICENSE$|package\.json$|[^/]+\.(?:ts|mts|mjs)$)/.test(
+          path,
+        ),
         `Unexpected packed file: ${path}`,
       );
     assert.equal(run('tar', ['-xOf', file, 'package/LICENSE'], root), license);
@@ -212,7 +214,7 @@ try {
       await page.keyboard.up('ArrowRight');
       assert.equal((await page.locator('canvas').screenshot()).equals(before), false);
       await page.getByRole('button', { name: '暂停', exact: true }).click();
-      assert.equal(await page.locator('#status').innerText(), '已暂停');
+      assert.equal(await page.locator('[data-text="status"]').innerText(), '已暂停');
       await page.getByRole('button', { name: '继续', exact: true }).click();
       await page.setViewportSize({ width: 320, height: 740 });
       assert.equal(

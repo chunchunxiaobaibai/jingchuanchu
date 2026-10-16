@@ -361,19 +361,25 @@ export class Engine {
   dispose(): void {
     if (this.state === 'disposed') return;
     this.state = 'disposed';
+    const errors: unknown[] = [];
     try {
       this.events.emit('disposed', undefined);
-    } finally {
-      try {
-        this.scope.dispose();
-      } finally {
-        this.world.dispose();
-        this.events.clear();
-        this.installed.clear();
-        this.systems = [];
-        this.scheduled = [];
-      }
+    } catch (error) {
+      errors.push(error);
     }
+    try {
+      this.scope.dispose();
+    } catch (error) {
+      errors.push(error);
+    } finally {
+      this.world.dispose();
+      this.events.clear();
+      this.installed.clear();
+      this.systems = [];
+      this.scheduled = [];
+    }
+    if (errors.length === 1) throw errors[0];
+    if (errors.length > 1) throw new AggregateError(errors, 'Engine cleanup failed');
   }
   private run(phase: 'fixed' | 'render', delta: number, alpha: number): void {
     let systems: System[];

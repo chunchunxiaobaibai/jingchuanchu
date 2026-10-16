@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.root button {
+  font: inherit;
+  background: var(--accent);
+  color: white;
+  border: 0;
+  border-radius: 6px;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+}
+.root button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.root button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+.root [data-ref='status'] {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}

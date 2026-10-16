@@ -59,6 +59,7 @@ function publicNames(text: string) {
 let count = 0;
 for (const directory of await readdir('packages')) {
   const manifest = JSON.parse(await readFile(`packages/${directory}/package.json`, 'utf8'));
+  if (directory === 'app' || directory === 'tooling') continue; // Additive packages have no 0.3.0 counterpart.
   const oldManifest = JSON.parse(historical(`packages/${directory}/package.json`));
   for (const path of Object.keys(oldManifest.exports))
     assert(path in manifest.exports, `Removed package entry ${manifest.name}${path}`);

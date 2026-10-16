@@ -206,3 +206,7 @@ handlers 包含 open(peer)、message(peer, message: Client)、close(peer)、erro
 `close(): Promise<void>` 停止心跳、终止连接并关闭 WebSocketServer，不负责 HTTP Server.close。
 
 只有这个包依赖外部 ws。默认消息/连接/发送限制见 [联网接入](networking.md)。客户端身份与游戏权限由应用实现。
+
+## 应用套件与开发工具
+
+app 新增 defineGame、defineScene、defineInput、defineView、bootstrapGame、mountGame、mountView、viewInputs、StateStore、ViewError 及对应类型。tooling/vite 提供 jingchuanchu 插件，CLI 提供 create/generate/check。完整签名以包声明为准，参数、绑定语法和迁移见 [应用套件手册](application-suite.md)。原有入口和函数保持兼容。

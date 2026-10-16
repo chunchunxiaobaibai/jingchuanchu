@@ -1,8 +1,33 @@
 # 快速入门
 
+## 从 GitHub 源码创建游戏（当前推荐）
+
+当前 0.4.0 使用 GitHub 源码和本地套件交付，暂不发布 npm。先克隆并构建引擎，再创建独立游戏项目：
+
+```bash
+git clone https://github.com/chunchunxiaobaibai/jingchuanchu.git
+cd jingchuanchu
+npm ci
+npm run dist:release
+node packages/tooling/dist/cli.mjs create ../my-game --preset singleplayer --style css --bundle ./dist/releases/jingchuanchu-engine-0.4.0
+cd ../my-game
+npm install
+npm run build
+npm run dev
+```
+
+选择 Less 时使用 `--style less`。生成器自动把所需 tgz 保存到游戏 vendor，项目可独立迁移；开发依赖仍从 npm 下载或缓存安装，无需登录 npm。下面两条命令在生成的游戏目录中使用：
+
+```bash
+npm run generate -- view score-panel
+npm run generate -- scene menu
+```
+
+组件自动加入父组件引用及模板，场景自动加入 scenes，默认初始场景不变。运行时、绑定和生命周期详见 [应用套件手册](application-suite.md)。
+
 ## 路线一：使用附带的可运行项目
 
-解压分发归档，保留 `packages` 与 `starters` 的相对位置：
+若已经获得构建后的分发归档，解压并保留 packages 与 starters 的相对位置。GitHub 的源码压缩包不等于此分发归档：
 
 ```bash
 cd jingchuanchu-engine-0.4.0/starters/browser
@@ -11,13 +36,15 @@ npm run dev
 ```
 
 访问 http://localhost:5175 。方向键或 WASD 移动圆形角色，点击画布设置目的地。暂停按钮控制 Engine。
-`npm run check` 验证 TS，`npm run build` 生成 `dist` 静态网页，`npm run preview` 在 4175 端口预览构建结果。
+`npm run check` 验证结构、组件资源/绑定及 TS，`npm run build` 生成 dist 静态网页，`npm run preview` 在 4175 端口预览构建结果。
 
-安装时从归档中的本地 tgz 获取引擎，Vite 和 TypeScript 从 npm 获取。现有项目也可以通过公共 npm 安装 `@xiaobaibaifqy/jingchuanchu-core` 等所需模块。
+安装时从归档中的本地 tgz 获取 0.4.0 引擎，无需 npm 发布权限，Vite 和 TypeScript 从 npm 获取。公共 npm 的引擎包仍为 0.3.0，使用当前版本请按下面的本地方式安装。
 
-## 路线二：接入自己的项目
+## 路线二：仅安装引擎模块到已有项目
 
 在你自己的项目目录运行安装器，下面路径替换成实际解压位置：
+
+这个安装器选择引擎模块并更新依赖，不生成应用目录或 UI；完整新项目使用上面的 CLI create。
 
 ```bash
 node /path/to/jingchuanchu-engine-0.4.0/install.mjs --preset singleplayer
@@ -66,26 +93,26 @@ node /path/to/bundle/install.mjs --preset singleplayer --dry-run
 
 消费分发包不需要配置 `source` 条件，不需要 tsx，也不需要引用 `packages/.../index.ts`。构建器通过公开入口获得 ESM，TS 获得 `.d.ts`。
 
-## 理解模板的三层
+## 理解模板的职责边界
 
-- `index.html`：Canvas 和控制按钮。
-- `src/main.ts`：安装 browser、renderer、input，把 DOM 操作转换成游戏意图。
-- `src/game.ts`：你的 Entity、Component、System 和资源，修改这里实现玩法。
+- `index.html`：空的 game-app 根宿主及唯一启动脚本。
+- `src/main.ts`：全局样式与应用启动；`src/app` 通过 defineGame 配置模块、应用命令及输入适配。
+- `src/game/scenes`、`components`、`systems`：场景组装、数据和更新规则。
+- `src/ui/components`：defineView 声明与自动关联的同名 HTML、CSS 或 Less。
+- `src/contracts`：UI/游戏之间的输入、命令和只读状态契约。
 
-入口中的安装方式：
+结构检查已接入 check 和 build。新建功能应遵循 [游戏项目规范](project-structure.md)，不要把界面和玩法重新集中进 main.ts。
+
+模板入口通过定义引用启动：
 
 ```ts
-engine.install([
-  canvas2DModule({ canvas }),
-  keyboardModule(),
-  gameModule(),
-  pointerModule({ canvas, handlers }),
-  browserModule(),
-]);
-engine.start();
+import { bootstrapGame } from '@xiaobaibaifqy/jingchuanchu-app';
+import { GameApp } from '../ui/components/GameApp/GameApp.js';
+import { gameDefinition } from './game.js';
+
+await bootstrapGame(GameApp, gameDefinition);
 ```
 
-这里的 `canvas`、`handlers` 和 `gameModule` 都由应用提供，完整定义在模板源码中。
-安装模块负责准备服务，`start()` 才启动循环；只安装 core 不会自动创建动画帧、Canvas 或 WebSocket。
+完整组装见模板 src/app/startApplication.ts 和 src/app/game.ts。应用套件负责挂载、主循环及资源清理；原有 Engine.install/start 仍可独立使用，见 [ECS 与循环](ecs-and-loop.md)。只安装 core 不会自动创建动画帧、Canvas 或 WebSocket。
 
 从模板继续开发，可以先加入自己的组件，创建敌人或目标，再添加处理这些组件的系统。网络功能可以在单机规则稳定后单独接入。

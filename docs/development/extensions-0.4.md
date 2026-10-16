@@ -19,6 +19,8 @@ engine.start();
 
 系统失败抛出 SystemError（仍为 Error），包含 systemId、phase、tick、cause；失败时停止引擎。停止监听器同时失败时，cause 为包含原故障及清理故障的 AggregateError。延迟命令失败也停止引擎，不再进入 render。
 
+Engine.dispose 会在销毁事件失败后继续执行 Scope 与 World 清理。仅一个阶段失败时保留原异常；销毁事件与 Scope 同时失败时，以 AggregateError 保留两者。重复 dispose 不再清理或重复抛错。
+
 World.query 保留开始迭代时的 handle 快照：新实体不加入当前遍历，销毁/重建后的实体不会替代旧 handle。组件交集在每个候选访问时检查，嵌套查询互不覆盖。每生命周期只创建一个冻结 handle，不能把对象身份当成跨销毁的永久 ID。
 
 World.flush 执行取出的这一批命令；批内 defer 留到下一次 flush。失败时该批剩余命令不执行；销毁 World 后中止剩余命令。延迟命令不是可回滚事务。
@@ -106,6 +108,8 @@ await scenes.switchTo({
 loadLevel、move、removeSceneListeners 由游戏定义。prepare 可选且异步，setup 保持同步；Engine.install 的同步契约不变。场景系统 ID 自动添加实例前缀，场景内 before/after 使用局部 ID。context.setResource/getResource 是场景私有资源，Engine.world 的公共服务由应用显式共享。
 
 新场景准备时旧场景仍运行。新准备/配置失败会清理候选并保留旧场景；成功后退出旧场景。连续切换会取消先前准备；忽略取消的准备结果也不会成为当前场景。成功切换后旧场景清理异常会报告，但新场景已激活，不能假装恢复已清理的旧场景。
+
+准备期间被新切换替代或管理器销毁时，旧 switchTo 返回的 Promise 会因取消而拒绝，无需等待 prepare 完成。调用方应及时处理拒绝；加载器仍需响应 signal 才能中止实际 I/O，晚到的准备成功或失败均不会重新激活旧场景或形成未处理拒绝。
 
 context.create、context.addSystem 自动登记到场景 Scope；直接 engine.world.create 或 engine.addSystem 属于应用管理，不会自动归场景。输入订阅、资源 lease 等自行登记 context.scope。pause/resume 控制当前场景系统，可用 Scene.onPause/onResume 清理输入；它们不暂停全 Engine 或公共网络。Engine.dispose 会销毁管理器。尚不支持单个 EngineModule 动态卸载。
 

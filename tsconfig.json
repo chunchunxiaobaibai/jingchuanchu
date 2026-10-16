@@ -13,5 +13,5 @@
     "customConditions": ["source"]
   },
   "include": ["packages", "tests", "scripts", "examples"],
-  "exclude": ["**/dist", "node_modules", "archive"]
+  "exclude": ["**/dist", "node_modules"]
 }

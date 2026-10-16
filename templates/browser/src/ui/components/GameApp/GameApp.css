@@ -1,0 +1,33 @@
+main {
+  max-width: 1008px;
+  margin: auto;
+  padding: 1.5rem;
+}
+h1 {
+  font-size: 1.625rem;
+}
+p {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+canvas {
+  width: 100%;
+  aspect-ratio: 8/5;
+  display: block;
+  border: 1px solid #dee4db;
+  border-radius: 8px;
+  touch-action: none;
+  cursor: crosshair;
+}
+canvas:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  main {
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 1.375rem;
+  }
+}

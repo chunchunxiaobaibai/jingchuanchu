@@ -65,7 +65,11 @@ for (const directory of await readdir('packages')) {
 }
 for (const file of ['LICENSE', 'CHANGELOG.md']) await cp(file, join(output, file));
 await cp('docs', join(output, 'docs'), { recursive: true });
-await cp('templates/browser', join(output, 'starters/browser'), { recursive: true });
+await cp('tasks', join(output, 'tasks'), { recursive: true }); // Specifications link to their implementation records.
+await cp('templates/browser', join(output, 'starters/browser'), {
+  recursive: true,
+  filter: (path) => !/(^|[\\/])(node_modules|dist)([\\/]|$)/.test(path),
+});
 await cp('examples', join(output, 'examples'), {
   recursive: true,
   filter: (path) => !/(^|[\\/])(node_modules|dist)([\\/]|$)/.test(path),
@@ -90,6 +94,11 @@ for (const relative of ['starters/browser', 'examples/network']) {
     manifest.dependencies[dependency] = `file:../../packages/${entry.file}`;
   }
   for (const dependency of Object.keys(manifest.devDependencies)) {
+    const entry = entries.find((value) => value.name === dependency);
+    if (entry) {
+      manifest.devDependencies[dependency] = `file:../../packages/${entry.file}`;
+      continue;
+    }
     const tool = JSON.parse(
       await readFile(resolve('node_modules', dependency, 'package.json'), 'utf8'),
     ) as { version: string };

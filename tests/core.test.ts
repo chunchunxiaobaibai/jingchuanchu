@@ -282,3 +282,39 @@ test('active traversal is stable across scoped system removal and registration',
   engine.dispose();
   assert.deepEqual(engine.getSystems(), []);
 });
+
+test('engine disposal preserves event and scope failures while completing cleanup', () => {
+  const engine = new Engine();
+  const eventError = new Error('disposed event');
+  const cleanupError = new Error('module cleanup');
+  let cleaned = false;
+  engine.world.create();
+  engine.addSystem({ id: 'tick', update() {} });
+  engine.events.on('disposed', () => {
+    throw eventError;
+  });
+  engine.scope.own(() => {
+    cleaned = true;
+  });
+  engine.scope.own(() => {
+    throw cleanupError;
+  });
+  const failures: unknown[] = [];
+  const collect = (error: unknown): void => {
+    if (error instanceof AggregateError) error.errors.forEach(collect);
+    else failures.push(error);
+  };
+  assert.throws(
+    () => engine.dispose(),
+    (error: unknown) => {
+      collect(error);
+      return true;
+    },
+  );
+  assert.deepEqual(failures, [eventError, cleanupError]);
+  assert.equal(cleaned, true);
+  assert.equal(engine.status, 'disposed');
+  assert.equal(engine.world.size, 0);
+  assert.deepEqual(engine.getSystems(), []);
+  assert.doesNotThrow(() => engine.dispose());
+});

@@ -5,7 +5,7 @@ dist/
 test-results/
 playwright-report/
 *.log
-archive/artifacts/
 .npmrc
 *.pem
 tests/fixtures/baseline/
+AGENTS.md

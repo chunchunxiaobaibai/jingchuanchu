@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-访问 http://localhost:5175 。修改 src/game.ts 制作自己的游戏；npm run build 输出可静态托管的网页。
+访问 http://localhost:5175 。玩法放在 src/game，界面组件放在 src/ui；npm run build 先进行结构与 TS 检查，再输出可静态托管的网页。
 
 ## 接入现有项目
 
@@ -36,6 +36,7 @@ node /path/to/this-bundle/install.mjs --modules core,assets --target ./my-game
 - [开发手册](docs/development/README.md)
 - [快速入门](docs/development/getting-started.md)
 - [API 参考](docs/development/api-reference.md)
+- [游戏项目规范与迁移](docs/development/project-structure.md)
 - [联网接入](docs/development/networking.md)
 - [版本记录](CHANGELOG.md)
 - [MIT LICENSE](LICENSE)
@@ -48,3 +49,7 @@ examples/network 可单独安装并启动 ping 服务；其他 examples 展示�
 可把本目录或对应 tar.gz 交付给其他人。manifest.json 和 SHA256SUMS 记录安装包版本与内容校验值。
 本地 file 依赖需要保留 tgz。迁移项目时一起保存安装包，或配置自己的 registry。
 公共包统一命名为 @xiaobaibaifqy/jingchuanchu-*；本地安装器只使用随归档提供的对应版本。
+
+## 应用套件与代码生成
+
+新增 app 运行包和 tooling 开发包；核心项目不依赖它们。完整 create/generate、CSS/Less 与 vendor 本地安装说明见 [应用套件手册](docs/development/application-suite.md)。

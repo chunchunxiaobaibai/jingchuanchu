@@ -34,7 +34,7 @@ engine.start();
 // 游戏结束或页面卸载时：engine.dispose();
 ```
 
-`canvas` 是应用持有的 HTMLCanvasElement；`collectorModule` 是你的游戏模块。这里没有网络客户端或游戏服务器。可运行 TS 项目见仓库 `templates/browser`，分发归档对应 `starters/browser`；历史完整游戏保存在仓库 `archive/legacy-demos`。
+`canvas` 是应用持有的 HTMLCanvasElement；`collectorModule` 是你的游戏模块。这里没有网络客户端或游戏服务器。可运行 TS 项目见仓库 `templates/browser`，分发归档对应 `starters/browser`。
 
 ## 增加网络
 
@@ -88,3 +88,7 @@ npm install /path/to/xiaobaibaifqy-jingchuanchu-ecs-0.3.0.tgz /path/to/xiaobaiba
 `npm run test:packages` 会创建临时外部项目，用本地包离线安装，编译并执行 TS 消费代码，检查未选择的网络依赖没有进入安装结果。
 
 依据：[npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces/)、[Node package exports](https://nodejs.org/download/release/latest-jod/docs/api/packages.html)。
+
+## 可选应用套件
+
+新增 app 运行包提供应用、场景、输入、视图定义及实例生命周期；tooling 是开发依赖，提供三文件自动关联、CSS/Less、create/generate。原有模块组合方式保留，核心引擎不依赖新套件。使用方法见 [应用套件手册](development/application-suite.md)。

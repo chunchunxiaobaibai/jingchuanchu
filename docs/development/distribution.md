@@ -17,7 +17,7 @@ npm test
 npm run test:distribution:node
 ```
 
-最后一步自动构建 8 个包、npm pack、生成归档，并在临时外部项目验证安装器、类型声明、可运行示例与 starter。
+最后一步自动构建 10 个包（8 个原有引擎包及 app/tooling）、npm pack、生成归档，并在临时外部项目验证安装器、类型声明、可运行示例与 starter。
 默认跳过浏览器，仅验证独立编译和网络。用户明确要求时再执行完整 test:distribution；浏览器验证需要 Chromium，首次运行先执行 `npx playwright install chromium`；Linux 还需对应浏览器运行库。
 单独生成、不运行完整外部验证：`npm run dist:release`。
 
@@ -32,6 +32,34 @@ dist/releases/
 
 ## 不同安装方式
 
+### Windows 现有项目
+
+生成套件后，在 PowerShell 执行（替换自己的项目路径）：
+
+```powershell
+node "E:\CodexProject\xiaobaifqy-engine\dist\releases\jingchuanchu-engine-0.4.0\install.mjs" --preset singleplayer --target "E:\MyGame"
+```
+
+`core` 只安装内核；`singleplayer` 安装网页单机模块；`client` 加入网络客户端；`server` 安装服务端及其依赖。安装器直接使用本地 tgz，无需 npm 登录或发布权限。`--offline` 表示不访问 registry，服务端的 `ws` 必须已经缓存。
+
+安装后仍通过公开包名引用，例如：
+
+```typescript
+import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
+```
+
+### 项目独立保存安装包
+
+直接使用安装器时，项目依赖指向分发目录。要让项目迁移后仍能 `npm ci`，把选中的 tgz 及其内部依赖一起复制到项目 `vendor/`，然后在项目目录重新安装。仅内核示例：
+
+```powershell
+npm install ./vendor/xiaobaibaifqy-jingchuanchu-ecs-0.4.0.tgz ./vendor/xiaobaibaifqy-jingchuanchu-core-0.4.0.tgz
+```
+
+网页单机还需 browser、renderer-2d、input、assets；网络客户端再加 net，服务端再加 net 和 net-server。一次安装全部选中包，避免内部 `^0.4.0` 依赖去公共 registry 查找尚未发布的版本。保存 `vendor/`、`package.json` 和 `package-lock.json`；升级引擎后重新打包并安装同一版本的全部选中包。
+
+### 方式比较
+
 1. 安装器：选择 preset 或 modules，自动选择内部依赖并验证所选 tgz。
 2. 原生 npm：同时提供所选包和内部依赖的 tgz；例如 core 同时需要 ecs。只给 core 会尝试从 registry 查找 ecs。
 3. 私有或公共 registry：发布后按正常 npm 包名安装，依赖由 registry 解析。
@@ -41,7 +69,7 @@ dist/releases/
 
 ## 如需发布 npm
 
-维护者完整流程见 [npm 发布手册](../maintainers/npm-publishing.md)，GitHub 源码准备见 [GitHub 上传说明](../maintainers/github.md)。公共 0.3.0 已发布且不可覆盖；本地 0.4.0 尚未发布，下面命令仅在完成验证并决定发布时执行。
+维护者完整流程见 [npm 发布手册](../maintainers/npm-publishing.md)。公共 0.3.0 已发布且不可覆盖；本地 0.4.0 尚未发布，下面命令仅在完成验证并决定发布时执行。本地安装和分发不需要发布权限。
 
 发布目标为公共 registry `https://registry.npmjs.org/`，包名为 `@xiaobaibaifqy/jingchuanchu-*`。每次发布前核对登录账号、目标版本与安装包，使用已验证的 tgz；包配置已指定 public 访问权限。
 

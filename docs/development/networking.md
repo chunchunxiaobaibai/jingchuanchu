@@ -75,4 +75,4 @@ RoomDirectory 是成员目录与容量控制，不自动生成房间、销毁游
 不要直接把整个 World JSON 化，也不要把秘密题目等仅部分玩家可见的数据发给所有客户端。
 连续动作游戏需要的预测/插值/校正，以及确定性锁步/回滚，目前都由游戏另行实现。
 
-完整 ping 示例在分发 `examples/network`；复杂的房间与你画我猜规则可参考引擎仓库的 `archive/legacy-demos/apps/server/service.ts` 和 `archive/legacy-demos/games/draw-guess`，它们不属于分发的引擎依赖。
+完整 ping 示例在分发 `examples/network`；具体游戏的房间、身份、分数和回合规则由独立游戏项目实现。
