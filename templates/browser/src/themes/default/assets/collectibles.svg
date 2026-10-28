@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" viewBox="0 0 48 24">
+  <!-- Copyright (c) 2026 Xiaobaifqy Engine contributors; MIT. See theme-assets-license.txt. -->
+  <path d="M12 2 16 8 22 12 16 16 12 22 8 16 2 12 8 8Z" fill="#ffd776"/>
+  <circle cx="12" cy="12" r="4" fill="#fff4c9"/>
+  <path d="M36 3 39 9 45 12 39 15 36 21 33 15 27 12 33 9Z" fill="#70d4b0"/>
+</svg>

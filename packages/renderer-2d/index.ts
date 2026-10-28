@@ -18,13 +18,14 @@ export class Canvas2D {
     readonly canvas: HTMLCanvasElement,
     width = 960,
     height = 600,
+    pixelRatio?: number,
   ) {
     const context = canvas.getContext('2d');
     if (!context) throw new Error('Canvas 2D is unavailable');
     this.context = context;
     this.logicalWidth = width;
     this.logicalHeight = height;
-    this.resize(width, height);
+    this.resize(width, height, pixelRatio);
   }
   resize(
     width = this.width,

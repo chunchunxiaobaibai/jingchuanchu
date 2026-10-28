@@ -1,6 +1,6 @@
 # 0.4.0 项目组织与迁移参考
 
-本文仅说明现有 0.4.0 模板，不是下一阶段框架规格。新页面/组件/路由与主题模型以 [SPEC](../../SPEC.md) 为唯一实施入口，任务见 [plan](../../tasks/plan.md)。
+本文仅说明历史 0.4.0 / legacy-v0.4 模板。当前默认的 src/app、pages、game、components、themes 布局及版本化 paths 见 [应用开发总览](application-framework.md)，可照写的代码见 [组件教程](application-components.md)。新模型契约入口为 [SPEC](../../SPEC.md)。
 
 ## 现有模板
 
@@ -19,6 +19,6 @@ npm run dev
 
 ## 使用和迁移
 
-新使用者先阅读 [应用套件手册](application-suite.md) 和 [快速入门](getting-started.md)。从手工模板迁移时，把界面变更与引擎/玩法改动分开，按该手册配置本地依赖和构建插件；不要覆盖已有项目文件。
+新使用者先阅读 [快速入门](getting-started.md) 和 [应用开发总览](application-framework.md)。维护旧根入口的项目继续按 [旧应用套件手册](application-suite.md) 配置本地依赖和构建插件；不要覆盖已有项目文件。
 
-现有 defineView 的 data-* 绑定、静态资源元数据和生命周期保持旧契约。未来新组件模型使用独立 application 入口，完成后再提供明确的迁移例；本轮没有把新 API 写成已可用命令。
+defineView 的 data-* 绑定、静态资源元数据和生命周期保持旧契约。当前已实现的 application 模型使用独立入口、setup、input/output/model 与显式父级注册；新旧对照和逐页迁移见 [迁移说明](application-framework.md#旧项目如何兼容)。配套新 CLI 可用 --profile legacy-v0.4 创建旧浏览器布局，不自动转换旧模板或存档。

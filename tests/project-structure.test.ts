@@ -31,7 +31,7 @@ async function check(changes: Record<string, string>) {
     }
     return spawnSync(
       process.execPath,
-      [resolve('templates/browser/scripts/check-project.mjs'), directory],
+      [resolve('templates/legacy-browser/scripts/check-project.mjs'), directory],
       { encoding: 'utf8' },
     );
   } finally {
@@ -87,4 +87,46 @@ test('misplaced files, missing component files and internal engine paths fail', 
   assert.notEqual(result.status, 0);
   for (const rule of ['file-location', 'component-files', 'engine-internals'])
     assert.match(result.stderr, new RegExp(rule));
+});
+
+test('application profile selects the shared path-based rules instead of legacy UI/CSS Module rules', async () => {
+  // No legacy UI files are present in this deliberately small application profile fixture.
+  const root = await mkdtemp(join(tmpdir(), 'jingchuanchu-application-'));
+  try {
+    const sources = {
+      'jingchuanchu.json': JSON.stringify({
+        schemaVersion: 2,
+        profile: 'application',
+        paths: { game: 'rules/game' },
+      }),
+      'src/main.ts': "import './app/start.js';",
+      'src/app/start.ts': "import '../../rules/game/session.js';",
+      'rules/game/session.ts': 'export const score = 1;',
+      'src/pages/play/play-page.ts': 'export {};',
+      'src/pages/play/play-page.html': '<section>play</section>',
+      'src/pages/play/play-page.less': 'section { color: black; }',
+    };
+    for (const [name, source] of Object.entries(sources)) {
+      const file = join(root, name);
+      await mkdir(dirname(file), { recursive: true });
+      await writeFile(file, source);
+    }
+    const run = () =>
+      spawnSync(
+        process.execPath,
+        [resolve('templates/legacy-browser/scripts/check-project.mjs'), root],
+        {
+          encoding: 'utf8',
+        },
+      );
+    const valid = run();
+    assert.equal(valid.status, 0, valid.stderr);
+    assert.match(valid.stdout, /Application project structure passed/);
+    await writeFile(join(root, 'rules/game/session.ts'), 'globalThis.document.title = "bad";');
+    const invalid = run();
+    assert.notEqual(invalid.status, 0);
+    assert.match(invalid.stderr, /rules\/game\/session.ts:1 \[game-dom\]/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });

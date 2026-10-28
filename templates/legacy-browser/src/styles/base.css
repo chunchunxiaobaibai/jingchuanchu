@@ -1,0 +1,14 @@
+:root {
+  font-family: 'Microsoft YaHei', system-ui, sans-serif;
+  color: #253b34;
+  background: #f6f5ef;
+  --accent: #176b58;
+  --muted: #62736d;
+  --focus: #d89b28;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}

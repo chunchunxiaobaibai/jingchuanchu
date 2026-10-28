@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
 import { SceneManager } from '@xiaobaibaifqy/jingchuanchu-core/scenes';
 import { Position2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
-import { createGameScene } from '../templates/browser/src/game/scenes/createGameScene.js';
+import { createGameScene } from '../templates/legacy-browser/src/game/scenes/createGameScene.js';
 
 test('native template scene moves from intents, pauses and cleans up without DOM', async () => {
   const engine = new Engine({ tickRate: 10 });

@@ -1,17 +1,17 @@
 # npm 发布手册
 
-用于镜川初维护者，保留给未来决定发布 npm 时使用。当前仅通过 GitHub 源码和本地套件交付 0.4.0，暂不执行下述发布操作，见 [GitHub 交付说明](github-delivery.md)。游戏开发者使用 [本地应用套件](../development/application-suite.md) 即可，无须 npm 发布权限。
+用于镜川初维护者，保留给未来决定发布 npm 时使用。当前 0.5.0-rc.1 仅进行 GitHub 预发布，不执行下述 npm 发布操作，见 [GitHub 交付说明](github-delivery.md)。游戏开发者使用 [本地应用套件](../development/application-suite.md) 即可，无须 npm 发布权限。
 
 ## 发布对象与现状
 
 - 账号/作用域：`xiaobaibaifqy` / `@xiaobaibaifqy`。
-- 当前已公开版本：8 个 `@xiaobaibaifqy/jingchuanchu-*` 包的 **0.3.0**；本地候选为尚未上传的 **0.4.0**。
+- 当前已公开版本：8 个 `@xiaobaibaifqy/jingchuanchu-*` 包的 **0.3.0**；当前 GitHub 候选为 **0.5.0-rc.1**，本次不上传 npm。
 - 本地共 10 个包，包含新增 app 运行包和 tooling 开发工具包；源码上传 GitHub 不会自动改变 npm 的版本。
 - 根 package.json 为 `private: true`；不能在根目录直接执行无参数的 `npm publish`。
 - 发布对象是 `dist/packages/*.tgz`；完整 tar.gz 是面向开发者的交付套件，不上传 npm。
 - archive、测试及外部游戏不进入引擎运行包。tooling 是独立开发工具包，包含编译器、CLI 和项目模板；其开发依赖不进入核心运行包依赖。打包内容以各包 files 白名单为准。
 
-0.3.0 已占用，不可覆盖。本地优化版本不自动发布。下一次改变包内容或 npm README，需要用新版本发布；不要移动现有 Git 标签。
+下文保留的 0.3.0/0.4.0 命令为历史流程示例，不是当前版本的发布命令；实际授权发布前必须统一替换为目标版本。0.3.0 已占用，不可覆盖。本地优化版本不自动发布。下一次改变包内容或 npm README，需要用新版本发布；不要移动现有 Git 标签。
 
 ## 1. 维护版本和元数据
 

@@ -2,8 +2,8 @@
 
 ## 交付给其他开发者
 
-当前采用本地分发归档，不需要 npm 账号、作用域权限或引擎仓库访问权。
-把 `jingchuanchu-engine-0.4.0.tar.gz` 与对应 `.sha256` 文件一起交给使用者。解压后打开 README 和手册，选择安装模块或运行 starter。
+本文描述当前源码的本地分发归档。当前预发布版本为 0.5.0-rc.1，但历史同名附件不包含当前源码的全部能力；交付时记录源码快照和归档摘要。不需要 npm 账号、作用域权限或引擎仓库访问权。
+把 `jingchuanchu-engine-0.5.0-rc.1.tar.gz` 与对应 `.sha256` 文件一起交给使用者。解压后打开 README 和手册，选择安装模块或运行 starter。
 
 归档含 npm tgz、每包 README/LICENSE/源码/ESM/声明、整套开发文档、安装器和示例。单机无需安装 ws 或联网游戏规则；服务端安装会正常从 npm 获取 ws。
 SHA-256 检查确认文件与分发清单一致，不代替发行者身份的验证。
@@ -12,20 +12,16 @@ SHA-256 检查确认文件与分发清单一致，不代替发行者身份的验
 
 ```bash
 npm ci
-npm run typecheck
-npm test
-npm run test:distribution:node
+npm run dist:release
 ```
 
-最后一步自动构建 10 个包（8 个原有引擎包及 app/tooling）、npm pack、生成归档，并在临时外部项目验证安装器、类型声明、可运行示例与 starter。
-默认跳过浏览器，仅验证独立编译和网络。用户明确要求时再执行完整 test:distribution；浏览器验证需要 Chromium，首次运行先执行 `npx playwright install chromium`；Linux 还需对应浏览器运行库。
-单独生成、不运行完整外部验证：`npm run dist:release`。
+dist:release 构建 10 个包、打包 tgz、检查模板并生成归档，不自动上传或启动浏览器。需要独立包消费验证时，执行 npm run test:app:distribution；需要完整 Node 分发验证时，执行 npm run test:distribution:node（会重新构建套件并验证安装器、独立示例/模板与实际网络往返）。不要因文档修改重复运行分发或全量检查。test:2d/test:distribution 会启动浏览器，仅在明确安排时执行。
 
 ```text
 dist/releases/
-  jingchuanchu-engine-0.4.0/          可直接查看与使用的目录
-  jingchuanchu-engine-0.4.0.tar.gz    交付归档
-  jingchuanchu-engine-0.4.0.tar.gz.sha256
+  jingchuanchu-engine-0.5.0-rc.1/          可直接查看与使用的目录
+  jingchuanchu-engine-0.5.0-rc.1.tar.gz    交付归档
+  jingchuanchu-engine-0.5.0-rc.1.tar.gz.sha256
 ```
 
 生产机器需要 Node >=22.12、npm、tar，构建与测试使用仓库锁文件。归档不包含 node_modules、游戏房间数据、环境配置或个人浏览器资料。
@@ -37,7 +33,7 @@ dist/releases/
 生成套件后，在 PowerShell 执行（替换自己的项目路径）：
 
 ```powershell
-node "E:\CodexProject\xiaobaifqy-engine\dist\releases\jingchuanchu-engine-0.4.0\install.mjs" --preset singleplayer --target "E:\MyGame"
+node "E:\CodexProject\xiaobaifqy-engine\dist\releases\jingchuanchu-engine-0.5.0-rc.1\install.mjs" --preset singleplayer --target "E:\MyGame"
 ```
 
 `core` 只安装内核；`singleplayer` 安装网页单机模块；`client` 加入网络客户端；`server` 安装服务端及其依赖。安装器直接使用本地 tgz，无需 npm 登录或发布权限。`--offline` 表示不访问 registry，服务端的 `ws` 必须已经缓存。
@@ -53,10 +49,10 @@ import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
 直接使用安装器时，项目依赖指向分发目录。要让项目迁移后仍能 `npm ci`，把选中的 tgz 及其内部依赖一起复制到项目 `vendor/`，然后在项目目录重新安装。仅内核示例：
 
 ```powershell
-npm install ./vendor/xiaobaibaifqy-jingchuanchu-ecs-0.4.0.tgz ./vendor/xiaobaibaifqy-jingchuanchu-core-0.4.0.tgz
+npm install ./vendor/xiaobaibaifqy-jingchuanchu-ecs-0.5.0-rc.1.tgz ./vendor/xiaobaibaifqy-jingchuanchu-core-0.5.0-rc.1.tgz
 ```
 
-网页单机还需 browser、renderer-2d、input、assets；网络客户端再加 net，服务端再加 net 和 net-server。一次安装全部选中包，避免内部 `^0.4.0` 依赖去公共 registry 查找尚未发布的版本。保存 `vendor/`、`package.json` 和 `package-lock.json`；升级引擎后重新打包并安装同一版本的全部选中包。
+网页单机还需 browser、renderer-2d、input、assets；网络客户端再加 net，服务端再加 net 和 net-server。一次安装全部选中包，避免内部 `^0.5.0-rc.1` 依赖去公共 registry 查找尚未发布的版本。保存 `vendor/`、`package.json` 和 `package-lock.json`；升级引擎后重新打包并安装同一版本的全部选中包。
 
 ### 方式比较
 
@@ -67,22 +63,17 @@ npm install ./vendor/xiaobaibaifqy-jingchuanchu-ecs-0.4.0.tgz ./vendor/xiaobaiba
 源码中 `source` 条件用于本仓库开发，外部消费默认 ESM/.d.ts。不要把整个 workspace 的 Node 运行参数复制到消费者配置中。
 每个引擎包都包含 MIT LICENSE。发行归档的模板和文档也采用同一授权；保留许可证原文。
 
-## 如需发布 npm
+## application 项目保存与升级
 
-维护者完整流程见 [npm 发布手册](../maintainers/npm-publishing.md)。公共 0.3.0 已发布且不可覆盖；本地 0.4.0 尚未发布，下面命令仅在完成验证并决定发布时执行。本地安装和分发不需要发布权限。
+新项目优先用配套 tooling create --bundle：自动复制依赖闭包到 vendor，离开套件目录仍可重建。已有 application 项目用 add --modules 选择模块并写入 vendor，再 npm install 更新锁文件。--all 包含服务端包，不适合无差别加入网页项目。
 
-发布目标为公共 registry `https://registry.npmjs.org/`，包名为 `@xiaobaibaifqy/jingchuanchu-*`。每次发布前核对登录账号、目标版本与安装包，使用已验证的 tgz；包配置已指定 public 访问权限。
+同一套件内的已有相同字节附件可复用；同名不同字节附件拒绝覆盖。若同版本号源码快照与历史产物内容不同时，优先新建项目并迁移业务，不覆盖旧 vendor 后期待相同 file 依赖自动更新。真实版本升级需同步选中的所有内部依赖，保存来源、摘要和锁文件，并重新 check/build 与游戏验收。
 
-账号需要满足 npm 的发布认证要求，只有登录成功还不够。若收到“Two-factor authentication … required”错误，在 Windows 浏览器的 npm Account 页面启用 2FA，再用 `npm login --auth-type=web --browser=false --registry=https://registry.npmjs.org/` 重新登录；复制终端链接到 Windows 浏览器完成验证。不要把密码、token 或恢复码发给其他人。
-
-内部依赖发布顺序为 ecs → core → browser/input/assets/renderer-2d/net → net-server。
-使用各包的 tgz 可以保证上传的内容与已验证产物一致。执行 `npm publish ./dist/packages/xiaobaibaifqy-jingchuanchu-ecs-0.4.0.tgz --access public --registry=https://registry.npmjs.org/`，依序发布其他模块。发布同一个名字/版本不可覆盖；首次发布后核对远端 integrity，并在外部项目按包名安装验证。不要把认证配置或凭据放进源码、README 或分发归档。
-
-发布命令成功后，新包可能暂时查询不到。npm 会在包可安装前执行扫描；官方说明通常约 5 分钟，繁忙时可能 15 分钟或更久。等待后再查询和安装，不要因为暂时的 404 重复发布同一个版本。依据：[npm 发布时扫描说明](https://github.blog/changelog/2026-07-28-npm-publish-time-malware-scanning-and-dual-use-metadata/)。
+如需发布 npm，由独立发布任务按 [维护手册](../maintainers/npm-publishing.md) 执行；不能把 dist:release 当作远端发布。本地安装不要求 npm 发布权限。
 
 ## 维护版本
 
-root 和所有引擎包使用同一版本，内部依赖范围跟随版本；此发行版为 0.4.0。
+root 和所有引擎包使用同一版本，内部依赖范围跟随版本；当前源码版本为 0.5.0-rc.1，作为 GitHub 预发布交付，npm 发布仍是独立操作。
 改变 API 时更新 CHANGELOG、API 参考、模板与消费测试，重新生成包，不直接修改已生成的 dist。
 外部项目应保存 lockfile；升级时更新引擎包及其内部依赖，并运行自己游戏的类型检查、逻辑测试和浏览器验证。
 

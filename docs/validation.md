@@ -1,5 +1,24 @@
 # 验证记录
 
+## 2026-10-28：0.5.0-rc.1 GitHub 预发布
+
+本次用户明确授权上传 GitHub 与创建 Release，统一根包及 10 个工作区包为 0.5.0-rc.1。使用新增标签/预发布，不移动 v0.4.0、不替换历史附件，不发布 npm。
+
+实际验证：
+
+- 严格 TypeScript 检查通过，10 个新版本 tgz 已构建；默认模板结构/绑定/类型检查通过。
+- Node 用例覆盖 349 项。Windows Node 24.21.0 主批次 348 项通过；1 项分发安装测试因该便携 Node 没有相邻 npm-cli.js 失败，改用附带 npm 的 Windows Node 24.12.0 定向重跑后通过。该失败属于验证宿主，不作为功能失败或跳过计数。
+- 实际 10 份 tgz 在仓库外验证通过：CSS、Less 和显式 legacy 项目创建/安装/check/类型/Vite build；现代项目各 6 个懒页面分块、3 份 WAV、许可复制、原模板错误位置与 vendor 相对依赖通过，无 source 条件、不带 ws。
+- 独立基础包消费者通过：ecs/core，以及 ecs/core/browser/input/renderer-2d/assets。
+- 完整 Node 分发检查通过：归档/许可/文档链接/摘要、按需安装及失败保护、无界面示例、离线 starter 静态构建与真实本地网络往返。显式 --skip-browser，不加载/启动浏览器分支。
+- 原有 118 个 API 名称及全部 0.3.0 入口兼容检查通过。
+
+完整参考模板的诊断加 Vite 构建在当前机器超过原验证脚本的 45 秒短操作上限；仅将构建步骤上限调整为 180 秒，并给临时目录清理增加有限重试。原始失败报告保留了超时来源，调整后 CSS/Less/legacy 全部实际通过，未放松断言。
+
+当前发布产物在干净源码提交与 v0.5.0-rc.1 标签上最终装配；tar.gz、ZIP 来自同一目录，分别附 SHA-256。manifest 记录最终 revision/tag，sourceDirty=false。源码、包和远端附件的核对记录保存在本地 dist/audit/release-0.5.0-rc.1（不提交的审计产物）。
+
+未验证：H01—H04 真实浏览器游玩、IME/焦点/触控/历史、设备音频/后台恢复与性能。没有启动浏览器、Playwright、截图或宣称最低支持版本/全部设备矩阵通过。预发布说明保留这些限制，使用和迁移见 [开发手册](development/README.md)、[本版本说明](maintainers/release-0.5.0-rc.1.md) 与 [验收清单](../tasks/acceptance.md)。
+
 ## 0.4.0 本地交付
 
 当前 0.4.0 未发布 npm，通过本地 tgz 或完整分发套件使用；公共 npm 保留 0.3.0。

@@ -8,6 +8,7 @@ import imports from 'postcss-import';
 import selectorParser from 'postcss-selector-parser';
 import { parseFragment } from 'parse5';
 import MagicString from 'magic-string';
+import { createTemplateChecker } from './template-check.mjs';
 
 const exists = (file) =>
   access(file).then(
@@ -148,22 +149,33 @@ export async function compileStyle(file, scope) {
   });
   return { css: result.css, dependencies: [...dependencies] };
 }
-/** Transform only imported defineView calls, preserving ordinary TS and its source map. */
+/** Associate resources for imported component factories, preserving ordinary TS and source maps. */
 export async function compileViews(code, id) {
   const ast = ts.createSourceFile(id, code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
-  const names = new Set();
+  const names = new Map();
   for (const statement of ast.statements)
     if (
       ts.isImportDeclaration(statement) &&
       ts.isStringLiteral(statement.moduleSpecifier) &&
-      statement.moduleSpecifier.text === '@xiaobaibaifqy/jingchuanchu-app'
+      ['@xiaobaibaifqy/jingchuanchu-app', '@xiaobaibaifqy/jingchuanchu-app/application'].includes(
+        statement.moduleSpecifier.text,
+      )
     ) {
       const bindings = statement.importClause?.namedBindings;
       if (bindings && ts.isNamedImports(bindings))
-        for (const entry of bindings.elements)
-          if ((entry.propertyName ?? entry.name).text === 'defineView') names.add(entry.name.text);
+        for (const entry of bindings.elements) {
+          const imported = (entry.propertyName ?? entry.name).text;
+          const legacy = statement.moduleSpecifier.text === '@xiaobaibaifqy/jingchuanchu-app';
+          if (
+            legacy
+              ? imported === 'defineView'
+              : ['defineComponent', 'definePage'].includes(imported)
+          )
+            names.set(entry.name.text, { factory: imported, legacy });
+        }
     }
   if (!names.size) return null;
+  const checker = createTemplateChecker(code, id);
   const calls = [];
   function visit(node) {
     if (
@@ -172,9 +184,10 @@ export async function compileViews(code, id) {
       names.has(node.expression.text)
     ) {
       const object = node.arguments[0];
+      const factory = names.get(node.expression.text);
       if (!object || !ts.isObjectLiteralExpression(object))
-        throw new Error(`${id}: defineView requires an object literal`);
-      calls.push(object);
+        throw new Error(`${id}: ${factory.factory} requires an object literal`);
+      calls.push({ object, legacy: factory.legacy });
     }
     ts.forEachChild(node, visit);
   }
@@ -183,11 +196,11 @@ export async function compileViews(code, id) {
     resources = [],
     dependencies = new Set();
   for (let index = 0; index < calls.length; index++) {
-    const object = calls[index];
+    const { object, legacy } = calls[index];
     for (const prop of object.properties)
       if (ts.isSpreadAssignment(prop))
         throw new Error(`${id}: spread metadata cannot be checked statically`);
-    for (const name of ['$template', '$style', '$scope', '$source'])
+    for (const name of ['$template', '$style', '$scope', '$source', '$bindings'])
       if (property(object, name)) throw new Error(`${id}: ${name} is compiler-owned`);
     const base = id.slice(0, -extname(id).length);
     const templateUrl = staticString(object, 'templateUrl', id),
@@ -199,10 +212,13 @@ export async function compileViews(code, id) {
     validateTemplate(
       html,
       template,
-      Object.fromEntries(
-        ['text', 'attributes', 'actions'].map((name) => [name, bindingNames(object, name, id)]),
-      ),
+      legacy
+        ? Object.fromEntries(
+            ['text', 'attributes', 'actions'].map((name) => [name, bindingNames(object, name, id)]),
+          )
+        : undefined,
     );
+    const bindings = legacy ? undefined : checker.compile(html, template, object, index);
     let style = styleUrl ? resolve(dirname(id), styleUrl) : undefined;
     if (style && !(await exists(style))) throw new Error(`${id}: Missing component style ${style}`);
     if (!styleUrl) {
@@ -230,9 +246,10 @@ export async function compileViews(code, id) {
     }
     output.appendLeft(
       object.getStart(ast) + 1,
-      `$template:${JSON.stringify(html)},$style:${styleExpression},$scope:${JSON.stringify(scope)},$source:${JSON.stringify(id)},`,
+      `$template:${JSON.stringify(html)},${bindings ? `$bindings:${bindings},` : ''}$style:${styleExpression},$scope:${JSON.stringify(scope)},$source:${JSON.stringify(id)},`,
     );
   }
+  checker.validate();
   return {
     code: output.toString(),
     map: output.generateMap({ hires: true, source: id, includeContent: true }),

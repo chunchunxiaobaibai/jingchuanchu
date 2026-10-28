@@ -1,0 +1,5 @@
+.app-shell {
+  min-height: 100vh;
+  color: var(--jcc-text, #e9edf5);
+  background: var(--jcc-background, #172031);
+}

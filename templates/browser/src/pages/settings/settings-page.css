@@ -1,0 +1,46 @@
+main {
+  max-width: 42rem;
+  margin: auto;
+  padding: 2rem 1.5rem;
+}
+form,
+fieldset {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+fieldset {
+  border: 1px solid #61718c;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+input,
+button {
+  font: inherit;
+}
+input[type='range'] {
+  width: 100%;
+}
+input:not([type='range']):not([type='checkbox']),
+button {
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  border: 0;
+}
+button {
+  color: #10281f;
+  background: #70d4b0;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+input:focus-visible,
+button:focus-visible {
+  outline: 3px solid #70d4b0;
+  outline-offset: 3px;
+}
+.audio-status {
+  color: #d7f5e9;
+}

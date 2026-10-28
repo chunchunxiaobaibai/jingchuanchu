@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Copyright (c) 2026 Xiaobaifqy Engine contributors; MIT. See theme-assets-license.txt. -->
+  <circle cx="12" cy="12" r="11" fill="#2d1645"/>
+  <path d="M8 7v10M16 7v10" fill="none" stroke="#f7edff" stroke-width="3" stroke-linecap="round"/>
+</svg>

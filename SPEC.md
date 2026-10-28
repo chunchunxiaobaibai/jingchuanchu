@@ -1,8 +1,8 @@
 # 下一阶段实施规格：网页 2D 游戏应用框架
 
-状态：实施规格草案，产品范围依据本轮已确认需求；接口细节供实施评审。当前发布版本仍是 0.4.0。本文及链接规格描述待实现能力，任务完成前不得当作现有 API 或验证结果。
+状态：T01—T44 自动实施与交付检查已完成，实际结果见 tasks/todo.md；H01—H04 浏览器/设备/性能验收仍未执行。本次发布任务将包版本统一为 0.5.0-rc.1，并交付 GitHub 预发布；不发布 npm、不替换历史标签或附件。本文是当前源码的规格入口，历史附件不自动获得新模型。
 
-这是下一阶段唯一规格入口；执行顺序见 [plan](tasks/plan.md)，完成状态见 [todo](tasks/todo.md)。各模块只定义自己的契约，公共约束不重复抄写。现有 0.4.0 用法见 [使用手册](docs/development/application-suite.md)。
+这是当前源码应用模型的唯一规格入口；执行顺序见 [plan](tasks/plan.md)，完成状态见 [todo](tasks/todo.md)。各模块只定义自己的契约，公共约束不重复抄写。现有 0.4.0 用法见 [使用手册](docs/development/application-suite.md)。
 
 ## 产品目标与边界
 
@@ -33,7 +33,7 @@
 | project-tooling      | [CLI 与构建](docs/specs/project-tooling.md)        | 各运行模块的公开契约                                              |
 | reference-game       | [参考游戏与交付](docs/specs/reference-game.md)     | 默认单机能力；认证另用接入示例验证                                |
 
-组件和 Store 不依赖 Router、主题或具体游戏；Router 不导入具体认证 Provider。应用装配守卫与服务。既有 core/ecs 不反向依赖 app 或构建工具。上述 ID 是规划单元，不要求新增同等数量的 npm 包。
+通用组件与 Store 的运行时不依赖 Router、主题或具体游戏；组件的路由上下文通过通用 owner 槽注入，Router 类型可使用 type-only 引用。Router 不导入具体认证 Provider。应用装配守卫与服务。既有 core/ecs 不反向依赖 app 或构建工具。上述 ID 是规划单元，不要求新增同等数量的 npm 包。
 
 ## 代码与公开入口
 
@@ -41,7 +41,7 @@
 
 新增 defineComponent、definePage、defineApplication、mountApplication、bootstrapApplication 及各规格定义的类型/函数；本次固定这一组名称，后续变动先更新规格和调用示例。组件构造采用 setup，生命周期沿用明确的八个钩子；setup 是实例构造函数，不另造第二套生命周期。
 
-新模板属于下一版本的默认开发方式。0.4.0 Release 不替换、不移动标签；发布版本号在发布任务中统一决定，本次不改版本、不上传。旧项目主动迁移，新生成项目不再附带旧 UI 范式作教学代码。
+新模板已成为当前源码 CLI 的默认开发方式；新指南见 [应用开发](docs/development/application-framework.md)。0.4.0 Release 不替换、不移动标签；本次授权发布使用 0.5.0-rc.1，GitHub 标记为预发布，npm 不发布。旧项目主动迁移，新生成项目不再附带旧 UI 范式作教学代码。
 
 ## 业务目录与命名
 

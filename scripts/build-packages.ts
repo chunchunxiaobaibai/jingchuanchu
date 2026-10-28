@@ -32,10 +32,15 @@ async function build(name: string): Promise<void> {
       "export {default, jingchuanchu} from './vite.mjs';\n",
     );
     await cp(resolve(entry.directory, 'vite.d.ts'), resolve(output, 'index.d.ts'));
-    await cp('templates/browser', resolve(output, 'starters/browser'), {
-      recursive: true,
-      filter: (path) => !/(^|[\\/])(node_modules|dist)([\\/]|$)/.test(path),
-    });
+    for (const starter of ['browser', 'legacy-browser'])
+      await cp(`templates/${starter}`, resolve(output, 'starters', starter), {
+        recursive: true,
+        filter: (path) => !/(^|[\\/])(node_modules|dist)([\\/]|$)/.test(path),
+      });
+    // npm excludes .gitignore even inside packaged starter directories. Keep its bytes under
+    // a portable resource name; createApplicationProject restores the intended filename.
+    await cp('templates/browser/.gitignore', resolve(output, 'starters/browser/gitignore.txt'));
+    await rm(resolve(output, 'starters/browser/.gitignore'));
     visiting.delete(name);
     built.add(name);
     console.log(`Built ${name}`);
@@ -51,4 +56,6 @@ async function build(name: string): Promise<void> {
   built.add(name);
   console.log(`Built ${name}`);
 }
-for (const name of packages.keys()) await build(name);
+const requested = process.argv.slice(2);
+for (const name of requested) if (!packages.has(name)) throw new Error(`Unknown package: ${name}`);
+for (const name of requested.length ? requested : packages.keys()) await build(name);

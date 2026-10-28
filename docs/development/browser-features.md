@@ -1,5 +1,7 @@
 # 浏览器功能接入
 
+本文用于直接装配基础模块。当前 application 项目优先用 [GameCanvas 场景教程](application-gameplay.md) 和 [资源/音频服务](application-services.md)，由页面统一持有循环、输入与资源；不在同一画布叠加下文的手工驱动。
+
 ## 绘制
 
 ```ts

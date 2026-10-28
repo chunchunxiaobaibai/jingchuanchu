@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-访问 http://localhost:5175 。玩法放在 src/game，界面组件放在 src/ui；npm run build 先进行结构与 TS 检查，再输出可静态托管的网页。
+访问 Vite 终端显示的地址。当前套件默认使用 application 模型：应用装配在 src/app，页面和私有场景在 src/pages，跨页规则/数据在 src/game，复用 UI 在 src/components。npm run build 检查目录、模板与 TS 后输出可静态托管网页。历史同版本附件保留旧模型，请按实际套件内容选择手册。
 
 ## 接入现有项目
 
@@ -35,8 +35,13 @@ node /path/to/this-bundle/install.mjs --modules core,assets --target ./my-game
 
 - [开发手册](docs/development/README.md)
 - [快速入门](docs/development/getting-started.md)
-- [API 参考](docs/development/api-reference.md)
-- [游戏项目规范与迁移](docs/development/project-structure.md)
+- [组件与页面教程](docs/development/application-components.md)
+- [2D 场景教程](docs/development/application-gameplay.md)
+- [资源、音频和保存](docs/development/application-services.md)
+- [应用 API 索引](docs/development/application-api.md)
+- [底层 API 参考](docs/development/api-reference.md)
+- [当前项目结构与迁移](docs/development/application-framework.md)
+- [历史目录参考](docs/development/project-structure.md)
 - [联网接入](docs/development/networking.md)
 - [版本记录](CHANGELOG.md)
 - [MIT LICENSE](LICENSE)
@@ -52,4 +57,4 @@ examples/network 可单独安装并启动 ping 服务；其他 examples 展示�
 
 ## 应用套件与代码生成
 
-新增 app 运行包和 tooling 开发包；核心项目不依赖它们。完整 create/generate、CSS/Less 与 vendor 本地安装说明见 [应用套件手册](docs/development/application-suite.md)。
+新增 app 运行包和 tooling 开发包；核心项目不依赖它们。当前默认完整参考应用、create/generate、CSS/Less 与 vendor 本地安装见 [新版应用开发指南](docs/development/application-framework.md)；历史入口另见 [旧应用套件手册](docs/development/application-suite.md)。

@@ -15,7 +15,16 @@ const root = JSON.parse(await readFile('package.json', 'utf8')) as { version: st
 if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(root.version))
   throw new Error('Invalid release version');
 const name = `jingchuanchu-engine-${root.version}`;
-const parent = resolve('dist/releases');
+const options = process.argv.slice(2);
+if (
+  options.length &&
+  (options.length !== 2 ||
+    options[0] !== '--output-dir' ||
+    !options[1] ||
+    options[1].startsWith('--'))
+)
+  throw new Error('Usage: build.ts [--output-dir directory]');
+const parent = resolve(options[1] ?? 'dist/releases');
 const output = join(parent, name);
 const license = await readFile('LICENSE', 'utf8');
 await rm(output, { recursive: true, force: true });
@@ -88,6 +97,21 @@ for (const relative of ['starters/browser', 'examples/network']) {
     dependencies: Record<string, string>;
     devDependencies: Record<string, string>;
   };
+  // A starter must carry every internal dependency as a local file reference; otherwise
+  // npm may try the registry for transitive packages that have never been published.
+  const selected = new Map<string, boolean>();
+  const include = (dependency: string, development: boolean): void => {
+    const entry = entries.find((value) => value.name === dependency);
+    if (!entry) return;
+    if (selected.has(dependency) && (!selected.get(dependency) || development)) return;
+    selected.set(dependency, development);
+    for (const child of Object.keys(entry.dependencies)) include(child, development);
+  };
+  for (const dependency of Object.keys(manifest.dependencies)) include(dependency, false);
+  for (const dependency of Object.keys(manifest.devDependencies)) include(dependency, true);
+  for (const [dependency, development] of selected)
+    (development ? manifest.devDependencies : manifest.dependencies)[dependency] =
+      '^' + root.version;
   for (const dependency of Object.keys(manifest.dependencies)) {
     const entry = entries.find((value) => value.name === dependency);
     if (!entry) throw new Error(`Unknown example dependency: ${dependency}`);

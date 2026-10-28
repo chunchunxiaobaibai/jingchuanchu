@@ -1,6 +1,8 @@
-# API 参考
+# 底层 API 参考
 
 适用 0.4.0。参数名称对应源码；`T` 表示调用方定义的数据类型。所有引擎模块 ID、组件 token 与系统 ID 都在各自实例范围中使用。
+
+本文保留基础包与旧应用入口参考。当前 application 子入口的组件、Store、路由、主题、GameCanvas、音频和保存等见 [应用 API 索引](application-api.md)，使用步骤见 [开发手册](README.md)。
 
 ## @xiaobaibaifqy/jingchuanchu-ecs
 
@@ -116,17 +118,17 @@ BrowserDriver 的方法：requestFrame(callback: (milliseconds: number) => void)
 
 ### 普通入口
 
-| API          | 参数/返回                                                          | 说明                                           |
-| ------------ | ------------------------------------------------------------------ | ---------------------------------------------- |
-| Point        | `{ x: number; y: number }`                                         | 逻辑坐标                                       |
-| Stroke       | `{ points: Point[]; color: string; width: number }`                | 绘画数据，与游戏网络协议分离                   |
-| Position2D   | Token<Point>                                                       | 位置组件                                       |
-| Shape2D      | `Token<{ kind: 'circle' \| 'rect'; color; width; height; layer }>` | 图形组件，字符串颜色和数值尺寸/层              |
-| new Canvas2D | `(canvas: HTMLCanvasElement, width?: number, height?: number)`     | 默认 960×600；保存 context/canvas/width/height |
-| toPoint      | `(clientX: number, clientY: number): Point`                        | CSS 坐标映射到画布并限制范围                   |
-| clear        | `(color?: string): void`                                           | 默认 #ffffff，填满逻辑画布                     |
-| stroke       | `(stroke: Stroke): void`                                           | 空点数组忽略；单点画圆点；多点画圆头线段       |
-| drawWorld    | `(world: World): void`                                             | 按 layer 绘制位置/图形组件，不自动 clear       |
+| API          | 参数/返回                                                                           | 说明                                                       |
+| ------------ | ----------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Point        | `{ x: number; y: number }`                                                          | 逻辑坐标                                                   |
+| Stroke       | `{ points: Point[]; color: string; width: number }`                                 | 绘画数据，与游戏网络协议分离                               |
+| Position2D   | Token<Point>                                                                        | 位置组件                                                   |
+| Shape2D      | `Token<{ kind: 'circle' \| 'rect'; color; width; height; layer }>`                  | 图形组件，字符串颜色和数值尺寸/层                          |
+| new Canvas2D | `(canvas: HTMLCanvasElement, width?: number, height?: number, pixelRatio?: number)` | 默认 960×600；可显式 DPR；保存 context/canvas/width/height |
+| toPoint      | `(clientX: number, clientY: number): Point`                                         | CSS 坐标映射到画布并限制范围                               |
+| clear        | `(color?: string): void`                                                            | 默认 #ffffff，填满逻辑画布                                 |
+| stroke       | `(stroke: Stroke): void`                                                            | 空点数组忽略；单点画圆点；多点画圆头线段                   |
+| drawWorld    | `(world: World): void`                                                              | 按 layer 绘制位置/图形组件，不自动 clear                   |
 
 ### /module 入口
 
@@ -136,14 +138,14 @@ renderWorld 默认 true，内置 render 系统 ID renderer-2d:world，order=100�
 
 ## @xiaobaibaifqy/jingchuanchu-input
 
-| API               | 参数/返回                                                                           | 说明                            |
-| ----------------- | ----------------------------------------------------------------------------------- | ------------------------------- |
-| new KeyboardInput | `(target: EventTarget, preventDefault?: readonly string[])`                         | 默认不阻止键盘默认动作          |
-| isDown            | `(code: string): boolean`                                                           | 查询按住状态                    |
-| clear             | `(): void`                                                                          | 清空按键                        |
-| dispose           | `(): void`                                                                          | 清空并移除监听                  |
-| PointerHandlers   | `{ down(event: PointerEvent); move(event: PointerEvent); up(event: PointerEvent) }` | 指针回调，均返回 void           |
-| bindPointer       | `(canvas, handlers: PointerHandlers, scope: Scope): void`                           | 捕获、结束和清理，支持鼠标/触摸 |
+| API               | 参数/返回                                                                                 | 说明                                      |
+| ----------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------- |
+| new KeyboardInput | `(target: EventTarget, preventDefault?: readonly string[])`                               | 默认不阻止键盘默认动作                    |
+| isDown            | `(code: string): boolean`                                                                 | 查询按住状态                              |
+| clear             | `(): void`                                                                                | 清空按键                                  |
+| dispose           | `(): void`                                                                                | 清空并移除监听                            |
+| PointerHandlers   | `down/move/up(event: PointerEvent)`，可选 `accept(event):boolean`、`cancel(event,reason)` | accept 在捕获前筛选；取消可与正常 up 区分 |
+| bindPointer       | `(canvas, handlers: PointerHandlers, scope: Scope): void`                                 | 捕获、结束和清理，支持鼠标/触摸           |
 
 `/module` 导出：
 
@@ -209,4 +211,4 @@ handlers 包含 open(peer)、message(peer, message: Client)、close(peer)、erro
 
 ## 应用套件与开发工具
 
-app 新增 defineGame、defineScene、defineInput、defineView、bootstrapGame、mountGame、mountView、viewInputs、StateStore、ViewError 及对应类型。tooling/vite 提供 jingchuanchu 插件，CLI 提供 create/generate/check。完整签名以包声明为准，参数、绑定语法和迁移见 [应用套件手册](application-suite.md)。原有入口和函数保持兼容。
+app 根入口保留 defineGame、defineScene、defineInput、defineView、bootstrapGame、mountGame、mountView、viewInputs、StateStore、ViewError 及对应类型，用法见 [旧应用套件手册](application-suite.md)。当前新增 application 子入口，完整索引见 [应用 API](application-api.md)。tooling/vite 提供 jingchuanchu 插件，CLI 提供 create/generate/add/check；现代项目用 component/page，旧 profile 才使用 view 自动注册。原有入口和函数保持兼容。

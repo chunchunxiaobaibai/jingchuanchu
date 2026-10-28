@@ -1,0 +1,107 @@
+<main @keydown="onKeydown($event)">
+  <h1>{{ levelTitle }}</h1>
+  <p>点击画布后用方向键或 WASD 移动，也可点选目标或使用下方按钮。Esc 暂停/继续。</p>
+  <button class="enable-audio" type="button" :disabled="unlockingAudio" @click="unlockAudio()">
+    启用并试听声音
+  </button>
+  <p class="play-audio-status" role="status">{{ audioNotice }}</p>
+  <game-hud
+    :pause-icon="pauseIcon"
+    :level-title="levelTitle"
+    :score="score"
+    :remaining-seconds="remaining"
+    :disabled="hudDisabled"
+    model:paused="paused"
+  ></game-hud>
+  <template when="loading"><p class="asset-loading" role="status">正在加载道具图片…</p></template>
+  <template when="assetIssue !== ''"
+    ><p role="alert">{{ assetIssue }}</p>
+    <button class="retry-assets" type="button" @click="loadVisuals()">
+      重试加载图片
+    </button></template
+  >
+  <div class="board">
+    <template when="mountCanvas">
+      <game-canvas
+        :scene="getScene()"
+        :options="options"
+        :props="sceneProps"
+        @ready="onReady($event)"
+        @error="onError()"
+      ></game-canvas>
+    </template>
+    <game-pause-panel
+      model:paused="paused"
+      :busy="restarting"
+      @restart-requested="restart()"
+    ></game-pause-panel>
+    <template when="finished">
+      <section class="completed" aria-live="polite">
+        <h2>{{ resultTitle }}</h2>
+        <p>本关收集 {{ score }} 枚微光。</p>
+        <route-link :to="{name:'result'}"
+          ><template slot="default">查看结算与保存进度</template></route-link
+        >
+        <button class="again" type="button" :disabled="restarting" @click="restart()">
+          再来一次
+        </button>
+      </section>
+    </template>
+  </div>
+  <template when="issue !== ''"
+    ><p role="alert">{{ issue }}</p>
+    <button type="button" :disabled="!ready || restarting" @click="restart()">
+      重试本关
+    </button></template
+  >
+  <div class="direction-pad" aria-label="移动方向">
+    <button
+      type="button"
+      :disabled="controlsDisabled"
+      @pointerdown="press('horizontal', -1, 'left', $event)"
+      @pointerup="release('horizontal', 'left')"
+      @pointercancel="release('horizontal', 'left')"
+      @lostpointercapture="release('horizontal', 'left')"
+    >
+      向左
+    </button>
+    <button
+      type="button"
+      :disabled="controlsDisabled"
+      @pointerdown="press('vertical', -1, 'up', $event)"
+      @pointerup="release('vertical', 'up')"
+      @pointercancel="release('vertical', 'up')"
+      @lostpointercapture="release('vertical', 'up')"
+    >
+      向上
+    </button>
+    <button
+      type="button"
+      :disabled="controlsDisabled"
+      @pointerdown="press('vertical', 1, 'down', $event)"
+      @pointerup="release('vertical', 'down')"
+      @pointercancel="release('vertical', 'down')"
+      @lostpointercapture="release('vertical', 'down')"
+    >
+      向下
+    </button>
+    <button
+      type="button"
+      :disabled="controlsDisabled"
+      @pointerdown="press('horizontal', 1, 'right', $event)"
+      @pointerup="release('horizontal', 'right')"
+      @pointercancel="release('horizontal', 'right')"
+      @lostpointercapture="release('horizontal', 'right')"
+    >
+      向右
+    </button>
+  </div>
+  <template when="paused">
+    <route-link :to="{name:'settings'}"
+      ><template slot="default"
+        ><img :src="settingsIcon" alt="" width="24" height="24" />旅程设置（离开本局）</template
+      ></route-link
+    >
+  </template>
+  <route-link :to="{name:'level-select'}"><template slot="default">返回选关</template></route-link>
+</main>

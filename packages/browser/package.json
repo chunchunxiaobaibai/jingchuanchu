@@ -1,7 +1,7 @@
 {
   "name": "@xiaobaibaifqy/jingchuanchu-browser",
-  "version": "0.4.0",
-  "description": "Jingchuanchu (\u955c\u5ddd\u521d) TypeScript engine browser module",
+  "version": "0.5.0-rc.1",
+  "description": "Jingchuanchu (镜川初) TypeScript engine browser module",
   "type": "module",
   "license": "MIT",
   "sideEffects": false,
@@ -33,7 +33,7 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-core": "^0.4.0"
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.5.0-rc.1"
   },
   "publishConfig": {
     "access": "public",

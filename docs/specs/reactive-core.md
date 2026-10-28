@@ -12,15 +12,22 @@ interface WritableSignal<T> extends ReadSignal<T> {
 }
 signal<T>(initial: T): WritableSignal<T>;
 computed<T>(derive: () => T): ReadSignal<T>;
-effect(run: (onCleanup: (cleanup: Cleanup) => void) => void, scope: Scope): Cleanup;
+effect(run: (onCleanup: (cleanup: Cleanup) => void) => void, scope: Scope,
+  options?: {onError?: (error: unknown) => void}): Cleanup;
 batch<T>(run: () => T): T;
 ```
+
+ReadSignal 带只读的内部类型标记，模板据此读取 signal/computed 的值，普通零参数操作不会被自动调用。
 
 signal 按 Object.is 比较传入值与上次写入值的身份；对象/数组通过 set/update 替换，原地嵌套赋值不作为更新方式。初始化/写入时取得独立只读快照，读取复用该快照；同一个已被调用方原地修改的输入对象不被视为新写入。UI/Store 数据限普通可结构化复制数据，外部消费者不能借只读引用修改源，不能每次 read 都深拷贝。
 
 computed 自动追踪同步计算实际读取的依赖，按需计算并缓存；分支变化移除不再使用的依赖。它只读，不负责发送请求或把结果写回另一个 signal。计算期间写依赖、循环计算要报带来源的错误。
 
+上游对使用方的反向依赖采用弱引用，避免共享 signal 保留已无人使用的 computed 及其闭包；活动 effect 仍由 Scope 持有，使用方仍强持有其依赖。响应式元数据的垃圾回收不代替资源的 Scope 清理。
+
 effect 用于外部能力同步；上次清理先于下次执行，Scope 退出后最终清理且不再重跑。异步函数不作为 effect 的自动请求协议：await 后读取不被追踪，异步业务使用显式操作和取消信号。
+
+调度中的错误通过可选 onError 交给所属应用错误边界；没有处理器时报告给宿主。手工停止/Scope 清理中的错误仍同步抛出，保持 Scope 聚合清理语义。更新循环被诊断后停止该 effect，不持续占用微任务队列。
 
 batch 内写入立即可读，派生值读取必须反映这些写入；对外渲染通知在批次结束合并。不承诺事务回滚，回调失败不静默撤销部分业务写入。effects 在微任务调度，effect 导致的新写入进入后续批次，循环回写有明确诊断。
 

@@ -1,5 +1,14 @@
 # 更新记录
 
+## 0.5.0-rc.1 · 网页 2D 应用框架预发布
+
+- 新增独立 app/application 入口：signal/computed/effect、三文件组件与表单 model、应用作用域、Store/Service、页面路由与懒加载/预加载。旧根入口及原有包名保持兼容。
+- 新增资源组/取消/租约、语义主题与回退、视口/动作适配、GameCanvas 场景所有权、固定步计时与缓动、音频与白名单存档；可选 AuthProvider/权限守卫通过单独 HTTP 适配示例接入。
+- CLI 默认生成完整收集参考游戏，支持 page/component/scene/store/theme、schemaVersion:2/profile/paths 和 vendor 依赖安装；legacy-v0.4 显式保留旧模板。
+- 修复销毁后 computed 闭包被共享 signal 保留的问题；修复动态 select 初始值及选项更新后的 DOM/model 同步，补齐直接回归。
+- 补齐快速入门、组件/场景/资源服务教程、应用 API 索引、构建/分发/迁移说明与排障。
+- GitHub 以预发布提供配套本地 tgz、tar.gz、ZIP 和 SHA-256；不发布 npm，不移动 v0.4.0 或替换其附件。浏览器/设备/性能 H01—H04 尚未验收，不声明正式生产就绪。
+
 ## 0.4.0 · GitHub 分发（npm 未发布）
 
 - 新增可选 app 运行包与 tooling 开发包：类型化应用/场景/输入、只读展示快照、父子组件输入、声明式绑定和八个实例生命周期钩子。

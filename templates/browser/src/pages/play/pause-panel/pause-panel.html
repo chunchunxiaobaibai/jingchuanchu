@@ -1,0 +1,12 @@
+<template when="paused">
+  <section class="backdrop">
+    <div class="panel" role="dialog" aria-label="暂停旅程">
+      <h2>休息片刻</h2>
+      <p>旅程已暂停，准备好后再继续。</p>
+      <div class="actions">
+        <button class="resume" type="button" :disabled="busy" @click="resume()">继续旅程</button>
+        <button class="restart" type="button" :disabled="busy" @click="restart()">重新开始</button>
+      </div>
+    </div>
+  </section>
+</template>

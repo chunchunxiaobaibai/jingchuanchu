@@ -43,7 +43,19 @@ try {
     const project = join(temporary, `${preset}-${style}`);
     run(
       process.execPath,
-      [cli, 'create', project, '--preset', preset, '--style', style, '--bundle', bundle],
+      [
+        cli,
+        'create',
+        project,
+        '--preset',
+        preset,
+        '--style',
+        style,
+        '--bundle',
+        bundle,
+        '--profile',
+        'legacy-v0.4',
+      ],
       tool,
     );
     run(npm, ['install', '--ignore-scripts', '--no-audit', '--no-fund'], project);

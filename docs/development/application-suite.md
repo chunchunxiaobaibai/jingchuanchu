@@ -1,6 +1,8 @@
 # 0.4.0 应用套件与脚手架
 
-本文是现有版本的使用手册。下一阶段的组件、路由、响应式和主题契约以 [SPEC](../../SPEC.md) 为准；旧目录与绑定规则不约束新模型。
+本文记录历史 0.4.0 模型。当前源码的默认 create 已切换到新版 application 模型，见 [新版应用开发指南](application-framework.md)；使用当前 CLI 继续创建本页旧模型时显式加 `--profile legacy-v0.4`。
+
+本文是历史根入口的使用手册。当前已实现的组件、路由、响应式和主题契约以 [SPEC](../../SPEC.md) 为准；旧目录与绑定规则不约束新模型。新模型的具体代码见 [组件教程](application-components.md)、[场景教程](application-gameplay.md) 和 [服务教程](application-services.md)。
 
 本地 0.4.0 新增可选 `@xiaobaibaifqy/jingchuanchu-app` 运行包和 `@xiaobaibaifqy/jingchuanchu-tooling` 开发工具包。原有 8 个引擎包、函数名及入口保留。新包尚未上传公共 npm，请使用本地套件。
 

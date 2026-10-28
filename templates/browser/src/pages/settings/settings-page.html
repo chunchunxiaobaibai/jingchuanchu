@@ -1,0 +1,29 @@
+<main>
+  <h1>旅程设置</h1>
+  <form @submit="applyName($event)">
+    <label for="settings-name">昵称</label
+    ><input id="settings-name" model:value="name" autocomplete="nickname" /><button
+      type="submit"
+      :disabled="!canApplyName"
+    >
+      使用这个昵称
+    </button>
+  </form>
+  <p aria-live="polite">{{ notice }}</p>
+  <fieldset>
+    <legend>声音偏好</legend>
+    <label for="volume-master">主音量 {{ masterPercent }}%</label
+    ><input id="volume-master" type="range" min="0" max="1" step="0.05" model:value="master" />
+    <label for="volume-music">音乐 {{ musicPercent }}%</label
+    ><input id="volume-music" type="range" min="0" max="1" step="0.05" model:value="music" />
+    <label for="volume-effects">音效 {{ effectsPercent }}%</label
+    ><input id="volume-effects" type="range" min="0" max="1" step="0.05" model:value="effects" />
+    <label><input class="muted" type="checkbox" model:checked="muted" />静音</label>
+  </fieldset>
+  <p class="audio-status" role="status">{{ audioStatus }}</p>
+  <button class="save-settings" type="button" :disabled="!canSave" @click="save()">保存设置</button>
+  <button class="load-settings" type="button" :disabled="busy" @click="load()">读取设置</button>
+  <p class="storage-status" role="status">{{ storageNotice }}</p>
+  <p>保存昵称和声音偏好；刷新后可主动读取。读取失败保留当前设置。</p>
+  <route-link :to="{name:'home'}"><template slot="default">返回首页</template></route-link>
+</main>

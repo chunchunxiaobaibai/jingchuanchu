@@ -1,0 +1,18 @@
+<header class="hud" aria-label="旅程状态">
+  <strong>{{ levelTitle }}</strong>
+  <dl>
+    <div>
+      <dt>微光</dt>
+      <dd class="score">{{ score }}</dd>
+    </div>
+    <div>
+      <dt>剩余时间</dt>
+      <dd class="time">{{ seconds }} 秒</dd>
+    </div>
+  </dl>
+  <button type="button" :disabled="paused || disabled" @click="pause()">
+    <template when="pauseIcon !== ''"
+      ><img :src="pauseIcon" alt="" width="24" height="24" /></template
+    >暂停
+  </button>
+</header>

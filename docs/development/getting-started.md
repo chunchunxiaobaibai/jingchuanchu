@@ -1,118 +1,95 @@
-# 快速入门
+# 快速入门：创建第一个网页 2D 游戏
 
-## 从 GitHub 源码创建游戏
+使用包含 app/application 的当前源码或由它构建的配套套件。历史 v0.4.0 附件保留旧行为；同版本号不是新能力的证明。已有旧项目继续使用 [旧应用套件手册](application-suite.md)，显式迁移见 [应用总览](application-framework.md)。
 
-当前 0.4.0 使用 GitHub 源码和预构建套件交付，暂不发布 npm。希望自行构建时，先克隆并构建引擎，再创建独立游戏项目；详细步骤与产物位置见 [源码构建指南](build-from-source.md)。只想直接开发游戏，可使用下文的预构建归档。
+## 从源码创建
+
+准备 Node.js >=22.12.0、npm、tar。在已有当前源码的引擎根目录运行；安装依赖与构建在同一个操作系统环境完成：
 
 ```bash
-git clone https://github.com/chunchunxiaobaibai/jingchuanchu.git
-cd jingchuanchu
 npm ci
 npm run dist:release
-node packages/tooling/dist/cli.mjs create ../my-game --preset singleplayer --style css --bundle ./dist/releases/jingchuanchu-engine-0.4.0
+node packages/tooling/dist/cli.mjs create ../my-game --preset singleplayer --style css --bundle ./dist/releases/jingchuanchu-engine-0.5.0-rc.1
 cd ../my-game
 npm install
+npm run check
 npm run build
 npm run dev
 ```
 
-选择 Less 时使用 `--style less`。生成器自动把所需 tgz 保存到游戏 vendor，项目可独立迁移；开发依赖仍从 npm 下载或缓存安装，无需登录 npm。下面两条命令在生成的游戏目录中使用：
+访问终端显示的 Vite 地址。当前新模板未固定 dev/preview 端口；需要固定端口时执行 `npm run dev -- --port 5175 --strictPort`。引擎根目录没有 dev，后续开发命令都在 my-game 内执行。
+
+create 的目标应为空目录。引擎包从套件复制到 vendor，依赖使用相对 file 路径；Vite/TypeScript 等开发依赖由 npm 下载或使用缓存。无需 npm 登录，构建也不自动发布。需要 Less 时使用 --style less。
+
+## 从配套套件创建
+
+若只有包含 manifest.json、packages 的套件，在一个新工具目录执行，替换所有 /path/to/bundle：
 
 ```bash
-npm run generate -- view score-panel
-npm run generate -- scene menu
-```
-
-组件自动加入父组件引用及模板，场景自动加入 scenes，默认初始场景不变。运行时、绑定和生命周期详见 [应用套件手册](application-suite.md)。
-
-## 路线一：使用附带的可运行项目
-
-若已经获得构建后的分发归档，解压并保留 packages 与 starters 的相对位置。GitHub 的源码压缩包不等于此分发归档：
-
-```bash
-cd jingchuanchu-engine-0.4.0/starters/browser
+npm init -y
+npm install --save-dev /path/to/bundle/packages/xiaobaibaifqy-jingchuanchu-tooling-0.5.0-rc.1.tgz
+npx --no-install jingchuanchu create ./my-game --bundle /path/to/bundle
+cd my-game
 npm install
+npm run check
 npm run dev
 ```
 
-访问 http://localhost:5175 。方向键或 WASD 移动圆形角色，点击画布设置目的地。暂停按钮控制 Engine。
-`npm run check` 验证结构、组件资源/绑定及 TS，`npm run build` 生成 dist 静态网页，`npm run preview` 在 4175 端口预览构建结果。
+也可直接在配套套件的 starters/browser 中 npm install、npm run dev；直接运行该 starter 时需保留它与 packages 的相对位置。要得到独立可移动项目，优先使用 create 的 vendor 流程。
 
-安装时从归档中的本地 tgz 获取 0.4.0 引擎，无需 npm 发布权限，Vite 和 TypeScript 从 npm 获取。公共 npm 的引擎包仍为 0.3.0，使用当前版本请按下面的本地方式安装。
+## 先跑通参考游戏
 
-## 路线二：仅安装引擎模块到已有项目
+首页确认昵称→查看关卡→选定并开始→点击画布后使用方向键/WASD，也可点选目标或使用虚拟按钮。收集微光或等待倒计时结束，再进入结算。HUD/ESC 可暂停、继续或重开；进入设置会离开本局。
 
-在你自己的项目目录运行安装器，下面路径替换成实际解压位置：
+游戏页点击“启用并试听声音”才尝试解锁音频；静音和音量在设置页调整。设置页“保存设置”和结算页“保存进度”分别保存白名单数据；刷新后主动读取。不恢复上次进行中的实体或局面。
 
-这个安装器选择引擎模块并更新依赖，不生成应用目录或 UI；完整新项目使用上面的 CLI create。
+此流程是人工使用步骤，不能据静态构建声称真实浏览器/音频验收通过；验收记录见 [检查清单](../../tasks/acceptance.md)。
+
+## 修改哪个文件
+
+| 目标                         | 默认位置                                |
+| ---------------------------- | --------------------------------------- |
+| 应用配置、主题选择、Provider | src/app/app-config.ts                   |
+| 路由与参数准备               | src/app/app-routes.ts                   |
+| 页面 TS/HTML/CSS 或 Less     | src/pages/页面名/                       |
+| 参考游戏移动、收集、计时规则 | src/pages/play/play-scene.ts            |
+| 跨页会话、偏好、高分         | src/game/session、preferences、progress |
+| 默认与派生主题、图片映射     | src/themes/default、dusk                |
+| 音频资源与许可               | src/assets/audio                        |
+
+文件名用小写 kebab-case，组件三文件同名。main.ts 负责启动与基础样式，业务逻辑放在所属页面或游戏域。
+
+## 新增功能
 
 ```bash
-node /path/to/jingchuanchu-engine-0.4.0/install.mjs --preset singleplayer
+npm run generate -- page bonus --route /bonus
+npm run generate -- component score-editor --shared
+npm run generate -- scene bonus --page bonus
+npm run generate -- store score --domain session
+npm run generate -- theme forest --extends default
 ```
 
-预设及用途：
+页面会注册路由；组件需父级显式引用；场景需显式传给 GameCanvas；主题需在 AppConfig 中选择。生成器不覆盖已有业务，不自动启动场景。完整可照写的代码见 [组件与页面教程](application-components.md) 和 [场景教程](application-gameplay.md)。
 
-| 预设         | 包含的能力                            |
-| ------------ | ------------------------------------- |
-| core         | ECS 与手动推进的引擎内核              |
-| singleplayer | core、浏览器循环、绘制、输入、资源    |
-| client       | singleplayer + 浏览器网络             |
-| server       | core + 房间/消息基础 + Node WebSocket |
-
-只选择部分模块：
+## 构建、预览与保存项目
 
 ```bash
-node /path/to/bundle/install.mjs --modules core,assets --target ./my-game
-node /path/to/bundle/install.mjs --preset singleplayer --dry-run
+npm run check
+npm run build
+npm run preview
 ```
 
-安装器自动补齐内部依赖并核对所选 tgz 的 SHA-256。`--dry-run` 只验证和列出包，不写项目。
-`--offline` 要求所有 npm 所需外部依赖已缓存；core 和 singleplayer 的引擎包没有外部运行依赖。
-已有项目的 package.json 由 npm 按正常安装行为更新；没有 package.json 时安装器生成一个私有 ESM 项目。
+check 检查结构、模板/资源和 TypeScript，build 再生成游戏 dist，preview 地址以终端为准。部署游戏 dist 中的静态网页；默认 hash 路由无需服务端按页面路径回退，若改 history 模式则配置静态服务回退到 index.html。账号或网络服务端另行部署。
 
-安装后引擎路径写入项目依赖。不要删除这些 tgz 后再尝试 `npm ci`。需要移动项目时，把选中的 tgz 放入项目的 `vendor/` 并重新以本地相对路径安装，或使用你自己的包 registry。
+保存源码、vendor、package.json、package-lock.json 和素材许可；协作者按锁文件 npm ci，并在所用操作系统中安装依赖。不要提交 node_modules。修改引擎源码不会热更新已复制的 vendor，升级需重新构建和更新本地依赖，见 [分发指南](distribution.md)。
 
-## 应用的最小配置
+## 只安装基础模块
 
-安装 Vite 和 TS 后，浏览器项目可以使用：
+已有引擎宿主、只需 ECS/Canvas/网络的项目，可使用套件安装器；它不生成页面或 UI：
 
-```json
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noEmit": true
-  },
-  "include": ["src"]
-}
+```bash
+node /path/to/bundle/install.mjs --modules core,assets --target ./existing-project --dry-run
+node /path/to/bundle/install.mjs --modules core,assets --target ./existing-project
 ```
 
-消费分发包不需要配置 `source` 条件，不需要 tsx，也不需要引用 `packages/.../index.ts`。构建器通过公开入口获得 ESM，TS 获得 `.d.ts`。
-
-## 理解模板的职责边界
-
-- `index.html`：空的 game-app 根宿主及唯一启动脚本。
-- `src/main.ts`：全局样式与应用启动；`src/app` 通过 defineGame 配置模块、应用命令及输入适配。
-- `src/game/scenes`、`components`、`systems`：场景组装、数据和更新规则。
-- `src/ui/components`：defineView 声明与自动关联的同名 HTML、CSS 或 Less。
-- `src/contracts`：UI/游戏之间的输入、命令和只读状态契约。
-
-结构检查已接入 check 和 build。新建功能应遵循 [游戏项目规范](project-structure.md)，不要把界面和玩法重新集中进 main.ts。
-
-模板入口通过定义引用启动：
-
-```ts
-import { bootstrapGame } from '@xiaobaibaifqy/jingchuanchu-app';
-import { GameApp } from '../ui/components/GameApp/GameApp.js';
-import { gameDefinition } from './game.js';
-
-await bootstrapGame(GameApp, gameDefinition);
-```
-
-完整组装见模板 src/app/startApplication.ts 和 src/app/game.ts。应用套件负责挂载、主循环及资源清理；原有 Engine.install/start 仍可独立使用，见 [ECS 与循环](ecs-and-loop.md)。只安装 core 不会自动创建动画帧、Canvas 或 WebSocket。
-
-从模板继续开发，可以先加入自己的组件，创建敌人或目标，再添加处理这些组件的系统。网络功能可以在单机规则稳定后单独接入。
+安装器补齐内部依赖并校验摘要，依赖引用套件内的 tgz，应保留其位置。application 项目增加能力优先用 `jingchuanchu add --modules assets,net --bundle /path/to/bundle` 保存到 vendor。底层开发见 [ECS 与循环](ecs-and-loop.md)。

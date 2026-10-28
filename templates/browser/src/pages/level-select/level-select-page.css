@@ -1,0 +1,41 @@
+main {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+li,
+.preview {
+  padding: 1.5rem;
+  border: 1px solid #61718c;
+  border-radius: 0.75rem;
+}
+.preview {
+  margin: 1.5rem 0;
+}
+button {
+  font: inherit;
+  padding: 0.8rem 1rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: #70d4b0;
+  color: #10281f;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+button:focus-visible {
+  outline: 3px solid #e9edf5;
+  outline-offset: 3px;
+}
+.selected {
+  color: #d7f5e9;
+}

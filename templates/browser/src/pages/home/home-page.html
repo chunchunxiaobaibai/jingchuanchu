@@ -1,0 +1,25 @@
+<main>
+  <p class="eyebrow">一段收集微光的旅程</p>
+  <h1>收集之旅</h1>
+  <p>先为这段旅程起个昵称。</p>
+  <form @submit="saveName($event)">
+    <label for="player-name">你的昵称</label>
+    <input
+      id="player-name"
+      name="nickname"
+      autocomplete="nickname"
+      model:value="draft"
+      aria-describedby="name-help"
+    />
+    <p id="name-help" class="hint">昵称需要 1 至 16 个字符。</p>
+    <p class="preview" aria-live="polite">你好，{{ preview }}。</p>
+    <button type="submit" :disabled="!canSave">使用这个昵称</button>
+  </form>
+  <p class="saved">当前旅程昵称：{{ savedName }}</p>
+  <nav aria-label="旅程入口">
+    <route-link :to="{ name: 'level-select' }"
+      ><template slot="default">选择关卡</template></route-link
+    >
+    <route-link :to="{name: 'settings'}"><template slot="default">旅程设置</template></route-link>
+  </nav>
+</main>

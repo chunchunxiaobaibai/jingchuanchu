@@ -33,6 +33,8 @@ renderer.stroke({ color: '#176b58', width: 5, points: [{ x: 20, y: 20 }] });
 
 相同尺寸的 resize/重复初始化保留画布缓冲，canvas2DModule 可用 `shouldRender` 跳过不需要的清空和重绘；动画场景默认持续渲染。
 
+当前源码支持 new Canvas2D(canvas,width,height,pixelRatio?) 的显式第四参数，原三参数用法保持兼容。application 项目优先由 GameCanvas 统一创建 Renderer/Viewport 并管理 DPR、contain 适配和绘制，不再额外给同一画布创建驱动；参见配套文档 application-gameplay.md。
+
 ## 授权
 
 MIT，见 [LICENSE](LICENSE)。

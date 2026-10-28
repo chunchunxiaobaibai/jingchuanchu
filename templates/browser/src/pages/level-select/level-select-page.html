@@ -1,0 +1,32 @@
+<main>
+  <h1>选择你的旅程</h1>
+  <route-link :to="{name:'result'}"
+    ><template slot="default">查看与读取旅程记录</template></route-link
+  >
+  <p>{{ nickname }}，先来看看各段旅程的目标。</p>
+  <ul class="levels">
+    <template each="level of levels" key="level.id">
+      <li>
+        <h2>{{ level.title }}</h2>
+        <p>{{ level.description }}</p>
+        <p>{{ level.durationSeconds }} 秒 · {{ level.targetCount }} 枚微光</p>
+        <route-link :to="previewTarget(level.id)"
+          ><template slot="default">查看关卡</template></route-link
+        >
+      </li>
+    </template>
+  </ul>
+  <section class="preview" aria-live="polite">
+    <h2>{{ previewTitle }}</h2>
+    <p>{{ previewDescription }}</p>
+    <p>{{ previewGoal }}</p>
+    <button type="button" :disabled="!canChoose" @click="confirmLevel()">选定此关</button>
+    <template when="canStart"
+      ><route-link :to="playTarget"
+        ><template slot="default">开始旅程</template></route-link
+      ></template
+    >
+    <p class="selected">本次选定：{{ selectedTitle }}</p>
+  </section>
+  <route-link :to="{ name: 'home' }"><template slot="default">返回首页</template></route-link>
+</main>

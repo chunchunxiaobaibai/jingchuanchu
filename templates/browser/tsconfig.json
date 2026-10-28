@@ -9,7 +9,7 @@
     "isolatedModules": true,
     "noUncheckedIndexedAccess": true,
     "verbatimModuleSyntax": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "noEmit": true
   },
   "include": ["src"]

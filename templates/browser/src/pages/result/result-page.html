@@ -1,0 +1,31 @@
+<main>
+  <h1>旅程结算与记录</h1>
+  <template when="hasResult">
+    <section class="run-result" aria-live="polite">
+      <h2>{{ resultTitle }}</h2>
+      <p>{{ levelTitle }} · 本关收集 {{ score }} 枚微光。</p>
+      <route-link :to="replayTarget"><template slot="default">再玩这一关</template></route-link>
+    </section>
+  </template>
+  <template when="!hasResult"
+    ><p class="no-result">本次旅程暂无结算，可以选择关卡或读取已保存的进度。</p></template
+  >
+  <h2>各关最高成绩</h2>
+  <ul class="progress-records">
+    <template each="record of records" key="record.id">
+      <li>{{ record.title }}：{{ record.bestScore }} 枚微光 · {{ record.status }}</li>
+    </template>
+  </ul>
+  <button class="save-progress" type="button" :disabled="busy" @click="save()">保存进度</button>
+  <button class="load-progress" type="button" :disabled="busy" @click="load()">读取进度</button>
+  <p class="progress-status" role="status">{{ notice }}</p>
+  <p>
+    成绩先保留在本次应用中；保存后可在刷新时主动读取。此处不保存活动中的游戏，也不修改昵称和声音偏好。
+  </p>
+  <nav aria-label="结算后导航">
+    <route-link :to="{name:'level-select'}"
+      ><template slot="default">返回选关</template></route-link
+    >
+    <route-link :to="{name:'home'}"><template slot="default">返回首页</template></route-link>
+  </nav>
+</main>

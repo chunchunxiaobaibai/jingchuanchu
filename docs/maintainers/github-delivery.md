@@ -1,38 +1,51 @@
-# GitHub 源码与本地套件交付
+# GitHub 源码与预构建套件交付
 
-仓库：[chunchunxiaobaibai/jingchuanchu](https://github.com/chunchunxiaobaibai/jingchuanchu)。当前版本号为 0.4.0，交付方式为 GitHub 源码与预构建 Release 套件；暂不发布 npm 0.4.0。
+仓库：[chunchunxiaobaibai/jingchuanchu](https://github.com/chunchunxiaobaibai/jingchuanchu)，默认分支为 dev。本次版本为 **0.5.0-rc.1**，以 [GitHub 预发布](https://github.com/chunchunxiaobaibai/jingchuanchu/releases/tag/v0.5.0-rc.1) 提供网页 2D 应用框架；不发布 npm。历史 [v0.4.0](https://github.com/chunchunxiaobaibai/jingchuanchu/releases/tag/v0.4.0) 标签与附件保留。
 
-[v0.4.0 下载入口](https://github.com/chunchunxiaobaibai/jingchuanchu/releases/tag/v0.4.0)提供 ZIP、tar.gz 及对应 SHA-256 文件，游戏开发者可以直接解压使用，无需构建引擎。
+## 源码、标签与附件
 
-## 源码更新与版本状态
+git push 只上传已提交的源码，不包含忽略的 dist/tgz。发布前检查全部修改、删除和未跟踪文件；不要把未提交实现遗留在仅本地工作区。每个包的 version 和内部依赖范围、模板、锁文件、文档命令使用同一版本。
 
-上传 main 表示保存该提交的源码，不等于创建版本标签、GitHub Release 或更新 npm。开发阶段继续维护版本号与 CHANGELOG；不要仅因上传源码就把所有“npm 未发布”描述改成“已发布”。
+先完成所需验证和源码提交，再创建尚未使用的 v<版本> 标签；不能移动旧标签或覆盖旧 Release 附件。本次保留 dev 作为源码入口，v0.5.0-rc.1 标记经过验证的候选。GitHub 的 Source code 附件没有预构建包，使用者仍需构建引擎。
 
-上传前查看 git status 和待提交 diff，特别留意已有删除及未跟踪文件。工作区的未提交内容不会随普通 git push 上传；本地可运行也不能证明远端已经包含相同内容。
+## 构建与验证
 
-README 应优先提供“克隆 → npm ci → dist:release → CLI 创建游戏”的路径。GitHub 自动生成的 Source code 压缩包通常只包含被 Git 跟踪的源码，本仓库忽略的 dist 和 tgz 不在其中。下载源码后仍需构建；不能直接把 templates/browser 当成已经配置好的独立发行模板。
+在引擎根目录按本次交付需要执行：
 
-## 可选的 Release 附件
-
-仅更新源码时不需要创建 Release。如果要让游戏开发者免去引擎构建步骤，可以另行创建明确版本的 GitHub Release，并上传：
-
-```text
-jingchuanchu-engine-0.4.0.tar.gz
-jingchuanchu-engine-0.4.0.tar.gz.sha256
+```bash
+npm run typecheck
+npm run pack:packages
+npm run check:templates
+npm run test:app:distribution
 ```
 
-文件由 npm run dist:release 生成，包含 10 个本地 tgz、清单、安装器、模板及开发手册。GitHub Release 不要求同时发布 npm，也不需要把生成产物提交到源码历史。
+前者构建实际 tgz，后者在仓库外验证 CSS/Less/legacy 的创建、安装、模板诊断、类型与静态构建。需要完整 Node 分发验收时，再执行 distribution/verify.ts --skip-browser；不要让这一选择隐式启动浏览器。具体版本/环境/命令与未验证部分记录在 [验证记录](../validation.md)。
 
-创建正式版本时，先完成所需检查并提交源码，再创建与根版本一致、尚未使用的标签，例如 v0.4.0。若已经生成并验证 tgz，可在干净提交及标签处运行 `npx tsx scripts/distribution/build.ts`，让套件记录最终 revision；检查 manifest.json 的 sourceDirty 为 false，sourceTag 与标签一致。不要移动已有版本标签或在同一版本下悄悄替换不同内容。
+从已提交、已标记且干净的源码重新装配归档：
 
-Release 说明应写明新增能力、兼容性、使用入口和实际验证范围。浏览器交互未验证时如实注明；不要用静态构建结果替代浏览器或设备兼容性结论。
+```bash
+npx --no-install tsx scripts/distribution/build.ts
+```
+
+这一步使用已有 dist/packages，不重复编译；确认 manifest.json 的 sourceRevision 是最终提交，sourceDirty=false，sourceTag=v0.5.0-rc.1。ZIP 与 tar.gz 应来自同一个目录、相同文件内容，分别生成 SHA-256。对外附件为：
+
+```text
+jingchuanchu-engine-0.5.0-rc.1.tar.gz
+jingchuanchu-engine-0.5.0-rc.1.tar.gz.sha256
+jingchuanchu-engine-0.5.0-rc.1.zip
+jingchuanchu-engine-0.5.0-rc.1.zip.sha256
+```
+
+归档包括 10 个 tgz、包清单、安装器、参考游戏、开发文档和许可，不包括 node_modules、个人环境或外部游戏。独立生成项目将依赖复制到 vendor；套件内 starter 使用相对 packages 目录。使用流程见 [快速入门](../development/getting-started.md)。
+
+## 上传与发布
+
+将源码提交和新标签推送后，先创建 draft + prerelease 的 GitHub Release，说明正文采用 [本版本说明](release-0.5.0-rc.1.md)。上传四份附件，核对名称、大小和远端摘要，再发布草稿；保留 prerelease=true，不将其设为正式 latest，不改动历史 v0.4.0。
+
+本次浏览器/设备/性能 H01—H04 尚未执行，Release 必须明确说明。Node DOM、注入驱动及静态构建不是实际游玩或设备兼容性证据；[验收清单](../../tasks/acceptance.md) 保留剩余人工项。完整参考游戏和文档已提供，不表示所有设备或生产场景验收完成。
+
+GitHub Release 与 npm 是不同交付渠道。未来若授权 npm 发布，按 [npm 发布手册](npm-publishing.md) 处理，不能因为 GitHub 发布而宣称 npm 已更新。
 
 ## 文档维护范围
 
-- README：当前交付状态、源码快速开始、模块导航、许可和反馈入口。
-- 开发手册：本地套件使用、创建项目、生成组件/场景、生命周期及主动迁移。
-- CHANGELOG：对使用者可见的变更；GitHub 源码状态与 npm 发布状态分开记录。
-- [验证记录](../validation.md)：实际执行的命令、环境与未验证部分。
-- [贡献指南](https://github.com/chunchunxiaobaibai/jingchuanchu/blob/main/CONTRIBUTING.md)：复现信息、修改边界和按需验证方式。
-
-完整资料已在仓库内，不必重复维护第二套 Wiki。后续决定发布 npm 时再执行 [npm 发布手册](npm-publishing.md)，并同步更新版本与页面说明。
+README 和开发手册提供当前源码/套件的使用路径；旧根入口手册描述历史布局。CHANGELOG 记录用户可见行为，验证记录区分实际检查与未覆盖项。现有 0.4.0 标签和附件用于重建历史版本，不重写成新 application 模型。

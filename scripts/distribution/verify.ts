@@ -2,19 +2,38 @@ import assert from 'node:assert/strict';
 import { access, cp, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { dirname, resolve, join } from 'node:path';
+import { dirname, resolve, join, basename } from 'node:path';
 import { tmpdir } from 'node:os';
-import { chromium } from '@playwright/test';
 
 function run(command: string, args: string[], cwd: string) {
-  const result = spawnSync(command, args, { cwd, encoding: 'utf8', timeout: 120_000 });
+  const windowsNpm = process.platform === 'win32' && command === 'npm';
+  const result = spawnSync(
+    windowsNpm ? process.execPath : command,
+    windowsNpm
+      ? [resolve(dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js'), ...args]
+      : args,
+    { cwd, encoding: 'utf8', timeout: 120_000 },
+  );
   if (result.status !== 0)
     throw result.error ?? new Error(`${command} failed:\n${result.stdout}\n${result.stderr}`);
-  return result.stdout;
+  return result.stdout.replace(/\r\n/g, '\n');
 }
 const root = resolve('.');
 const version = (JSON.parse(await readFile('package.json', 'utf8')) as { version: string }).version;
-const archive = resolve('dist/releases', `jingchuanchu-engine-${version}.tar.gz`);
+let archiveOverride: string | undefined;
+for (let i = 2; i < process.argv.length; i++) {
+  if (process.argv[i] === '--skip-browser') continue;
+  if (
+    process.argv[i] !== '--archive' ||
+    !process.argv[i + 1] ||
+    process.argv[i + 1]!.startsWith('--')
+  )
+    throw new Error('Usage: verify.ts [--archive file] [--skip-browser]');
+  archiveOverride = process.argv[++i];
+}
+const archive = archiveOverride
+  ? resolve(archiveOverride)
+  : resolve('dist/releases', `jingchuanchu-engine-${version}.tar.gz`);
 const checksum = (await readFile(`${archive}.sha256`, 'utf8')).split(' ')[0];
 assert.equal(
   createHash('sha256')
@@ -24,7 +43,7 @@ assert.equal(
 );
 const temporary = await mkdtemp(join(tmpdir(), 'xiaobaibaifqy-jingchuanchu-distribution-'));
 try {
-  run('tar', ['-xzf', archive, '-C', temporary], root);
+  run('tar', ['-xzf', basename(archive), '-C', temporary], dirname(archive));
   const bundle = join(temporary, `jingchuanchu-engine-${version}`);
   const manifest = JSON.parse(await readFile(join(bundle, 'manifest.json'), 'utf8')) as {
     packages: Array<{ name: string; file: string; sha256: string }>;
@@ -39,7 +58,9 @@ try {
         .digest('hex'),
       entry.sha256,
     );
-    const list = run('tar', ['-tzf', file], root).trim().split('\n');
+    const list = run('tar', ['-tzf', basename(file)], dirname(file))
+      .trim()
+      .split('\n');
     for (const required of [
       'package/README.md',
       'package/LICENSE',
@@ -52,11 +73,15 @@ try {
       assert.ok(
         /^package\/(?:dist\/|README\.md$|LICENSE$|package\.json$|[^/]+\.(?:ts|mts|mjs)$)/.test(
           path,
-        ),
+        ) ||
+          (entry.name === '@xiaobaibaifqy/jingchuanchu-app' &&
+            /^package\/runtime\/[a-z0-9/-]+\.ts$/.test(path)),
         `Unexpected packed file: ${path}`,
       );
-    assert.equal(run('tar', ['-xOf', file, 'package/LICENSE'], root), license);
-    const packageInfo = JSON.parse(run('tar', ['-xOf', file, 'package/package.json'], root)) as {
+    assert.equal(run('tar', ['-xOf', basename(file), 'package/LICENSE'], dirname(file)), license);
+    const packageInfo = JSON.parse(
+      run('tar', ['-xOf', basename(file), 'package/package.json'], dirname(file)),
+    ) as {
       version: string;
       license: string;
     };
@@ -188,6 +213,7 @@ try {
   ])
     assert.equal(`node_modules/${forbidden}` in starterLock.packages, false);
   if (!process.argv.includes('--skip-browser')) {
+    const { chromium } = await import('@playwright/test');
     // Production build is served by the consumer's own Vite, never the engine workspace.
     const { preview } = (await import(
       resolve(starter, 'node_modules/vite/dist/node/index.js')
@@ -207,6 +233,11 @@ try {
         errors.push(error.message);
       });
       await page.goto(`http://127.0.0.1:${address.port}`);
+      await page.getByRole('link', { name: '选择关卡', exact: true }).click();
+      await page.getByRole('link', { name: '查看关卡', exact: true }).first().click();
+      await page.getByRole('button', { name: '选定此关', exact: true }).click();
+      await page.getByRole('link', { name: '开始旅程', exact: true }).click();
+      await page.locator('canvas').waitFor();
       const before = await page.locator('canvas').screenshot();
       await page.locator('canvas').focus();
       await page.keyboard.down('ArrowRight');
@@ -214,8 +245,8 @@ try {
       await page.keyboard.up('ArrowRight');
       assert.equal((await page.locator('canvas').screenshot()).equals(before), false);
       await page.getByRole('button', { name: '暂停', exact: true }).click();
-      assert.equal(await page.locator('[data-text="status"]').innerText(), '已暂停');
-      await page.getByRole('button', { name: '继续', exact: true }).click();
+      assert.equal(await page.getByRole('dialog', { name: '暂停旅程' }).isVisible(), true);
+      await page.getByRole('button', { name: '继续旅程', exact: true }).click();
       await page.setViewportSize({ width: 320, height: 740 });
       assert.equal(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),

@@ -1,8 +1,11 @@
 import { access, cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve, relative, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { loadProjectConfig } from './project-config.mjs';
+import { generateApplication } from './application-scaffold.mjs';
+import { createApplicationProject } from './application-starter.mjs';
+import { resolveBundleModules } from './install.mjs';
 
 const prefix = '@xiaobaibaifqy/jingchuanchu-';
 const exists = (file) =>
@@ -30,34 +33,10 @@ function componentName(name) {
     .map((word) => word[0].toUpperCase() + word.slice(1))
     .join('');
 }
-async function localDependencies(bundle, names, target) {
-  const data = JSON.parse(await readFile(join(bundle, 'manifest.json'), 'utf8'));
-  const entries = new Map(data.packages.map((entry) => [entry.name, entry])),
-    needed = new Set();
-  function select(name) {
-    if (needed.has(name)) return;
-    const entry = entries.get(name);
-    if (!entry) throw new Error(`Module missing from bundle: ${name}`);
-    needed.add(name);
-    for (const dependency of Object.keys(entry.dependencies))
-      if (dependency.startsWith(prefix)) select(dependency);
-  }
-  names.forEach((name) => select(prefix + name));
-  const result = {};
-  for (const name of needed) {
-    const entry = entries.get(name);
-    if (!/^[\w.-]+\.tgz$/.test(entry.file)) throw new Error('Invalid bundle filename');
-    const file = join(bundle, 'packages', entry.file),
-      bytes = await readFile(file);
-    if (createHash('sha256').update(bytes).digest('hex') !== entry.sha256)
-      throw new Error(`Checksum mismatch: ${entry.file}`);
-    result[name] = { file, dependency: `file:vendor/${entry.file}` };
-  }
-  return result;
-}
+const localDependencies = resolveBundleModules;
 export async function createProject(
   target,
-  { preset = 'singleplayer', style = 'css', bundle } = {},
+  { preset = 'singleplayer', style = 'css', bundle, profile } = {},
 ) {
   if (!Object.hasOwn(presets, preset)) throw new Error(`Unknown preset: ${preset}`);
   if (!['css', 'less'].includes(style)) throw new Error(`Unknown style: ${style}`);
@@ -65,15 +44,34 @@ export async function createProject(
   if ((await exists(target)) && (await readdir(target)).length)
     throw new Error('Target directory must be empty');
   const browser = ['singleplayer', 'client'].includes(preset);
+  profile ??= browser ? 'application' : 'legacy-v0.4';
+  if (!['application', 'legacy-v0.4'].includes(profile) || (!browser && profile === 'application'))
+    throw new Error(
+      'Application profile requires singleplayer/client; core/server keep a non-UI legacy profile',
+    );
   const selected = [...presets[preset], ...(browser ? ['tooling'] : [])];
   // Resolve and verify every local archive before writing project files.
-  const local = bundle ? await localDependencies(resolve(bundle), selected, target) : undefined;
+  const local = bundle ? await localDependencies(resolve(bundle), selected) : undefined;
   await mkdir(target, { recursive: true });
+  if (browser && profile === 'application')
+    return createApplicationProject(target, {
+      preset,
+      style,
+      local,
+      version: manifest.version,
+      tools: manifest.dependencies,
+      name:
+        target
+          .split(sep)
+          .at(-1)
+          .toLowerCase()
+          .replace(/[^a-z0-9-]/g, '-') || 'my-game',
+    });
   let pkg;
   if (browser) {
-    let starter = fileURLToPath(new URL('./starters/browser', import.meta.url));
+    let starter = fileURLToPath(new URL('./starters/legacy-browser', import.meta.url));
     if (!(await exists(starter)))
-      starter = fileURLToPath(new URL('../../templates/browser', import.meta.url));
+      starter = fileURLToPath(new URL('../../templates/legacy-browser', import.meta.url));
     await cp(starter, target, {
       recursive: true,
       filter: (file) => !/(^|[\\/])(node_modules|dist)([\\/]|$)/.test(relative(starter, file)),
@@ -211,14 +209,28 @@ function register(code, file, kind, exportName, importFile) {
     code.slice(offset)
   );
 }
-export async function generate(kind, name, { project = '.', parent, style } = {}) {
-  if (!['view', 'scene'].includes(kind)) throw new Error('Generate supports view or scene');
-  const exported = componentName(name),
-    root = resolve(project);
-  const config = JSON.parse(
-    await readFile(join(root, 'jingchuanchu.json'), 'utf8').catch(() => '{}'),
-  );
-  style ??= config.style ?? 'css';
+export async function generate(kind, name, options = {}) {
+  const { project = '.', parent } = options;
+  let style = options.style;
+  const root = resolve(project),
+    config = await loadProjectConfig(root);
+  if (config.profile === 'application') return generateApplication(kind, name, config, options);
+  if (
+    options.page !== undefined ||
+    options.shared !== undefined ||
+    options.route !== undefined ||
+    options.domain !== undefined ||
+    options.extends !== undefined
+  )
+    throw new Error(
+      'Application generation options require profile:application; migrate explicitly',
+    );
+  if (!['view', 'scene'].includes(kind))
+    throw new Error(
+      'Legacy generate supports view or scene; new components require profile:application',
+    );
+  const exported = componentName(name);
+  style ??= config.style;
   if (!['css', 'less'].includes(style)) throw new Error('Style must be css or less');
   const base =
     kind === 'view'

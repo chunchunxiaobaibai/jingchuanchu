@@ -34,6 +34,8 @@ scope.dispose();
 
 PointerHandlers 可用 `cancel(event, reason)` 区分取消/失捕与正常 up，窗口失焦和 Scope 销毁会清理捕获。KeyboardInput 清理焦点和输入法组合状态，避免文字输入进入游戏按键。
 
+当前源码的 PointerHandlers 还可用 accept(event):boolean，在捕获指针前检查事件是否属于玩法区域；未提供时保留原行为。application 项目通常通过 GameCanvas/defineActions 使用输入，不给同一画布叠加手工绑定；对应使用方式在配套文档 application-gameplay.md。
+
 ## 授权
 
 MIT，见 [LICENSE](LICENSE)。

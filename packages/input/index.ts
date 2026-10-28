@@ -1,6 +1,8 @@
 import type { Scope } from '@xiaobaibaifqy/jingchuanchu-core';
 export type PointerCancelReason = 'pointercancel' | 'lostpointercapture' | 'blur' | 'dispose';
 export interface PointerHandlers {
+  /** Optional admission check before taking pointer capture. */
+  accept?(event: PointerEvent): boolean;
   down(event: PointerEvent): void;
   move(event: PointerEvent): void;
   up(event: PointerEvent): void;
@@ -92,6 +94,7 @@ export function bindPointer(
   };
   const down = (event: PointerEvent): void => {
     if (!event.isPrimary || event.button !== 0 || activePointer !== undefined) return;
+    if (handlers.accept && !handlers.accept(event)) return;
     canvas.setPointerCapture(event.pointerId);
     activePointer = event.pointerId;
     lastEvent = event;

@@ -1,0 +1,21 @@
+main {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+.run-result {
+  padding: 1rem;
+  border: 1px solid #8bd5c7;
+  border-radius: 0.75rem;
+}
+.progress-records {
+  line-height: 2;
+}
+button {
+  margin: 0.25rem;
+  padding: 0.6rem 1rem;
+}
+nav {
+  display: flex;
+  gap: 1rem;
+}
