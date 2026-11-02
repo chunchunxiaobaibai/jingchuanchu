@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>浏览器功能接入 | 镜川初文档</title>
+    <meta name="description" content="当前源码的构建方式、交付流程与验证边界。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="engineering/browser-support.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html" aria-current="page">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html" class="selected" aria-current="page"
+            >浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>工程与维护</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>浏览器功能接入</h1>
+          <p>当前源码的构建方式、交付流程与验证边界。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            本文用于直接装配基础模块。当前 application 项目优先用
+            <a href="../guide/gameplay.html">GameCanvas 场景教程</a> 和
+            <a href="../guide/services.html">资源/音频服务</a
+            >，由页面统一持有循环、输入与资源；不在同一画布叠加下文的手工驱动。
+          </p>
+          <h2 id="绘制">绘制</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>import { Position2D, Shape2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { canvas2DModule, Renderer2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/module';
+
+engine.install([canvas2DModule({ canvas, width: 960, height: 600 })]);
+const object = engine.world.create();
+engine.world.set(object, Position2D, { x: 200, y: 150 });
+engine.world.set(object, Shape2D, {
+  kind: 'rect',
+  color: '#176b58',
+  width: 40,
+  height: 24,
+  layer: 0,
+});</code></pre>
+          </div>
+          <p>
+            内置系统在 render 阶段清空画布，然后按 layer 升序绘制同时拥有 Position2D 和 Shape2D
+            的实体。圆形的 position 是圆心，width 是直径，height 不参与圆形绘制；矩形 position
+            是左上角。
+          </p>
+          <p>
+            Canvas 的逻辑尺寸默认 960×600，物理像素使用构造时 devicePixelRatio，最多 2 倍。CSS
+            负责页面缩放；逻辑尺寸不会因 CSS 改变。 需要多个画布或自定义绘制，可直接创建
+            Canvas2D，或禁用自动世界绘制：
+          </p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>engine.install([canvas2DModule({ canvas, renderWorld: false })]);
+const renderer = engine.world.getResource(Renderer2D);
+engine.addSystem({
+  id: 'game:draw',
+  phase: 'render',
+  update() {
+    renderer.clear('#ffffff');
+    renderer.stroke({
+      color: '#202c37',
+      width: 5,
+      points: [
+        { x: 10, y: 10 },
+        { x: 90, y: 90 },
+      ],
+    });
+  },
+});</code></pre>
+          </div>
+          <p>
+            这是与上一个安装示例二选一的配置，不在同一 Engine 重复安装
+            renderer-2d。相机、精灵和变换使用 renderer-2d/features；自定义文字等绘制可使用
+            renderer.context 原生 Canvas API。
+          </p>
+          <h2 id="键盘">键盘</h2>
+          <p>
+            keyboardModule 提供 Keyboard 服务。isDown 使用 <code>KeyboardEvent.code</code>，例如
+            KeyW 或 ArrowUp，不使用本地化字符。 编辑 input、textarea、select 或 contenteditable
+            时不采集按下操作；失去焦点、暂停和停止时清空状态。 preventDefault
+            只阻止显式选择的按键默认动作，建议为方向键配置，防止移动时页面滚动。
+          </p>
+          <h2 id="指针">指针</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>pointerModule({
+  canvas,
+  handlers: {
+    down(event) {
+      const point = engine.world.getResource(Renderer2D).toPoint(event.clientX, event.clientY);
+      engine.world.getResource(Game).target = point;
+    },
+    move() {},
+    up() {},
+  },
+});</code></pre>
+          </div>
+          <p>
+            接受主要指针的左键/触摸操作，一次处理一个指针。移动只在捕获期间转发；pointerup、cancel
+            或 lost capture 只结束一次。 模块清理时释放捕获并移除监听器。Canvas 应设置
+            <code>touch-action: none</code>，模板已配置。 toPoint 把 CSS
+            坐标映射到逻辑画布；带相机时可使用 toWorldPoint，页面内游戏优先使用 GameCanvas
+            的动作坐标。
+          </p>
+          <h2 id="资源">资源</h2>
+          <p>
+            AssetCache 接受自己的 Promise loader。并发读取相同 URL
+            共享一次加载，失败时删除缓存项，下一次 get 可以重试。 clear 释放未持有条目，仍被 retain
+            的资源保留；dispose 关闭缓存并强制结束持有，此后 get 返回拒绝的 Promise。
+          </p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>import { assetModule } from '@xiaobaibaifqy/jingchuanchu-assets/module';
+
+const images = assetModule&lt;ImageBitmap&gt;({
+  id: 'images',
+  async load(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Image request failed: ${response.status}`);
+    return createImageBitmap(await response.blob());
+  },
+  release(image) {
+    image.close();
+  },
+});
+engine.install([images]);
+const image = await engine.world.getResource(images.cache).get('/assets/player.png');</code></pre>
+          </div>
+          <p>
+            加载器负责协议、状态码和数据校验。release 回调应处理自己的错误；clear/dispose
+            不等待异步资源释放。 默认参考项目通过应用资源组加载图片和音频。底层资源示例见
+            <code>examples/assets.ts</code>。
+          </p>
+          <h2 id="浏览器循环">浏览器循环</h2>
+          <p>
+            browserModule 在 started/resumed 后请求帧，在 pause/stop/dispose
+            时取消帧；隐藏页面自动暂停，恢复时不补算全部后台时间。
+            只自动恢复由可见性导致的暂停；原本手动暂停的游戏不会因为切回页面而自动恢复。
+            需要测试或特殊宿主时传
+            BrowserDriver；驱动接口只负责请求/取消帧及可见性订阅，不负责游戏规则。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <a href="../engineering/distribution.html"
+            ><small>← 上一篇</small><strong>分发与版本维护</strong></a
+          ><a href="../guide/troubleshooting.html"
+            ><small>下一篇 →</small><strong>常见问题</strong></a
+          >
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#绘制">绘制</a><a href="#键盘">键盘</a><a href="#指针">指针</a
+            ><a href="#资源">资源</a><a href="#浏览器循环">浏览器循环</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

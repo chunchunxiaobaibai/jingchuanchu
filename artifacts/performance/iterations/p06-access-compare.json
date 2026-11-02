@@ -1,0 +1,56 @@
+{
+  "node": "v24.12.0",
+  "samples": 31,
+  "warmupBatches": 10,
+  "batch": 50,
+  "units": "milliseconds per complete access loop",
+  "currentSourceSha256": "4e246b6c83e5df25c6c84c7fb2ab05fed167739b866b5584e4df1135ff91cc34",
+  "variants": {
+    "slot": "  require<T>(entity: Entity, token: Token<T>): T {\n    this.assertAlive(entity);\n    const store = this.stores.get(token.key);\n    if (!store) throw new Error(`Missing component: ${token.name}`);\n    return store.require(entity.index, token.name) as T;\n  }\n",
+    "original": "  require<T>(entity: Entity, token: Token<T>): T {\n    this.assertAlive(entity);\n    const store = this.stores.get(token.key);\n    if (!store?.has(entity.index)) throw new Error(`Missing component: ${token.name}`);\n    return store.get(entity.index) as T;\n  }\n",
+    "value": "  require<T>(entity: Entity, token: Token<T>): T {\n    this.assertAlive(entity);\n    const store = this.stores.get(token.key);\n    const value = store?.get(entity.index);\n    if (value === undefined && !store?.has(entity.index)) throw new Error(`Missing component: ${token.name}`);\n    return value as T;\n  }\n"
+  },
+  "checksum": 310541175000,
+  "results": [
+    {
+      "size": 1000,
+      "variants": {
+        "slot": {
+          "medianMs": 0.021121999999998024,
+          "p95Ms": 0.02450600000000122,
+          "minMs": 0.018284000000001015
+        },
+        "original": {
+          "medianMs": 0.02476199999999835,
+          "p95Ms": 0.029153999999998632,
+          "minMs": 0.022512000000001534
+        },
+        "value": {
+          "medianMs": 0.020636000000001785,
+          "p95Ms": 0.02433799999999792,
+          "minMs": 0.01822200000000066
+        }
+      }
+    },
+    {
+      "size": 10000,
+      "variants": {
+        "slot": {
+          "medianMs": 0.29471,
+          "p95Ms": 0.31057400000000596,
+          "minMs": 0.2713959999999952
+        },
+        "original": {
+          "medianMs": 0.3457219999999961,
+          "p95Ms": 0.37046800000000074,
+          "minMs": 0.3188259999999991
+        },
+        "value": {
+          "medianMs": 0.29323200000000726,
+          "p95Ms": 0.3103479999999945,
+          "minMs": 0.26517399999999725
+        }
+      }
+    }
+  ]
+}

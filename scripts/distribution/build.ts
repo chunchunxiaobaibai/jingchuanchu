@@ -72,7 +72,7 @@ for (const directory of await readdir('packages')) {
     dependencies: manifest.dependencies,
   });
 }
-for (const file of ['LICENSE', 'CHANGELOG.md', 'SPEC.md']) await cp(file, join(output, file));
+for (const file of ['LICENSE', 'SPEC.md']) await cp(file, join(output, file));
 await cp('docs', join(output, 'docs'), { recursive: true });
 await cp('tasks', join(output, 'tasks'), { recursive: true }); // Specifications link to their implementation records.
 await cp('templates/browser', join(output, 'starters/browser'), {
@@ -84,8 +84,11 @@ await cp('examples', join(output, 'examples'), {
   filter: (path) => !/(^|[\\/])(node_modules|dist)([\\/]|$)/.test(path),
 });
 await writeFile(
-  join(output, 'README.md'),
-  (await readFile('distribution/README.md', 'utf8')).replaceAll('{{VERSION}}', root.version),
+  join(output, 'README.html'),
+  (await readFile('scripts/distribution/readme.html', 'utf8')).replaceAll(
+    '{{VERSION}}',
+    root.version,
+  ),
 );
 const installer = ts.transpileModule(await readFile('scripts/distribution/install.ts', 'utf8'), {
   compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },

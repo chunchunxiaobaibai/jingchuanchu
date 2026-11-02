@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>快速上手 | 镜川初文档</title>
+    <meta name="description" content="创建一个独立的网页 2D 游戏，从当前源码到可部署网页。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="guide/quick-start.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html" aria-current="page">指南</a
+        ><a href="../api/index.html">API</a><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html" class="selected" aria-current="page">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>开发指南</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">DEVELOPER GUIDE</p>
+          <h1>快速上手</h1>
+          <p>创建一个独立的网页 2D 游戏，从当前源码到可部署网页。</p>
+        </div>
+        <article data-doc-content>
+          <p class="lead">
+            从配套源码构建引擎套件，再用 CLI
+            创建游戏。游戏项目独立保存源码、依赖和资源，之后的日常开发在游戏目录完成。
+          </p>
+          <aside class="callout">
+            <strong>开始之前</strong>
+            <p>
+              需要 Node.js ≥ 22.12.0、npm、Git 和 tar，并具备基础 TypeScript、HTML、CSS
+              与命令行知识。以下命令使用当前仓库版本 0.5.0-rc.1。Windows 与 WSL 请分别安装依赖。
+            </p>
+          </aside>
+          <h2 id="build">1. 构建引擎套件</h2>
+          <p>在引擎仓库根目录执行：</p>
+          <div class="code-block">
+            <div class="code-label">终端 · 引擎仓库</div>
+            <pre><code>npm ci
+npm run dist:release</code></pre>
+          </div>
+          <p>
+            这会检查类型、构建并打包 10 个工作区包、检查模板，并生成本地套件。套件目录位于
+            <code>dist/releases/jingchuanchu-engine-0.5.0-rc.1/</code>。详细过程见<a
+              href="build-from-source.html"
+              >从源码到独立游戏</a
+            >。
+          </p>
+          <h2 id="create">2. 创建一个游戏</h2>
+          <p>继续在引擎仓库执行，目标目录必须不存在或为空：</p>
+          <div class="code-block">
+            <div class="code-label">终端 · 引擎仓库</div>
+            <pre><code>node packages/tooling/dist/cli.mjs create ../my-game --preset singleplayer --style css --bundle ./dist/releases/jingchuanchu-engine-0.5.0-rc.1</code></pre>
+          </div>
+          <p>
+            CLI 校验本地包摘要、解析内部依赖并复制到游戏的 <code>vendor/</code>，使用相对
+            <code>file:</code> 依赖。需要 Less 时将 <code>--style css</code> 改为
+            <code>--style less</code>。
+          </p>
+          <details>
+            <summary>已经拿到分发套件？</summary>
+            <p>可以直接运行套件内的参考项目：</p>
+            <pre><code>cd /path/to/bundle/starters/browser
+npm install
+npm run dev</code></pre>
+            <p>或先在单独的工具目录安装配套 CLI，再创建保存 vendor 的独立项目：</p>
+            <pre><code>npm init -y
+npm install --save-dev /path/to/bundle/packages/xiaobaibaifqy-jingchuanchu-tooling-0.5.0-rc.1.tgz
+npx --no-install jingchuanchu create ./my-game --bundle /path/to/bundle</code></pre>
+          </details>
+          <h2 id="run">3. 安装与运行</h2>
+          <div class="code-block">
+            <div class="code-label">终端 · 游戏项目</div>
+            <pre><code>cd ../my-game
+npm install
+npm run dev</code></pre>
+          </div>
+          <p>
+            在浏览器手动访问 Vite
+            终端显示的地址。参考项目包括首页、关卡选择、游玩、设置和结算，游玩页管理
+            Canvas、HUD、暂停与重开。引擎仓库与游戏项目有各自的命令和产物。
+          </p>
+          <h2 id="files">4. 认识项目文件</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>位置</th>
+                  <th>从这里开始修改</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>src/main.ts</code></td>
+                  <td>启动应用、加载基础样式及绑定偏好。</td>
+                </tr>
+                <tr>
+                  <td><code>src/app/</code></td>
+                  <td>应用配置、命名路由与外壳。</td>
+                </tr>
+                <tr>
+                  <td><code>src/pages/</code></td>
+                  <td>每个页面的 TS、HTML、CSS/Less，页面私有组件及场景。</td>
+                </tr>
+                <tr>
+                  <td><code>src/game/</code></td>
+                  <td>跨页面的会话、规则、偏好和进度 Store。</td>
+                </tr>
+                <tr>
+                  <td><code>src/themes/</code></td>
+                  <td>主题颜色与语义图片键。</td>
+                </tr>
+                <tr>
+                  <td><code>vendor/</code></td>
+                  <td>配套引擎安装包，随源码和锁文件一同保存。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            完整职责与依赖方向见<a href="../engineering/project-structure.html">目录与文件归属</a>。
+          </p>
+          <h2 id="extend">5. 添加自己的页面</h2>
+          <pre><code>npm run generate -- page bonus --route /bonus
+npm run generate -- component score-panel --page bonus
+npm run generate -- scene bonus --page bonus</code></pre>
+          <p>
+            页面会注册到路由表。组件需显式加入父定义的 <code>components</code> 并在 HTML
+            引用；场景通过页面内的 <code>GameCanvas</code> 接入。可照写的完整示例见<a
+              href="components.html"
+              >组件、表单与页面</a
+            >和<a href="gameplay.html">场景与游戏循环</a>。
+          </p>
+          <h2 id="ship">6. 检查与构建网页</h2>
+          <pre><code>npm run check
+npm run build
+npm run preview</code></pre>
+          <p>
+            <code>build</code> 先检查目录、模板与类型，再由 Vite 输出游戏的
+            <code>dist/</code>。将其中内容部署到静态网站服务。默认使用 hash 路由；history
+            模式需配置入口回退和 base。联网服务端需独立部署。
+          </p>
+          <aside class="callout">
+            <strong>保存可以重建的项目</strong>
+            <p>
+              保存源码、素材许可、<code>vendor/</code>、<code>package.json</code> 与
+              <code>package-lock.json</code>。其他协作者可以使用
+              <code>npm ci</code> 重建依赖。外部开发工具仍需要 registry 或缓存。
+            </p>
+          </aside>
+          <h2 id="next">下一步</h2>
+          <div class="next-grid">
+            <a href="components.html"
+              ><strong>学习组件与页面 →</strong><span>输入、输出、model、Store 和路由。</span></a
+            ><a href="../api/index.html"
+              ><strong>查询 API →</strong><span>按包与能力查找签名和契约。</span></a
+            >
+          </div>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <a href="../index.html"><small>← 上一篇</small><strong>为网页 2D 游戏而生。</strong></a
+          ><a href="../guide/build-from-source.html"
+            ><small>下一篇 →</small><strong>从源码到独立游戏</strong></a
+          >
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#build">1. 构建引擎套件</a><a href="#create">2. 创建一个游戏</a
+            ><a href="#run">3. 安装与运行</a><a href="#files">4. 认识项目文件</a
+            ><a href="#extend">5. 添加自己的页面</a><a href="#ship">6. 检查与构建网页</a
+            ><a href="#next">下一步</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

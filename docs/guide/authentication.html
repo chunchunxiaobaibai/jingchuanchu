@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>认证与权限接入 | 镜川初文档</title>
+    <meta name="description" content="可选同源账号会话、服务端协议、权限守卫与用户数据隔离。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="guide/authentication.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html" aria-current="page">指南</a
+        ><a href="../api/index.html">API</a><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html" class="selected" aria-current="page"
+            >认证与权限接入</a
+          >
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>开发指南</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">DEVELOPER GUIDE</p>
+          <h1>认证与权限接入</h1>
+          <p>可选同源账号会话、服务端协议、权限守卫与用户数据隔离。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            可选的同源账号适配采用 Cookie 会话、HTTP AuthProvider
+            与可注入测试后端。默认单机项目不依赖账号服务；接入生产服务时由后端验证身份与权限。
+          </p>
+          <p>
+            <code>protocol.ts</code> 定义 LoginInput、展示 User 和有限 Permission；<code
+              >client.ts</code
+            >
+            提供 createHttpAuthProvider，按应用实例创建，不使用全局会话。具体 API URL
+            由业务注入，要求与 applicationOrigin 同源，不包含 URL
+            凭据/query/hash。构造不发请求，浏览器使用 Cookie 和 credentials:same-origin；客户端不读
+            HttpOnly Cookie，也不把会话凭据放入 Store、URL 或持久化。
+          </p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const Account = defineService({
+  name: 'account',
+  factory(context) {
+    const origin = window.location.origin;
+    return new AuthService({
+      scope: context.scope,
+      provider: createHttpAuthProvider({
+        applicationOrigin: origin,
+        baseURL: new URL('/api/auth', origin).href,
+      }),
+    });
+  },
+});</code></pre>
+          </div>
+          <p>
+            defineService/AuthService/provideService 从引擎 application 子入口导入；应用配置
+            providers:[provideService(Account)]。页面/根组件使用
+            context.useService(Account)。路由权限另按
+            <a href="../specs/access-policy.html">access-policy</a> 配套
+            createAccessGuard、bindAccessRouter。业务用户名/密码只作为 login 请求输入，不进入
+            AuthService.session；decodeSession 显式选择 id/displayName/permissions，原始响应中的
+            token/password 等字段不转交会话。
+          </p>
+          <h2 id="服务端协议">服务端协议</h2>
+          <p>baseURL 下端点如下；响应均不缓存，状态码不能以任意 2xx 替代。</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>端点</th>
+                  <th>请求</th>
+                  <th>成功/匿名响应</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>GET session</td>
+                  <td>无正文</td>
+                  <td>
+                    200 <code>{user,csrfToken}</code>；缺失/过期会话为 401
+                    <code>{user:null,csrfToken}</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td>POST login</td>
+                  <td>JSON <code>{username,password}</code>、X-CSRF-Token</td>
+                  <td>200 <code>{user,csrfToken}</code>，user 必须非空；无效凭据 401</td>
+                </tr>
+                <tr>
+                  <td>POST logout</td>
+                  <td>JSON <code>{}</code>、X-CSRF-Token</td>
+                  <td>确认撤销成功 204；撤销失败非 204</td>
+                </tr>
+                <tr>
+                  <td>POST reward</td>
+                  <td>JSON <code>{}</code>、X-CSRF-Token</td>
+                  <td>200 <code>{reward:number}</code>；无身份 401、无 claim-reward 权限 403</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            User 至少包含非空 id、displayName 字符串和只由 play/claim-reward 组成的权限数组。session
+            的 401 必须仍是可校验匿名 envelope，附新匿名会话的 CSRF token；401
+            携带已认证身份是协议错误。其他错误/无效响应返回失败，不当作登录成功或匿名。
+          </p>
+          <p>
+            服务端部署契约：同源 HTTPS，服务端设置 Secure/HttpOnly/SameSite Cookie；session 为登录前
+            CSRF 建立匿名会话，登录确认后轮换会话与 token；所有写端点检查 Origin、Cookie 会话与
+            X-CSRF-Token。CSRF token 只在 Provider
+            闭包持有，不作为用户展示字段。当前客户端不设置浏览器禁止的 Cookie/Origin 请求头，不用 JS
+            保存服务器会话 Cookie。测试注入传输，后端自持内存会话表并调用业务提供的
+            authenticate，不要求引擎内置账号数据库。
+          </p>
+          <p>
+            Provider 的 claimReward 是独立业务请求示例，不通过隐藏按钮授予权限。HttpAuthError 保留
+            status/operation；业务收到受保护请求的 401 时调用 auth.invalidate 并进入登录流程，403
+            展示无权限，不能把所有错误都当成重新登录。默认不自动重试写请求。logout 非 204 交给
+            AuthService 报告
+            localCleared:true/remoteRevocation:unconfirmed，不能据本地匿名声称服务器已撤销。
+          </p>
+          <p>
+            CancellationSignal 桥接 AbortController，订阅覆盖读取响应体的阶段；即使注入传输忽略
+            abort，晚到响应在更新 CSRF/返回数据前仍检查取消。API
+            redirect:error，不跟随重定向迁移凭据。测试不证明真实浏览器的 Cookie/CSRF
+            策略或目标部署已生效。
+          </p>
+          <h2 id="注入测试后端">注入测试后端</h2>
+          <p>
+            server.ts 的
+            createExampleAuthBackend({origin,basePath,authenticate,now?,ttlMs?,beforeRevoke?}) 返回
+            handle(Request) 与 dispose。origin 显式要求 HTTPS，Cookie 固定为
+            __Host-jcc-auth-example，Secure/HttpOnly/Path=/；同源写请求校验 Origin、JSON
+            Content-Type、Cookie 和常量时间比较的 CSRF token。GET session 对无身份/过期会话建立匿名
+            CSRF 会话；登录成功删除旧会话、创建随机新会话/token。User 从 verifier
+            结果白名单选择并复制冻结，权限判断读取服务器会话，不读取请求正文中伪造的用户或权限。reward
+            只需 claim-reward；真实资源归属规则由业务扩展。
+          </p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const backend = createExampleAuthBackend({
+  origin: applicationOrigin,
+  basePath: '/api/auth',
+  authenticate: verifyBusinessCredentials,
+});
+const response = await backend.handle(request);
+// 退出测试或释放宿主时：backend.dispose()</code></pre>
+          </div>
+          <p>
+            verifyBusinessCredentials 是业务注入的凭据校验函数，返回最小 User 或
+            null；本目录没有预置账号数据库/固定生产账号。now/ttlMs 用于确定性过期测试；beforeRevoke
+            可注入撤销故障，失败返回 503 且不删除会话，成功 204 删除服务器会话并过期 Cookie。异步
+            verifier 返回后重新检查会话/请求取消，旧会话已经过期或撤销时拒绝创建新身份。dispose
+            清空内存会话。
+          </p>
+          <p>
+            测试 Cookie jar 只在 Node 测试传输中读取 Set-Cookie、发送
+            Cookie/Origin，不导出为浏览器客户端功能。测试分别跳过 can/路由守卫直接请求
+            reward，并提交伪造权限；服务端仍返回 401 或 403。撤销失败时特意确认原 Cookie 仍可请求
+            reward，证明本地匿名不等于远端已撤销；撤销成功后重放旧 Cookie 被拒绝。
+          </p>
+          <h2 id="当前检查">当前检查</h2>
+          <p>
+            仓库根目录运行
+            <code
+              >tsx --conditions=source --test tests/auth-adapter.test.ts
+              tests/auth-backend.test.ts</code
+            >，并执行 <code>tsc --noEmit</code>。当前 Windows 依赖环境使用 node.exe 执行对应 tsx/tsc
+            入口，见 tasks/todo.md 的实际命令。客户端测试注入 Response，后端集成注入实际
+            Request/Response、Cookie jar
+            和验证器；没有打开浏览器、监听网络端口或请求外部服务。部署时需把 handler 接入业务 HTTPS
+            宿主，并以目标浏览器验证 Cookie/CSRF 行为。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <a href="../guide/services.html"
+            ><small>← 上一篇</small><strong>资源、音频与保存</strong></a
+          ><a href="../guide/gameplay.html"
+            ><small>下一篇 →</small><strong>场景与游戏循环</strong></a
+          >
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#服务端协议">服务端协议</a><a href="#注入测试后端">注入测试后端</a
+            ><a href="#当前检查">当前检查</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>自定义模块 | 镜川初文档</title>
+    <meta name="description" content="从可运行代码开始，理解模块边界与完整接入流程。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="guide/engine-modules.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html" aria-current="page">指南</a
+        ><a href="../api/index.html">API</a><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html" class="selected" aria-current="page">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>开发指南</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">DEVELOPER GUIDE</p>
+          <h1>自定义模块</h1>
+          <p>从可运行代码开始，理解模块边界与完整接入流程。</p>
+        </div>
+        <article data-doc-content>
+          <h2 id="最小契约">最小契约</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
+import { resource } from '@xiaobaibaifqy/jingchuanchu-ecs';
+
+export const Settings = resource&lt;{ difficulty: number }&gt;('GameSettings');
+export function settingsModule(): EngineModule {
+  return {
+    id: 'game:settings',
+    setup(engine, scope) {
+      engine.provide(Settings, { difficulty: 1 }, scope);
+    },
+  };
+}</code></pre>
+          </div>
+          <p>
+            setup 是同步配置过程。不用 async
+            setup，不在里面启动新的独立游戏循环。资源可以异步加载，但注册 loader 后让应用 await
+            加载结果。 ID 是字符串，建议游戏模块用 <code>game:</code> 前缀，系统用
+            <code>module:action</code> 前缀。依赖描述模块 ID，不是 npm 包名：
+          </p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const movementModule: EngineModule = {
+  id: 'game:movement',
+  dependencies: ['keyboard-input'],
+  setup(engine, scope) {
+    engine.addSystem({ id: 'game:movement:tick', update() {} }, scope);
+  },
+};</code></pre>
+          </div>
+          <h2 id="安装事务">安装事务</h2>
+          <p>
+            install 先检查重复 ID、缺失依赖和循环，然后按依赖顺序 setup。
+            可以分批安装，依赖可来自上一批。运行中先 pause 或 stop 再安装，之后 resume 或 start。
+          </p>
+          <p>
+            失败时反向清理本批 scope；通过 provide/addSystem/订阅 scope
+            登记的服务、系统和监听器会撤销，已提交的旧模块保留。 setup
+            直接写入旧世界数据、修改外部对象或创建实体，不会自动回滚，必须登记清理：
+          </p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const entity = engine.world.create();
+scope.own(() =&gt; engine.world.destroy(entity));</code></pre>
+          </div>
+          <p>
+            同一实例不能重复安装同
+            ID，不支持只卸载某一个模块。需要更换整套能力组合时销毁实例再创建新的 Engine。
+          </p>
+          <h2 id="服务-事件和生命周期">服务、事件和生命周期</h2>
+          <p>
+            通过 provide 注册服务；其他系统用 world.getResource 获取。重复提供同一个 token
+            会抛错，避免静默覆盖。 assets 和 network 工厂返回的 cache/connection 是
+            token，而不是缓存/连接实例。
+          </p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const assets = assetModule({ load: loadTexture, release: releaseTexture });
+engine.install([assets]);
+const cache = engine.world.getResource(assets.cache);</code></pre>
+          </div>
+          <p>类型化事件：</p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const events = new EventBus&lt;{ damaged: { targetId: string; amount: number } }&gt;();
+events.on('damaged', ({ amount }) =&gt; console.log(amount), scope);
+events.emit('damaged', { targetId: 'player-1', amount: 10 });</code></pre>
+          </div>
+          <p>
+            on 返回取消订阅函数，可重复调用；传 scope 时也在 scope 清理时取消。emit
+            同步执行事件监听器，不是排队到下一帧。 监听器异常会聚合报告，其他监听器仍执行。事件
+            payload 是共享引用，不自动复制。
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Engine 事件</th>
+                  <th>时机</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>started</td>
+                  <td>停止或暂停状态调用 start，时间累积归零</td>
+                </tr>
+                <tr>
+                  <td>paused</td>
+                  <td>从运行状态暂停</td>
+                </tr>
+                <tr>
+                  <td>resumed</td>
+                  <td>从暂停状态恢复</td>
+                </tr>
+                <tr>
+                  <td>stopped</td>
+                  <td>从非停止状态停止</td>
+                </tr>
+                <tr>
+                  <td>disposed</td>
+                  <td>开始销毁，在 scope 和 World 清理之前</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            使用 <code>engine.events.on(name, callback, scope)</code> 登记。开始/恢复阶段异常会通知
+            stopped，让已激活的模块清理。
+          </p>
+          <h2 id="清理责任">清理责任</h2>
+          <p>
+            Scope 按登记顺序反向调用清理函数，某一个清理异常不会阻止其他清理，最后聚合抛出。 dispose
+            可重复调用；关闭后的 scope 再 own 一个函数，会立即执行它。 own
+            返回原清理函数，不自动把函数包装成幂等释放；通常交给 scope 执行一次即可。
+          </p>
+          <p>
+            计时器、DOM 监听器、实体和资源应登记；不要保存已销毁 World 的实体继续访问。 Scope
+            清理是同步的，不等待 Promise。<code>WebSocketHost.close()</code>
+            是异步接口，应由应用入口显式 await，再关闭 HTTP 服务。
+          </p>
+          <p>
+            完整可运行例子见 <code>examples/custom-module.ts</code>。包开发者新增能力时，首先定义
+            typed token 和 EngineModule 接口，再补实现与消费验证，不把某款游戏的字段写进引擎。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <a href="../guide/rendering.html"
+            ><small>← 上一篇</small><strong>渲染、碰撞与引擎能力</strong></a
+          ><a href="../guide/networking.html"><small>下一篇 →</small><strong>联网接入</strong></a>
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#最小契约">最小契约</a><a href="#安装事务">安装事务</a
+            ><a href="#服务-事件和生命周期">服务、事件和生命周期</a><a href="#清理责任">清理责任</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

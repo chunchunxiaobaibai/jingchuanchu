@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>viewport-input：画布尺寸、坐标与输入动作 | 镜川初文档</title>
+    <meta name="description" content="模块边界、所有权、取消语义及直接验收要求。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="specs/viewport-input.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details open>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html" class="selected" aria-current="page"
+            >画布尺寸、坐标与输入动作</a
+          >
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>模块契约</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>viewport-input：画布尺寸、坐标与输入动作</h1>
+          <p>模块边界、所有权、取消语义及直接验收要求。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            公共规则见
+            <a href="../engineering/workflow.html">SPEC</a
+            >。位置：runtime/viewport.ts、input-actions.ts；复用 renderer.resize/toPoint
+            和现有键盘/指针清理。
+          </p>
+
+          <h2 id="视口">视口</h2>
+          <p>
+            createViewport({canvas, width, height, fit:'contain', maxPixelRatio:2, scope, driver?})
+            管逻辑分辨率、CSS 显示区域和像素缓冲。默认保持逻辑比例、居中留边；不要每帧重设
+            canvas.width/height。ResizeObserver/DPR 通知在变化时更新，Node 使用注入几何驱动。
+          </p>
+          <p>
+            默认只实现 contain；其他裁切/拉伸模式不以含糊的 auto 代替。toGamePoint(event)
+            返回逻辑点及 inside 标志；相机转换复用既有
+            screenToWorld。留边区输入不当成画布边界内的点击。组件 UI 仍由 CSS/Less 布局，不跟随
+            Canvas 像素缓冲缩放。
+          </p>
+          <p>
+            几何驱动提供 measure/observe/apply，可选 toPoint/dispose；measure 返回容器客户区
+            left/top/width/height/pixelRatio。视口计算居中的 CSS 矩形，缓冲为 round(逻辑尺寸 × 受限
+            DPR)，CSS 尺寸变化本身不重设逻辑缓冲。maxPixelRatio 当前不超过既有 Canvas2D 上限
+            2。inside 使用左/上包含、右/下不包含的边界；外部点沿用 renderer 的夹取坐标但
+            inside=false，零尺寸时返回
+            (0,0,false)。每次点转换先刷新几何，避免滚动后的旧坐标。驱动退出与 scope
+            退出幂等，构造失败也回收已接管的驱动。
+          </p>
+          <p>
+            默认驱动使用 canvas.parentElement 作为已有明确 CSS 尺寸的专用容器，按客户区（包含
+            padding、不含 border）测量；Canvas 绝对定位并居中，静态容器临时设为
+            relative，退出恢复自有样式。ResizeObserver 观察容器，宿主 resize 与重新挂接的 resolution
+            matchMedia 监听 DPR；缺少 ResizeObserver 时依靠 resize/点转换刷新，不轮询。可选 bounds
+            返回 Canvas 实际客户矩形，用于 inside 判断；默认坐标映射复用 Canvas2D.toPoint。Canvas2D
+            构造器新增可选第四参数 pixelRatio，旧三参数调用保留原默认行为。
+          </p>
+          <h2 id="输入动作">输入动作</h2>
+          <p>
+            defineActions 定义轴与离散动作，键盘映射为正负键组、pointer
+            映射为主指针点按/拖动；触摸通过 Pointer Events 同一路径。actions.read()
+            在固定步开始采样一次并返回只读状态，pressed/released 在该步消费；持续按下与 UI
+            离散命令分开。
+          </p>
+          <p>
+            动作描述使用
+            <code
+              >defineActions({moveX:{kind:'axis',negative:['KeyA'],positive:['KeyD']},fire:{kind:'button',keys:['Space'],pointer:'primary'}})</code
+            >，可选 preventDefault 标记由宿主适配处理。轴合并键盘与带 source 标识的虚拟值并夹取到
+            [-1,1]；按钮合并全部来源，释放一个来源不清掉仍按住的其他来源。采样返回
+            axes/buttons/pointer 深只读快照，按钮与主指针提供
+            down/pressed/released，快速按下并松开仍保留两个边沿直到一次
+            read。clear/暂停清空持有及边沿，不合成游戏命令；不活动时忽略新输入。指针初始按下必须
+            inside，拖动可继续到外部。
+          </p>
+          <p>
+            宿主失焦、进入可编辑控件、页面隐藏、游戏暂停和 owner
+            退出时清理状态/捕获；输入法组合不生成游戏按键。声明 preventDefault
+            的游戏键只在活动宿主内处理，主指针映射的该标记在已接受的 down/move/up 上生效。HUD
+            输入框和按钮仍可交互。
+          </p>
+          <p>
+            createActions({definition, canvas, viewport, scope, host?}) 返回
+            read/clear/setActive/setVirtual/dispose 与 disposed；host 默认为
+            canvas.parentElement（无父级则 canvas），必须包含该 Canvas 且属于同一文档。同一 Canvas
+            只能有一个活动控制器。键盘事件须来自宿主内的非交互焦点，编辑控件、按钮/链接及
+            Ctrl/Meta/Alt 快捷键保留原行为；指针仅在 Canvas 有效区域开始并以 preventScroll 聚焦
+            Canvas。无 tabindex 时临时设为 0，Canvas 临时 touch-action:none 支持 Pointer Events
+            拖动；退出恢复自有值与样式
+            priority，保留外部改动。主指针取消、失焦、隐藏、进入编辑区和组合输入清空状态并释放捕获；setActive(false)
+            为显式暂停，恢复不重放持有输入。虚拟输入由调用方在 HUD 交互中用
+            setVirtual(action,value,source?)
+            写入，允许按钮焦点但不允许编辑/组合/隐藏/暂停期间写入；多控件用独立 source。read
+            由固定步调用，不内部启动循环。已退出时 read/setVirtual 报 ActionError，dispose 幂等。
+          </p>
+          <p>
+            页面提供通用虚拟方向键时转换为同一动作状态，不另写第二套移动逻辑。首阶段不做手柄、复杂多点手势识别或所有设备自动布局。
+          </p>
+          <h2 id="直接验收">直接验收</h2>
+          <p>V1：不同 CSS 尺寸和像素比下逻辑点击位置一致；未变化尺寸不重置缓冲，留边点击可区分。</p>
+          <p>V2：键盘、主指针及虚拟按键读取相同动作；暂停/失焦/退出不留卡键或捕获。</p>
+          <p>V3：输入法与可编辑控件不驱动角色；每固定步只消费一次离散边沿。</p>
+          <p>
+            测试：tests/viewport-input.test.ts 验证注入几何驱动，tests/input-actions.test.ts
+            验证纯数据采样，tests/input-action-types.ts
+            验证动作键和值类型，tests/browser-actions.test.ts 用 Node DOM
+            事件和模拟捕获验证宿主接线；既有 tests/input.test.ts
+            检查输入兼容性。手机实际触控、缩放和焦点手感待人工验收。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#视口">视口</a><a href="#输入动作">输入动作</a><a href="#直接验收">直接验收</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

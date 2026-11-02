@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>state-store：按业务共享状态 | 镜川初文档</title>
+    <meta name="description" content="模块边界、所有权、取消语义及直接验收要求。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="specs/state-store.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details open>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html" class="selected" aria-current="page"
+            >按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>模块契约</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>state-store：按业务共享状态</h1>
+          <p>模块边界、所有权、取消语义及直接验收要求。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            公共规则见 <a href="../engineering/workflow.html">SPEC</a>。位置：runtime/store.ts；依赖
+            reactive-core，不依赖 DOM、Router 或认证。
+          </p>
+          <h2 id="定义与读取">定义与读取</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const GameStore = defineStore({
+  name: 'game-session',
+  setup(context) {
+    const score = signal(0);
+    const doubled = computed(() =&gt; score() * 2);
+    return {
+      state: { score },
+      getters: { doubled },
+      actions: { addScore: (amount: number) =&gt; score.update((value) =&gt; value + amount) },
+    };
+  },
+});</code></pre>
+          </div>
+
+          <p>
+            定义对象可共享，实例不可隐式全局共享。context.useStore(GameStore) 返回当前 owner
+            中同一实例；不同应用隔离。默认 owner 为应用；页面可显式 provide
+            同一定义取得页面私有实例，沿最近作用域解析。不允许循环创建 Store。
+          </p>
+          <p>
+            state 声明使用可写 signal，getters 使用只读 signal/computed；实例将两者都包装为无
+            set/update 的只读读取句柄。name 用于诊断，定义按身份区分。
+          </p>
+          <p>
+            外部仅取得只读 state/getters 和受类型检查的 actions；可写信号留在 setup
+            闭包内。selector/computed 不复制整份状态，读取只订阅实际使用字段。actions
+            保留输入和结果类型，异步 action 的拒绝由调用方处理并带 Store/操作来源。
+          </p>
+          <p>
+            Store setup context 提供 scope、signal、显式服务获取及 runTask。异步操作采用
+            <code
+              >context.runTask(async ({signal, commit}) =&gt; { /* await 请求 */ commit(() =&gt; {
+              /* 写状态 */ }); }, {key?})</code
+            >；同 key 后发任务使前次提交失效，未指定 key 的独立任务可并行。commit 在
+            owner/请求代次仍有效时批量写入，否则返回取消结果，不执行传入回调。
+          </p>
+          <p>
+            runTask 返回
+            <code>Promise&lt;{status:'completed', value:T} | {status:'cancelled'}&gt;</code
+            >，取消时无需等待底层 I/O 完成；当前任务的失败以带来源的错误拒绝，取消后晚到的 I/O
+            失败被接收而不会形成未处理拒绝。commit 返回
+            <code>{status:'committed', value:T} | {status:'cancelled'}</code
+            >，只接受同步回调；任务完成后保存的 commit 也失效。同 key 的替代会中止旧任务的引擎
+            CancellationSignal，未指定 key 时任务相互独立。
+          </p>
+          <p>
+            reset/dispose 使所有旧任务失效，实际 I/O 是否中断仍由加载器响应
+            signal；不声称能强行拦截业务绕过 commit 协议的任意 Promise 回调。多字段修改使用
+            batch，单个 action 不自动等于数据库事务。
+          </p>
+          <h2 id="所有权与重置">所有权与重置</h2>
+          <p>
+            应用 Store 跨页保留；页面 Store 离页 dispose。reset 保持外部 Store
+            和字段读取句柄稳定，将公开 state 重设为实例构造时的初始快照，递增操作代次并通知
+            context.onReset 登记的业务清理；dispose 释放副作用和订阅。onReset
+            接受同步清理回调并返回取消登记函数；每次 reset
+            按登记顺序通知。取消监听或重置清理失败时仍继续其他清理/状态恢复，最后聚合错误，不把失败报告为成功。
+          </p>
+          <p>
+            定义可显式标记 userScoped:true，实例提供同名只读元数据（默认
+            false），供账号模块在身份切换时重置；匿名偏好单独保存。
+          </p>
+          <p>
+            持久化交给 save-data，默认不保存 Store 全部字段，不把 token、ECS handle、Engine 或 DOM
+            作为普通状态存储。game/session/game-store.ts 管跨页进度；仅本页的草稿使用局部 signal
+            或页面 Store，不自动都提升为全局状态。
+          </p>
+          <h2 id="直接验收">直接验收</h2>
+          <p>S1：同应用两个页面共享实例，两个应用完全隔离；页面 override 的实例随页面释放。</p>
+          <p>
+            S2：派生值与 action 类型正确，外部无法直接写 state；两次批量更新只安排一批视图提交。
+          </p>
+          <p>S3：reset/dispose 后旧异步结果不能写回，循环依赖诊断包含 Store 名称。</p>
+          <p>
+            测试：tests/stores.test.ts 与类型 fixture。保留现有 StateStore
+            根入口和既有消费者，不把新 defineStore 强塞进旧构造器。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#定义与读取">定义与读取</a><a href="#所有权与重置">所有权与重置</a
+            ><a href="#直接验收">直接验收</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

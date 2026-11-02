@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>auth-session：可选账号会话适配 | 镜川初文档</title>
+    <meta name="description" content="模块边界、所有权、取消语义及直接验收要求。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="specs/auth-session.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details open>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html" class="selected" aria-current="page"
+            >可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>模块契约</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>auth-session：可选账号会话适配</h1>
+          <p>模块边界、所有权、取消语义及直接验收要求。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            公共规则及服务端边界见
+            <a href="../engineering/workflow.html">SPEC</a>。位置：runtime/auth.ts；依赖应用服务和
+            Store，不依赖 Router。
+          </p>
+
+          <h2 id="恢复核心">恢复核心</h2>
+          <p>
+            AuthProvider 的 restore/login 返回未知请求结果，由同一同步 decode 转为 anonymous 或
+            authenticated(user)；User 至少有非空 id，只放普通数据展示 DTO。框架保存经过 decode
+            的只读身份，不把原始响应放入 session；凭据由请求层持有。restore/login/logout 都接
+            CancellationSignal。
+          </p>
+          <p>
+            内部 createAuthRestorer 默认 unknown，ensureSession 才调用 restore，进行中的恢复共享
+            Promise；成功的匿名/身份缓存，失败保留 failed 并允许下一次显式请求重试。decoder
+            或请求失败返回带 operation/cause 的
+            AuthError，不能把失败当匿名或已认证。invalidate/退出先递增代次并清掉本地身份，再取消旧恢复；忽略取消的晚到结果不解码、不提交。退出后
+            ensureSession 返回 cancelled。内部 createAuthRestorer 不从 application 导出；使用公开
+            AuthService 访问同一会话核心。
+          </p>
+          <p>
+            内部 registerCleanup(callback,scope?) 注册用户 Store
+            重置、页面/网络取消等同步清理，返回注销函数；传入 scope
+            退出后自动注销。失效/退出先清身份和代次，再尝试全部仍有效登记；某个清理失败不阻止其他回调，错误聚合保留
+            cause。清理期间不新建恢复请求，异步 cleanup 被拒绝并消费其 Promise
+            拒绝。恢复等待先登记再调用 Provider，Provider 同步触发失效时也能结算
+            cancelled，后续请求不受旧等待污染。
+          </p>
+          <h2 id="登录与登出">登录与登出</h2>
+          <p>
+            内部 login(input) 先失效旧代次、清本地身份并执行登记清理，再调用
+            Provider.login；清理失败阻止新登录，也不能通过 ensureSession
+            绕过未完成的清理。并发登录以最新请求为准，旧请求立即
+            cancelled，忽略取消的结果不提交。登录等待期间 session=restoring，只有 decode
+            确认身份后才能 authenticated；输入不写入 session。
+          </p>
+          <p>
+            logout() 立即清身份与敏感活动，session=anonymous，再等待 Provider.logout
+            撤销。ensureSession 在撤销等待期间直接返回匿名，不重新恢复旧会话。结果为
+            logged-out(remoteRevocation:confirmed)、failed(localCleared:true,remoteRevocation:confirmed|unconfirmed,error)
+            或 cancelled；confirmed 只表示 Provider 的撤销调用成功确认，unconfirmed
+            不声称服务器已经撤销。清理错误仍尝试远端撤销并分别报告；远端失败不恢复本地身份。晚到旧登出不能清掉后续已确认的新登录。
+          </p>
+          <p>测试仅注入 Provider，不能据此宣称真实后端认证或撤销已经通过。</p>
+          <h2 id="可选应用装配">可选应用装配</h2>
+          <p>
+            从 <code>@xiaobaibaifqy/jingchuanchu-app/application</code> 导入
+            AuthService、defineService、provideService。业务通过已有服务机制注册，无需新的全局会话配置：
+          </p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const Account = defineService({
+  name: 'account',
+  factory(context) {
+    return new AuthService({
+      scope: context.scope,
+      provider: createAccountProvider(), // 业务实现 AuthProvider&lt;LoginInput, User&gt;
+    });
+  },
+});
+
+const Root = defineComponent({
+  selector: 'app-shell',
+  $template: '&lt;main&gt;Game&lt;/main&gt;',
+  setup(context) {
+    const auth = context.useService(Account);
+    const game = context.useStore(UserGameStore);
+    auth.registerCleanup(() =&gt; game.reset(), context.scope);
+    return { auth, game };
+  },
+});
+
+const application = defineApplication({
+  root: Root,
+  providers: [provideService(Account)],
+});</code></pre>
+          </div>
+          <p>
+            createAccountProvider、UserGameStore 是业务接入点，后端实现见 。Provider 工厂在首次
+            useService 时按应用实例创建；构造 AuthService 不发请求，必须显式调用 ensureSession 或
+            login。组件/场景/Store 使用同一个 Account
+            定义取得应用共享服务；复用同一应用定义挂载两次仍产生独立会话与
+            Provider。单机项目省略此服务，未消费的 Provider 不构造、不请求。
+          </p>
+          <p>
+            userScoped 标记不会自动绑定某个账号服务，业务显式登记需要重置的 Store
+            与页面/网络资源。登记 scope
+            应覆盖敏感活动的完整生命周期；上例根组件登记随应用存在，临时页面登记随页面退出注销。Store.reset
+            同时使用已有任务代次取消旧业务提交。应用退出由服务 scope 释放会话并取消等待，不因
+            Provider 忽略取消而复活身份。
+          </p>
+          <h2 id="契约">契约</h2>
+          <p>
+            AuthProvider&lt;LoginInput, User&gt; 定义
+            restore(signal)、login(input,signal)、logout(signal)，返回经业务 decoder
+            校验的匿名/已认证结果。User 只包含展示所需身份、权限声明等最小信息，凭据交给 Provider
+            的请求层管理。
+          </p>
+          <p>
+            AuthService 提供 ensureSession、login、logout 和只读 session 状态。状态为
+            unknown/restoring/anonymous/authenticated/failed；并发恢复共享请求。只有 Provider
+            确认后才进入 authenticated，不把未知或网络失败当成功。
+          </p>
+          <p>
+            服务按应用实例隔离；单机应用不提供服务，不生成登录目录。示例 Provider
+            必须有明确后端配置和真实请求协议，不以本地 loggedIn=true
+            作为认证实现，也不要求框架自带账号数据库。
+          </p>
+          <p>
+            会话失效/切换账号递增身份代次，取消旧请求并触发已登记的 user-scoped Store
+            重置与页面/网络清理；旧 Promise
+            结果不得恢复旧身份。登出失败也立即清理本地敏感活动，同时报告服务端撤销失败，不能假称远端会话已撤销。
+          </p>
+          <p>
+            Cookie/令牌策略由部署适配确定。默认示例使用同源服务器会话，由后端设置安全 Cookie
+            并处理所需 CSRF；不在普通
+            Store、URL、日志或默认持久化保存凭据。具体后端地址属于业务配置，不硬编码服务商。
+          </p>
+          <h2 id="直接验收">直接验收</h2>
+          <p>I1：恢复去重及 unknown/anonymous/failed 区分，Provider 输出校验，单机无认证依赖。</p>
+          <p>I2：账号切换后旧请求不能写回，用户 Store 和资源清理被调用；两个应用隔离。</p>
+          <p>I3：带假后端的接入示例区分有效/过期会话及撤销失败，不只演示前端标记。</p>
+          <p>
+            测试：tests/auth-session.test.ts，注入
+            Provider/请求驱动。真实后端接入由项目明确提供，不能在规格阶段宣称已完成外部身份认证。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#恢复核心">恢复核心</a><a href="#登录与登出">登录与登出</a
+            ><a href="#可选应用装配">可选应用装配</a><a href="#契约">契约</a
+            ><a href="#直接验收">直接验收</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

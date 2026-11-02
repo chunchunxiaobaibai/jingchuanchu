@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>reactive-core：响应式基础 | 镜川初文档</title>
+    <meta name="description" content="模块边界、所有权、取消语义及直接验收要求。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="specs/reactive-core.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details open>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html" class="selected" aria-current="page">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>模块契约</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>reactive-core：响应式基础</h1>
+          <p>模块边界、所有权、取消语义及直接验收要求。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            公共范围、命名和验证规则见
+            <a href="../engineering/workflow.html">SPEC</a
+            >。位置：packages/app/runtime/reactivity.ts；从 app/application
+            导出。模块不依赖组件、路由或游戏。
+          </p>
+          <h2 id="契约">契约</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>interface ReadSignal&lt;T&gt; { (): ReadonlyData&lt;T&gt;; }
+interface WritableSignal&lt;T&gt; extends ReadSignal&lt;T&gt; {
+  set(value: T): void;
+  update(reduce: (previous: ReadonlyData&lt;T&gt;) =&gt; T): void;
+}
+signal&lt;T&gt;(initial: T): WritableSignal&lt;T&gt;;
+computed&lt;T&gt;(derive: () =&gt; T): ReadSignal&lt;T&gt;;
+effect(run: (onCleanup: (cleanup: Cleanup) =&gt; void) =&gt; void, scope: Scope,
+  options?: {onError?: (error: unknown) =&gt; void}): Cleanup;
+batch&lt;T&gt;(run: () =&gt; T): T;</code></pre>
+          </div>
+          <p>
+            ReadSignal 带只读的内部类型标记，模板据此读取 signal/computed
+            的值，普通零参数操作不会被自动调用。
+          </p>
+          <p>
+            signal 按 Object.is 比较传入值与上次写入值的身份；对象/数组通过 set/update
+            替换，原地嵌套赋值不作为更新方式。初始化/写入时取得独立只读快照，读取复用该快照；同一个已被调用方原地修改的输入对象不被视为新写入。UI/Store
+            数据限普通可结构化复制数据，外部消费者不能借只读引用修改源，不能每次 read 都深拷贝。
+          </p>
+          <p>
+            computed
+            自动追踪同步计算实际读取的依赖，按需计算并缓存；分支变化移除不再使用的依赖。它只读，不负责发送请求或把结果写回另一个
+            signal。计算期间写依赖、循环计算要报带来源的错误。
+          </p>
+          <p>
+            上游对使用方的反向依赖采用弱引用，避免共享 signal 保留已无人使用的 computed
+            及其闭包；活动 effect 仍由 Scope
+            持有，使用方仍强持有其依赖。响应式元数据的垃圾回收不代替资源的 Scope 清理。
+          </p>
+          <p>
+            effect 用于外部能力同步；上次清理先于下次执行，Scope
+            退出后最终清理且不再重跑。异步函数不作为 effect 的自动请求协议：await
+            后读取不被追踪，异步业务使用显式操作和取消信号。
+          </p>
+          <p>
+            调度中的错误通过可选 onError
+            交给所属应用错误边界；没有处理器时报告给宿主。手工停止/Scope
+            清理中的错误仍同步抛出，保持 Scope 聚合清理语义。更新循环被诊断后停止该
+            effect，不持续占用微任务队列。
+          </p>
+          <p>
+            batch
+            内写入立即可读，派生值读取必须反映这些写入；对外渲染通知在批次结束合并。不承诺事务回滚，回调失败不静默撤销部分业务写入。effects
+            在微任务调度，effect 导致的新写入进入后续批次，循环回写有明确诊断。
+          </p>
+          <p>
+            组件层提供 nextTick(): Promise&lt;void&gt; 等待已安排的视图更新提交；nextTick
+            不等待网络或下一游戏帧，没有待处理更新时在微任务返回。
+          </p>
+          <h2 id="直接验收">直接验收</h2>
+          <ul>
+            <li>R1：同值 set 不触发通知；两次写入在 batch 外部只提交一批视图通知。</li>
+            <li>R2：computed 缓存、动态分支依赖及批次内一致读取可验证。</li>
+            <li>R3：Scope 释放后 effect 不执行；每次重跑前的清理只执行一次。</li>
+            <li>R4：循环派生与错误回写给出可定位错误，不能挂死更新队列。</li>
+          </ul>
+          <p>
+            验证文件：tests/reactivity.test.ts；无 DOM、无浏览器。此模块不宣称已实现 Proxy
+            深层响应式、SSR 或调试扩展。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav><a href="#契约">契约</a><a href="#直接验收">直接验收</a></nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

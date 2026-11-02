@@ -371,7 +371,10 @@ function mount(
     const branchOwner = new ComponentOwner(parentOwner),
       template = host.ownerDocument.createElement('template');
     template.innerHTML = program.html;
-    const fragment = template.content,
+    // Template contents belong to an inert document in real browsers. Children
+    // mount before insertion, so adopt now to give their DOM adapters the host
+    // document/window (Canvas, viewport, input and frame drivers require it).
+    const fragment = host.ownerDocument.adoptNode(template.content),
       branchNodes = [...fragment.childNodes];
     branchOwner.afterDispose = () => {
       for (const node of branchNodes) node.parentNode?.removeChild(node);

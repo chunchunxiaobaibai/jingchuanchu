@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>theme-assets：主题与语义资源 | 镜川初文档</title>
+    <meta name="description" content="模块边界、所有权、取消语义及直接验收要求。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="specs/theme-assets.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details open>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html" class="selected" aria-current="page"
+            >主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>模块契约</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>theme-assets：主题与语义资源</h1>
+          <p>模块边界、所有权、取消语义及直接验收要求。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            公共规则见 <a href="../engineering/workflow.html">SPEC</a>。位置：runtime/theme.ts；依赖
+            asset-loading、reactive-core。主题不依赖 Router，也不包含游戏规则。
+          </p>
+
+          <h2 id="定义">定义</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const defaultTheme = defineTheme({
+  name: 'default',
+  tokens: { accent: '#176b58' },
+  assets: {
+    'ui.pause': { kind: 'image', src: pauseImage },
+    'game.coin': {
+      kind: 'atlas-region',
+      src: atlasImage,
+      frame: { x: 0, y: 0, width: 16, height: 16 },
+    },
+  },
+});
+const forestTheme = extendTheme(defaultTheme, {
+  name: 'forest',
+  assets: { 'game.coin': { kind: 'image', src: coinImage } },
+});</code></pre>
+          </div>
+          <p>
+            资源键由游戏声明并由默认主题推导，覆盖键与类型可检查。image 与 atlas-region
+            使用区分联合；覆盖单个资源时整体替换描述，不能把旧 frame 偷合并到新图片。未覆盖的键/样式
+            token 回退默认定义；不做任意深层对象合并。
+          </p>
+          <p>
+            token 值限 string 或有限 number，键使用 CSS
+            标识符（字母/下划线开头，后接字母/数字/下划线/短横线），根作用域变量名固定为
+            <code>--jcc-${key}</code>。extendTheme 只允许既有 token/资源键，token 保留 string/number
+            类别但不锁死默认字面量。多级派生继承上一层未覆盖值，资源 defaultAssets
+            始终保存最初默认映射，供覆盖加载失败时回退；定义快照不受外部对象修改影响。此阶段不提供运行时
+            setTheme 或上传入口。
+          </p>
+          <p>
+            app-config 选择开发者主题；应用 ThemeService 提供只读 token、键解析和按 Scope 获取的
+            image lease。公共图标组件用资源键取 URL；Canvas 用同一解析规则取加载图片/图集
+            frame。两者不能各维护一份资源路径表，也不能把 CanvasImageSource 存进展示 Store。
+          </p>
+          <p>
+            通过 <code>context.useTheme(defaultTheme)</code> 或
+            <code>app.useTheme(defaultTheme)</code> 绑定默认契约，得到带精确
+            token/资源键的上下文：只读 name/tokens，以及
+            resolve(key)。返回应用所选派生主题，默认契约须与其共享原始 defaultAssets
+            表，避免混入另一主题族。模板可在 setup 暴露绑定后的 resolve
+            函数，从而检查字面量资源键。上下文绑定调用
+            owner，退出后不能继续解析；未配置主题明确报缺失。应用 theme
+            选择只在挂载时完成，没有运行时切换入口。
+          </p>
+          <p>
+            根宿主只安装主题自有 <code>--jcc-*</code> 变量；退出/启动失败按变量恢复原值与
+            priority，保留不属于主题的样式变化，不写
+            documentElement。资源描述解析不会自动下载图片；需要实际资源时使用下方 owner-bound
+            load，底层由注入 assets transport 解码和释放。
+          </p>
+          <p>
+            <code>theme.load(key,{signal?})</code> 返回 ThemeImageLease：kind/asset、image、图集时的
+            frame、fallback、可选 diagnostic 与 release。DOM 可用 asset.src 和 frame，Canvas 用同一
+            image.source/frame；图片、实际图集尺寸验证与持有均复用当前 owner 的 assets。image/frame
+            读取在释放后报错。覆盖失败仅尝试一次最初 defaultAssets，回退成功的 lease 保留原
+            ThemeError diagnostic；配置了应用 onError
+            时也报告该来源。无观察器不额外制造未捕获异常。默认也失败则拒绝包含两个原因的
+            ThemeError；取消/owner 退出不触发默认回退。该操作不改变 resolve
+            的静态映射，成功后的实际资源来源以 lease.asset 为准。
+          </p>
+          <p>
+            token 只作用于应用根范围的 CSS 变量，组件 CSS/Less
+            负责布局。资源原始尺寸与显示尺寸、对齐、裁切分离；替换图片不改变实体逻辑尺寸、碰撞或规则。
+          </p>
+          <p>
+            路径/键/描述错误在构建或类型阶段定位；可加载覆盖失败时尝试对应默认资源并报告来源。默认也失败则呈现明确缺失状态，由页面决定重试，不无限请求。
+          </p>
+          <p>
+            第一阶段只提供构建时选择主题，不提供运行时上传或皮肤保存
+            UI。未来来源适配经资源解析层进入，不把路径拼接分散在业务组件中。普通直接图片引用允许存在，但不承诺自动加入换肤。
+          </p>
+          <h2 id="直接验收">直接验收</h2>
+          <p>：单改主题映射同时替换 DOM 暂停图标和 Canvas 道具图标，游戏逻辑/命中范围不变。</p>
+          <p>：未覆盖回退、覆盖加载失败回退、图集到单图替换及 owner 释放正确。</p>
+          <p>：两个应用不同主题互不污染；无效键在模板/类型检查定位。</p>
+          <p>
+            测试：tests/themes.test.ts、主题编译
+            fixture。当前阶段不宣称已支持玩家上传、在线切肤或主题市场。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav><a href="#定义">定义</a><a href="#直接验收">直接验收</a></nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

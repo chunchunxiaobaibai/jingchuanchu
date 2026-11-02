@@ -99,18 +99,26 @@ export class ActionSampler<A extends ActionEntries> {
   private active = true;
   private closed = false;
   private readonly entries: ActionEntries;
+  private readonly orderedEntries: Array<[string, ActionEntry]>;
   constructor(definition: ActionDefinitions<A>) {
     if (definition[ACTIONS] !== true)
       throw new ActionError('<actions>', 'create', new Error('Expected defineActions(...)'));
     this.entries = definition.entries as ActionEntries;
+    this.orderedEntries = Object.entries(this.entries);
   }
   private buttons(): void {
-    for (const [key, entry] of Object.entries(this.entries)) {
+    for (const [key, entry] of this.orderedEntries) {
       if (entry.kind !== 'button') continue;
-      const current =
+      let current =
         (entry.keys?.some((code) => this.keys.has(code)) ?? false) ||
-        [...(this.virtual.get(key)?.values() ?? [])].some(Boolean) ||
         (entry.pointer === 'primary' && this.pointerDown);
+      const sources = this.virtual.get(key);
+      if (!current && sources)
+        for (const value of sources.values())
+          if (value) {
+            current = true;
+            break;
+          }
       const previous = this.down.get(key) ?? false;
       if (current && !previous) this.pressed.add(key);
       if (!current && previous) this.released.add(key);
@@ -153,7 +161,9 @@ export class ActionSampler<A extends ActionEntries> {
     if (this.closed || !this.active) return;
     if (![point.x, point.y].every(Number.isFinite) || typeof point.inside !== 'boolean')
       throw new ActionError('pointer', 'point', new Error('Invalid game point'));
-    this.point = Object.freeze({ ...point });
+    // Copy once when pointer state changes, rather than cloning it every fixed
+    // step. Only this deeply immutable leaf is shared by later snapshots.
+    this.point = snapshot(point);
     const current = down && (this.pointerDown || point.inside);
     if (current && !this.pointerDown) this.pointerPressed = true;
     if (!current && this.pointerDown) this.pointerReleased = true;
@@ -164,32 +174,34 @@ export class ActionSampler<A extends ActionEntries> {
     if (this.closed) throw new ActionError('<actions>', 'read', new Error('Actions are disposed'));
     const axes: Record<string, number> = Object.create(null),
       buttons: Record<string, ButtonSnapshot> = Object.create(null);
-    for (const [key, entry] of Object.entries(this.entries)) {
+    for (const [key, entry] of this.orderedEntries) {
       if (entry.kind === 'axis') {
         const keyboard =
           Number(entry.positive.some((code) => this.keys.has(code))) -
           Number(entry.negative.some((code) => this.keys.has(code)));
-        const virtual = [...(this.virtual.get(key)?.values() ?? [])].reduce<number>(
-          (sum, value) => sum + Number(value),
-          0,
-        );
+        let virtual = 0;
+        const sources = this.virtual.get(key);
+        if (sources) for (const value of sources.values()) virtual += Number(value);
         axes[key] = Math.max(-1, Math.min(1, keyboard + virtual));
       } else
-        buttons[key] = {
+        buttons[key] = Object.freeze({
           down: this.down.get(key) ?? false,
           pressed: this.pressed.has(key),
           released: this.released.has(key),
-        };
+        });
     }
-    const value = snapshot({
-      axes,
-      buttons,
-      pointer: {
+    // The output schema is fixed and every nested value is built here or is
+    // already frozen. Keep ordinary own-property records, including special
+    // action names, without a general-purpose structured clone of the tree.
+    const value = Object.freeze({
+      axes: Object.freeze({ ...axes }),
+      buttons: Object.freeze({ ...buttons }),
+      pointer: Object.freeze({
         down: this.pointerDown,
         pressed: this.pointerPressed,
         released: this.pointerReleased,
         point: this.point,
-      },
+      }),
     });
     this.pressed.clear();
     this.released.clear();

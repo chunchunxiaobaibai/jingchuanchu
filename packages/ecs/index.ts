@@ -24,6 +24,11 @@ class SparseSet<T> {
     const slot = this.sparse.get(index);
     return slot === undefined ? undefined : this.values[slot];
   }
+  require(index: number, name: string): T {
+    const slot = this.sparse.get(index);
+    if (slot === undefined) throw new Error(`Missing component: ${name}`);
+    return this.values[slot] as T;
+  }
   set(index: number, value: T): void {
     const slot = this.sparse.get(index);
     if (slot !== undefined) {
@@ -105,8 +110,8 @@ export class World {
   require<T>(entity: Entity, token: Token<T>): T {
     this.assertAlive(entity);
     const store = this.stores.get(token.key);
-    if (!store?.has(entity.index)) throw new Error(`Missing component: ${token.name}`);
-    return store.get(entity.index) as T;
+    if (!store) throw new Error(`Missing component: ${token.name}`);
+    return store.require(entity.index, token.name) as T;
   }
   has<T>(entity: Entity, token: Token<T>): boolean {
     return this.isAlive(entity) && (this.stores.get(token.key)?.has(entity.index) ?? false);
@@ -117,17 +122,31 @@ export class World {
   }
   *query(...tokens: Token<unknown>[]): IterableIterator<Entity> {
     this.assertOpen();
-    const stores = tokens.map((token) => this.stores.get(token.key));
-    if (stores.some((store) => !store)) return;
-    const smallest = stores.reduce<SparseSet<unknown> | undefined>(
-      (best, store) => (!best || store!.indices.length < best.indices.length ? store : best),
-      undefined,
-    );
-    const candidates = smallest ? [...smallest.indices] : [...this.alive];
+    const stores: SparseSet<unknown>[] = [];
+    let smallest: SparseSet<unknown> | undefined;
+    for (const token of tokens) {
+      const store = this.stores.get(token.key);
+      if (!store) return;
+      stores.push(store);
+      if (!smallest || store.indices.length < smallest.indices.length) smallest = store;
+    }
     // Snapshot handles prevent recycled indices from entering an active traversal.
-    const entities = candidates.map((index) => this.handles[index]!);
-    for (const entity of entities)
-      if (this.isAlive(entity) && stores.every((store) => store!.has(entity.index))) yield entity;
+    // Copy straight into that snapshot; an intermediate index copy is unnecessary.
+    const indices = smallest?.indices;
+    const entities = new Array<Entity>(indices ? indices.length : this.alive.size);
+    if (indices) {
+      for (let i = 0; i < indices.length; i++) entities[i] = this.handles[indices[i]!]!;
+    } else {
+      let i = 0;
+      for (const index of this.alive) entities[i++] = this.handles[index]!;
+    }
+    candidates: for (let i = 0; i < entities.length; i++) {
+      const entity = entities[i]!;
+      if (!this.isAlive(entity)) continue;
+      for (let j = 0; j < stores.length; j++)
+        if (!stores[j]!.has(entity.index)) continue candidates;
+      yield entity;
+    }
   }
   setResource<T>(token: Token<T>, value: NoInfer<T>): void {
     this.assertOpen();

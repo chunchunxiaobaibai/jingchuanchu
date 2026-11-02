@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>CLI 与构建工具 | 镜川初文档</title>
+    <meta name="description" content="项目检查、三文件编译、Vite 插件；仅作为开发依赖。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="api/tooling.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a
+        ><a href="../api/index.html" aria-current="page">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>API 参考</h2>
+          <a href="../api/index.html">API 参考</a
+          ><a href="../api/application-contracts.html">应用 API 使用契约</a>
+        </section>
+        <section>
+          <h2>按包查阅</h2>
+          <a href="../api/app.html">应用与游戏能力</a><a href="../api/core.html">引擎与作用域</a
+          ><a href="../api/ecs.html">实体与组件</a><a href="../api/browser.html">浏览器运行</a
+          ><a href="../api/renderer-2d.html">2D 渲染</a><a href="../api/input.html">键盘与指针</a
+          ><a href="../api/assets.html">资源缓存</a><a href="../api/net.html">网络客户端</a
+          ><a href="../api/net-server.html">网络服务端</a
+          ><a href="../api/tooling.html" class="selected" aria-current="page">CLI 与构建工具</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb"><a href="../index.html">文档</a><span>/</span><span>API</span></div>
+        <div class="page-heading">
+          <p class="eyebrow">API REFERENCE</p>
+          <h1>CLI 与构建工具</h1>
+          <p>项目检查、三文件编译、Vite 插件；仅作为开发依赖。</p>
+        </div>
+        <article data-doc-content>
+          <p class="lead">项目检查、三文件编译、Vite 插件；仅作为开发依赖。</p>
+          <aside class="callout">
+            <strong>使用方式</strong>
+            <p>
+              先阅读<a href="../engineering/cli.html">接入指南</a
+              >，再查阅下方当前源码的导出签名。类型名称对应所属入口；源码位置按仓库相对路径标注。应用语义详见<a
+                href="application-contracts.html"
+                >应用 API 使用契约</a
+              >。
+            </p>
+          </aside>
+          <section class="api-entry">
+            <h2 id="root">@xiaobaibaifqy/jingchuanchu-tooling</h2>
+            <p><span class="tag">2 项导出</span></p>
+            <div class="symbol-index">
+              <a href="#root-default">default</a><a href="#root-jingchuanchu">jingchuanchu</a>
+            </div>
+            <section class="api-symbol">
+              <h3 id="root-default"><code>default</code><span class="tag">函数</span></h3>
+              <p class="source-location">packages/tooling/vite.d.ts:2</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import jingchuanchu from '@xiaobaibaifqy/jingchuanchu-tooling';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>function jingchuanchu(): Plugin;</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
+              <h3 id="root-jingchuanchu"><code>jingchuanchu</code><span class="tag">函数</span></h3>
+              <p class="source-location">packages/tooling/vite.d.ts:2</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { jingchuanchu } from '@xiaobaibaifqy/jingchuanchu-tooling';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>function jingchuanchu(): Plugin;</code></pre>
+              </div>
+            </section>
+          </section>
+          <section class="api-entry">
+            <h2 id="vite">@xiaobaibaifqy/jingchuanchu-tooling/vite</h2>
+            <p><span class="tag">2 项导出</span></p>
+            <div class="symbol-index">
+              <a href="#vite-default">default</a><a href="#vite-jingchuanchu">jingchuanchu</a>
+            </div>
+            <section class="api-symbol">
+              <h3 id="vite-default"><code>default</code><span class="tag">函数</span></h3>
+              <p class="source-location">packages/tooling/vite.d.ts:2</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import jingchuanchu from '@xiaobaibaifqy/jingchuanchu-tooling/vite';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>function jingchuanchu(): Plugin;</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
+              <h3 id="vite-jingchuanchu"><code>jingchuanchu</code><span class="tag">函数</span></h3>
+              <p class="source-location">packages/tooling/vite.d.ts:2</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { jingchuanchu } from '@xiaobaibaifqy/jingchuanchu-tooling/vite';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>function jingchuanchu(): Plugin;</code></pre>
+              </div>
+            </section>
+          </section>
+          <section class="api-entry">
+            <h2 id="project">@xiaobaibaifqy/jingchuanchu-tooling/project</h2>
+            <p><span class="tag">2 项导出</span></p>
+            <div class="symbol-index">
+              <a href="#project-checkApplicationProject">checkApplicationProject</a
+              ><a href="#project-loadProjectConfig">loadProjectConfig</a>
+            </div>
+            <section class="api-symbol">
+              <h3 id="project-checkApplicationProject">
+                <code>checkApplicationProject</code><span class="tag">函数</span>
+              </h3>
+              <p class="source-location">packages/tooling/project-check.d.mts:2</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { checkApplicationProject } from '@xiaobaibaifqy/jingchuanchu-tooling/project';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>function checkApplicationProject(configuration: ProjectConfig): Promise&lt;readonly string[]&gt;;</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
+              <h3 id="project-loadProjectConfig">
+                <code>loadProjectConfig</code><span class="tag">函数</span>
+              </h3>
+              <p class="source-location">packages/tooling/project-config.d.mts:17</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { loadProjectConfig } from '@xiaobaibaifqy/jingchuanchu-tooling/project';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>function loadProjectConfig(directory: string): Promise&lt;ProjectConfig&gt;;</code></pre>
+              </div>
+            </section>
+          </section>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <a href="../api/net-server.html"><small>← 上一篇</small><strong>网络服务端</strong></a
+          ><a href="../api/index.html"><small>下一篇 →</small><strong>API 参考</strong></a>
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#root">@xiaobaibaifqy/jingchuanchu-tooling</a
+            ><a href="#vite">@xiaobaibaifqy/jingchuanchu-tooling/vite</a
+            ><a href="#project">@xiaobaibaifqy/jingchuanchu-tooling/project</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

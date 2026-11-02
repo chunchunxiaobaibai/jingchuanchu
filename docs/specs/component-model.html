@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>component-model：组件、模板与绑定 | 镜川初文档</title>
+    <meta name="description" content="模块边界、所有权、取消语义及直接验收要求。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="specs/component-model.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details open>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html" class="selected" aria-current="page"
+            >组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>模块契约</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>component-model：组件、模板与绑定</h1>
+          <p>模块边界、所有权、取消语义及直接验收要求。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            公共规则见 <a href="../engineering/workflow.html">SPEC</a>。新增
+            runtime/component.ts、template.ts、models.ts 与 application 入口；保留旧 view.ts
+            的公开行为。编译实现位于 tooling，依赖此处契约。
+          </p>
+          <h2 id="定义和实例">定义和实例</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const NicknameEditor = defineComponent({
+  selector: 'nickname-editor',
+  inputs: { label: input&lt;string&gt;({ default: '昵称' }) },
+  outputs: { save: output&lt;string&gt;() },
+  models: { value: model&lt;string&gt;({ default: '' }) },
+  setup(context) {
+    const valid = computed(() =&gt; context.models.value().trim().length &gt; 0);
+    return {
+      label: context.inputs.label,
+      value: context.models.value,
+      valid,
+      save: () =&gt; context.emit('save', context.models.value()),
+    };
+  },
+});</code></pre>
+          </div>
+          <p>
+            input/output/model 是类型化定义描述，不持有共享实例状态。input 支持 required 或
+            default；对象默认值必须用工厂。setup 在初始输入就绪后创建本实例的
+            signal/派生/操作，返回对象是模板可见范围。组件不能自动读取根 AppState、任意全局变量或
+            Engine。
+          </p>
+          <p>
+            input 的默认 mode:'value' 沿用可克隆纯数据快照；显式
+            input&lt;T&gt;({required:true,mode:'reference'})
+            用于场景定义、驱动配置等含函数/宿主能力的描述。reference 按 Object.is
+            比较并保留原引用，不克隆、不深冻结；替换引用才触发更新，调用方负责引用内部生命周期。字段读取仍只读，onInputsChanged
+            的字段表冻结但该字段保持原引用，输入替换/回滚也保留身份。对象默认值继续要求工厂。该模式仅用于
+            input，不改变 model、普通 signal/computed 的纯数据约束，也不提供隐式对象内部响应式。
+          </p>
+          <p>
+            inputs 为只读信号；emit(name,payload) 根据 outputs 检查名称和负载。models
+            是“值输入＋更新请求”契约：绑定父级时 setter
+            请求父级写入，最终值仍由父级决定；未绑定时可使用本实例默认值。输入与 model
+            不能同名。definePage 使用同一组件定义模型，增加路由页面身份；普通组件不因定义了 selector
+            就成为路由。
+          </p>
+          <p>
+            context 提供
+            own、signal、element(ref)、on、useStore/useService。服务获取必须来自当前实例的明确
+            owner，不使用隐式全局当前实例。实例提供
+            setInputs、activate、deactivate、dispose；公共输入与组件输出类型必须保留。
+          </p>
+          <p>
+            context.element/on 在挂载前不可用。setup 返回的字段是模板公开成员；输入/输出/model 的 TS
+            名称采用 camelCase，模板组件属性/事件采用 kebab-case
+            并按声明映射，冲突须诊断，不能依赖浏览器把大小写转换后猜名字。
+          </p>
+          <p>
+            单组件嵌入入口为 mountComponent(host, definition, {owner?, inputs?, outputs?, models?,
+            onError?})，返回类型化 exposed、setInputs、activate/deactivate/dispose。models
+            中的可写目标由父级拥有，组件只经该目标请求更新；绑定后不能再用 setInputs 旁路覆盖该
+            model。未绑定的 model 使用自己的初始值。节点引用使用
+            ref="name"。完成挂载和所有权，提供表达式/属性/事件，提供 model，提供 when/each/key/slot
+            与 nextTick。应用、Store 和路由仍按各自任务实现。
+          </p>
+          <h2 id="默认模板语法">默认模板语法</h2>
+          <p>
+            以下是新模型唯一默认绑定语法的示例片段，不是上方组件的完整模板；旧 data-* 语法仅由旧
+            defineView 管线继续支持。
+          </p>
+          <div class="code-block">
+            <div class="code-label">html</div>
+            <pre><code>&lt;label&gt;{{ label }}&lt;/label&gt;
+&lt;input model:value="value" /&gt;
+&lt;button :disabled="!valid" @click="save()"&gt;保存&lt;/button&gt;
+&lt;template when="valid"&gt;&lt;span&gt;可以提交&lt;/span&gt;&lt;/template&gt;
+&lt;template each="item of items" key="item.id"&gt;&lt;span&gt;{{ item.name }}&lt;/span&gt;&lt;/template&gt;
+&lt;slot name="actions"&gt;&lt;span&gt;默认操作区&lt;/span&gt;&lt;/slot&gt;</code></pre>
+          </div>
+          <ul>
+            <li>
+              插值默认 textContent；:name 用于单向绑定，value/checked/disabled 等按 DOM property
+              更新，aria/data 等按 attribute 更新。:class
+              支持字符串、字符串数组或布尔映射，不能通过它逃逸组件样式作用域。
+            </li>
+            <li>
+              @event 调用公开操作，可读类型化 $event；禁止模板赋值、任意脚本、eval
+              和全局访问。表达式支持已公开成员、字面量、属性读取、常用运算和公开函数调用，由 TS AST
+              编译，不在运行时用 Function 执行字符串。
+            </li>
+            <li>
+              model:name 只接受可写 signal/model 或显式 writableModel({get,set})
+              适配。computed、只读 input 或普通只读 Store 字段作为目标必须报错；Store setter
+              应调用业务操作。
+            </li>
+            <li>
+              <code>writableModel({get,set,convert?,event?})</code>
+              将业务操作适配为可写目标；数值/多选需显式
+              <code>convert: 'number'/'strings'</code>，提交时机可选 <code>input</code>（默认）或
+              <code>change</code>。返回值提供只读 <code>draft</code>/<code>validation</code> 与
+              <code>resetDraft()</code
+              >；空值/解析失败不写入业务数值，显式重置恢复模型值。布尔原生绑定使用
+              <code>model:checked</code>，多选使用 select 的
+              <code>model:value</code>。同一字段不能并用 <code>:value</code> 与
+              <code>model:value</code>。
+            </li>
+            <li>
+              原生 input/textarea/select 支持字符串、数值、布尔和多选数组；转换与 input/change
+              时机由显式 model 配置定义。空数字或解析失败保留草稿及校验结果，不强制为
+              0。中文组合输入、光标与焦点不被回写破坏；程序回写不再发用户更新事件。
+            </li>
+            <li>
+              when 只创建命中分支，退出分支释放其组件/监听；each 必须有稳定唯一
+              key（字符串或有限数值），重复键在改动该列表前报错；重排复用 DOM
+              与组件实例，移除才销毁。列表项是只读快照，编辑通过公开业务操作完成。组件实例缓存不由
+              when 默认提供。
+            </li>
+            <li>
+              命名 slot 接收父模板
+              <code>&lt;template slot="actions"&gt;</code> 内容，按父级词法上下文求值，DOM
+              挂到子组件指定位置；缺失时使用 fallback。首阶段不做动态 slot 名称或 slot props。
+            </li>
+          </ul>
+          <p>
+            动态组件须赋给具名变量，components 使用静态定义数组；子定义 selector
+            保留字面量类型以检查注册和字段映射。原生事件的 $event.currentTarget
+            按标签类型化，组件事件的 $event
+            为声明负载。表达式首阶段支持属性读取、字面量索引、条件/常用运算及公开函数直接调用；成员方法调用、赋值、全局脚本和类型断言不进入模板语法。
+          </p>
+          <p>
+            编译器生成模板虚拟 TS 验证输入、事件、表达式和 model 可写性，错误映射到原 HTML
+            文件及行列。三文件自动关联、CSS/Less 和静态 templateUrl/styleUrl
+            沿用资源规则。只检查字符串名称存在不算完成。
+          </p>
+          <p>
+            当前 TypeScript 构造器的上下文推断存在属性顺序限制：将 <code>setup</code> 放在使用
+            context 的生命周期钩子之前；如需反向书写，显式指定完整定义泛型。仅给 setup
+            添加返回类型不能消除此限制。该限制已记录为类型体验改进项，当前默认写法使用 setup 在前。
+          </p>
+          <h2 id="生命周期和调度">生命周期和调度</h2>
+          <p>
+            setup → onInit → 创建视图和子组件 → 子 onMount → 父 onMount。初始输入不调用
+            onInputsChanged，初次显示不调用更新钩子。后续输入合并 previous/current；实际 DOM
+            更新前/后才调用
+            onBeforeUpdate/onUpdated，父准备、子更新、父完成。钩子同步；钩子内写入进入下一批。
+          </p>
+          <p>
+            onDeactivate/onActivate 由显式停用/恢复触发，不等同游戏暂停。销毁顺序为子实例 → 自身
+            onDestroy → 自动清理 →
+            移除自身节点；异常聚合后报告，必要清理继续。实例退出取消异步任务；已销毁实例不能复活或写状态。
+          </p>
+          <h2 id="直接验收">直接验收</h2>
+          <p>C1：多个实例的输入/model/局部状态隔离；父子生命周期与批处理次序正确。</p>
+          <p>C2：原生表单和自定义组件 model 双向同步，中文输入及程序重置不回环。</p>
+          <p>C3：条件退出、keyed 重排、slot 父作用域和销毁后订阅释放有直接用例。</p>
+          <p>C4：错误输入/事件/model 由模板类型诊断定位；旧 defineView 消费例仍通过。</p>
+          <p>
+            测试：tests/component-runtime.test.ts、tests/component-template.test.ts、类型
+            fixture。Node DOM 验证行为，浏览器焦点/输入法体验另列人工验收，不声称 Node
+            模拟已证明设备行为。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#定义和实例">定义和实例</a><a href="#默认模板语法">默认模板语法</a
+            ><a href="#生命周期和调度">生命周期和调度</a><a href="#直接验收">直接验收</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+{
+  "node": "v24.12.0",
+  "platform": "win32",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+  "samples": 21,
+  "warmupBatches": 5,
+  "units": "milliseconds per operation; p95 of batch averages, not individual browser frames",
+  "sources": {
+    "packages/ecs/index.ts": "646d4e22027ffd39003f77b9753c38a1ab5e697f4da2a497bc1de2fcd358efe8",
+    "packages/app/runtime/input-actions.ts": "21fb55bb56950fc81cc1ecfb8c2353e8405ccd5e67df15bbced403afb89508ab",
+    "packages/renderer-2d/collision.ts": "069d155b80e532470d1aed26a3fb6953479495c3e35f06557b934b2392e8d752"
+  },
+  "checksum": 105029379000,
+  "results": [
+    {
+      "name": "query:1000:0",
+      "batch": 20,
+      "medianMs": 0.06222999999999956,
+      "p95Ms": 0.08274499999999989,
+      "minMs": 0.042244999999999776
+    },
+    {
+      "name": "query:1000:1",
+      "batch": 20,
+      "medianMs": 0.050245000000001025,
+      "p95Ms": 0.0802500000000009,
+      "minMs": 0.04189500000000237
+    },
+    {
+      "name": "query:1000:4",
+      "batch": 20,
+      "medianMs": 0.07872500000000002,
+      "p95Ms": 0.12073000000000036,
+      "minMs": 0.06029499999999928
+    },
+    {
+      "name": "require:1000",
+      "batch": 20,
+      "medianMs": 0.022800000000000865,
+      "p95Ms": 0.03879000000000019,
+      "minMs": 0.021094999999999687
+    },
+    {
+      "name": "query:10000:0",
+      "batch": 20,
+      "medianMs": 0.5037750000000016,
+      "p95Ms": 0.6392499999999984,
+      "minMs": 0.41936000000000034
+    },
+    {
+      "name": "query:10000:1",
+      "batch": 20,
+      "medianMs": 0.6510699999999986,
+      "p95Ms": 1.5162499999999965,
+      "minMs": 0.5196399999999983
+    },
+    {
+      "name": "query:10000:4",
+      "batch": 20,
+      "medianMs": 0.8369799999999941,
+      "p95Ms": 0.9096450000000005,
+      "minMs": 0.7703650000000039
+    },
+    {
+      "name": "require:10000",
+      "batch": 20,
+      "medianMs": 0.3476699999999937,
+      "p95Ms": 0.3667450000000031,
+      "minMs": 0.32164000000000215
+    },
+    {
+      "name": "actions:idle",
+      "batch": 1000,
+      "medianMs": 0.0054329999999999925,
+      "p95Ms": 0.005858699999999999,
+      "minMs": 0.005114100000000008
+    },
+    {
+      "name": "actions:held",
+      "batch": 1000,
+      "medianMs": 0.006312799999999925,
+      "p95Ms": 0.008628799999999956,
+      "minMs": 0.00586220000000003
+    },
+    {
+      "name": "collision:1000:sparse",
+      "batch": 5,
+      "medianMs": 0.8770999999999731,
+      "p95Ms": 1.2617199999999684,
+      "minMs": 0.6860400000000482
+    },
+    {
+      "name": "collision:1000:same-x",
+      "batch": 5,
+      "medianMs": 1.6876800000000003,
+      "p95Ms": 2.04958000000006,
+      "minMs": 1.466399999999976
+    }
+  ]
+}

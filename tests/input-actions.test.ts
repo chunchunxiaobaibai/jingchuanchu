@@ -92,3 +92,41 @@ test('definitions copy mappings and reject invalid definitions/virtual values wi
   assert.throws(() => actions.setVirtual('moveX', 2), ActionError);
   assert.throws(() => actions.setVirtual('fire', true, ''), ActionError);
 });
+
+test('fixed-shape snapshots stay deeply immutable and retain special action names', () => {
+  const definition = defineActions({
+    ['__proto__']: { kind: 'axis', negative: ['KeyA'], positive: ['KeyD'] },
+    constructor: { kind: 'button', keys: ['Space'] },
+  });
+  const sampler = new ActionSampler(definition);
+  const point = { x: 12, y: 34, inside: true };
+  sampler.setKey('KeyD', true);
+  sampler.setKey('Space', true);
+  sampler.setPointer(point, true);
+  const first = sampler.read();
+  point.x = 999;
+  assert.equal(first.axes.__proto__, 1);
+  assert.deepEqual(first.buttons.constructor, { down: true, pressed: true, released: false });
+  assert.equal(Object.getPrototypeOf(first.axes), Object.prototype);
+  assert.equal(Object.getPrototypeOf(first.buttons), Object.prototype);
+  for (const value of [
+    first,
+    first.axes,
+    first.buttons,
+    first.buttons.constructor,
+    first.pointer,
+    first.pointer.point,
+  ])
+    assert.ok(Object.isFrozen(value));
+  assert.equal(Reflect.set(first.axes, '__proto__', -1), false);
+  assert.equal(Reflect.set(first.pointer.point!, 'x', -1), false);
+  sampler.setPointer({ x: 56, y: 78, inside: false }, false);
+  sampler.clear();
+  const next = sampler.read();
+  sampler.dispose();
+  assert.equal(first.pointer.point!.x, 12);
+  assert.equal(first.buttons.constructor.pressed, true);
+  assert.equal(next.axes.__proto__, 0);
+  assert.equal(next.buttons.constructor.down, false);
+  assert.equal(next.pointer.point, null);
+});

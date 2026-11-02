@@ -1,6 +1,6 @@
 import { component, type Entity, type World } from '@xiaobaibaifqy/jingchuanchu-ecs';
 import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
-import { createTransformResolver, transformPoint } from './features.js';
+import { createTransformResolver } from './features.js';
 export type Collider = (
   { kind: 'rect'; width: number; height: number } | { kind: 'circle'; radius: number }
 ) & { offsetX?: number; offsetY?: number; group?: number; mask?: number };
@@ -40,8 +40,10 @@ export function detectCollisions(world: World): CollisionPair[] {
   for (const entity of world.query(Collider2D)) {
     const collider = world.require(entity, Collider2D),
       matrix = resolve(entity),
-      offset = { x: collider.offsetX ?? 0, y: collider.offsetY ?? 0 };
-    const center = transformPoint(matrix, offset);
+      offsetX = collider.offsetX ?? 0,
+      offsetY = collider.offsetY ?? 0;
+    const centerX = matrix[0] * offsetX + matrix[2] * offsetY + matrix[4],
+      centerY = matrix[1] * offsetX + matrix[3] * offsetY + matrix[5];
     let radius: number | undefined, minX: number, maxX: number, minY: number, maxY: number;
     if (collider.kind === 'circle') {
       if (!Number.isFinite(collider.radius) || collider.radius < 0)
@@ -50,23 +52,31 @@ export function detectCollisions(world: World): CollisionPair[] {
         b = matrix[2] ** 2 + matrix[3] ** 2,
         c = matrix[0] * matrix[2] + matrix[1] * matrix[3];
       radius = collider.radius * Math.sqrt((a + b + Math.sqrt((a - b) ** 2 + 4 * c * c)) / 2);
-      minX = center.x - radius;
-      maxX = center.x + radius;
-      minY = center.y - radius;
-      maxY = center.y + radius;
+      minX = centerX - radius;
+      maxX = centerX + radius;
+      minY = centerY - radius;
+      maxY = centerY + radius;
     } else {
-      if (![collider.width, collider.height].every((value) => Number.isFinite(value) && value >= 0))
+      if (
+        !Number.isFinite(collider.width) ||
+        collider.width < 0 ||
+        !Number.isFinite(collider.height) ||
+        collider.height < 0
+      )
         throw new Error('Invalid collider dimensions');
-      const points = [
-        offset,
-        { x: offset.x + collider.width, y: offset.y },
-        { x: offset.x, y: offset.y + collider.height },
-        { x: offset.x + collider.width, y: offset.y + collider.height },
-      ].map((point) => transformPoint(matrix, point));
-      minX = Math.min(...points.map((point) => point.x));
-      maxX = Math.max(...points.map((point) => point.x));
-      minY = Math.min(...points.map((point) => point.y));
-      maxY = Math.max(...points.map((point) => point.y));
+      // Preserve the original four-corner arithmetic, without point/map arrays.
+      const right = offsetX + collider.width,
+        bottom = offsetY + collider.height;
+      const x1 = matrix[0] * right + matrix[2] * offsetY + matrix[4],
+        y1 = matrix[1] * right + matrix[3] * offsetY + matrix[5],
+        x2 = matrix[0] * offsetX + matrix[2] * bottom + matrix[4],
+        y2 = matrix[1] * offsetX + matrix[3] * bottom + matrix[5],
+        x3 = matrix[0] * right + matrix[2] * bottom + matrix[4],
+        y3 = matrix[1] * right + matrix[3] * bottom + matrix[5];
+      minX = Math.min(centerX, x1, x2, x3);
+      maxX = Math.max(centerX, x1, x2, x3);
+      minY = Math.min(centerY, y1, y2, y3);
+      maxY = Math.max(centerY, y1, y2, y3);
     }
     bounds.push({
       entity,
@@ -74,8 +84,8 @@ export function detectCollisions(world: World): CollisionPair[] {
       maxX,
       minY,
       maxY,
-      centerX: center.x,
-      centerY: center.y,
+      centerX,
+      centerY,
       radius,
       group: collider.group ?? 1,
       mask: collider.mask ?? -1,

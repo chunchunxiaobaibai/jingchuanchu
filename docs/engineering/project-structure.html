@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>目录与文件归属 | 镜川初文档</title>
+    <meta name="description" content="仓库、游戏和文档各有明确边界，每类内容只有一个主入口。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="engineering/project-structure.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html" aria-current="page">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html" class="selected" aria-current="page"
+            >目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>工程与维护</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>目录与文件归属</h1>
+          <p>仓库、游戏和文档各有明确边界，每类内容只有一个主入口。</p>
+        </div>
+        <article data-doc-content>
+          <h2 id="repository">引擎仓库</h2>
+          <pre><code>xiaobaifqy-engine/
+  packages/               引擎包源码，按运行能力分包
+    app/                  应用运行时与 application 入口
+    core/                 固定步、模块调度与 Scope
+    ecs/                  实体、组件与 World
+    browser/              浏览器循环与 DOM 工具
+    renderer-2d/          Canvas 绘制、精灵与变换
+    input/                键盘与指针
+    assets/               底层资源缓存
+    net/                  客户端连接与协议边界
+    net-server/           Node WebSocket 服务
+    tooling/              CLI、模板编译与 Vite 插件
+  templates/              项目生成器消费的模板
+    browser/              当前默认参考游戏
+    legacy-browser/       兼容性测试使用的模板
+  examples/               网络与认证的独立接入示例
+  docs/                   独立的 PC HTML 文档站
+    guide/                入门及连续开发教程
+    api/                  按公开入口生成的 API 与使用契约
+    engineering/          架构、目录、交付与验证
+    specs/                模块实施契约
+    assets/               文档样式、交互及搜索索引
+  scripts/                仓库级构建和验证工具
+    build/                包构建与 tgz 打包
+    verify/               定向行为、模板与消费验证
+    benchmarks/           核心及隔离性能测量
+    assets/               参考音频资源生成
+    docs/                 文档生成、链接检查和本地预览
+    distribution/         套件装配、安装器与验证
+  tests/                  引擎与工具的行为测试
+  tasks/                  实施顺序、任务状态与人工验收
+  SPEC.md                 当前源码的规格入口
+  dist/                   生成的包与套件，不作为编辑源
+  README.md               仓库入口</code></pre>
+          <p>
+            包内源码按模块就近存放，跨包引用使用公开包名。<code>packages/*/dist/</code>
+            是各包编译产物，根目录 <code>dist/</code> 是安装包与交付套件。请修改源码后重新构建。
+          </p>
+          <h2 id="game">独立游戏目录</h2>
+          <pre><code>my-game/
+  src/
+    main.ts
+    app/                  app-config、app-routes、app-shell 三文件
+    pages/
+      play/               play-page 三文件、play-scene、私有 hud/
+      home/               首页三文件
+      settings/           设置页三文件
+    game/                 跨页面规则、会话、偏好与存档定义
+    components/           真正复用的 UI 三文件组件
+    themes/               默认及派生主题与换肤图片
+    assets/               不随主题变化的公共资源
+    styles/               全局基础样式
+  public/                 静态资源与许可
+  vendor/                 本地引擎安装包
+  jingchuanchu.json        项目配置
+  package.json
+  package-lock.json</code></pre>
+          <p>
+            <code>account/</code> 只在接入认证时创建。页面私有组件放页面旁，跨页面游戏业务进
+            <code>game/</code>，通用 UI 进 <code>components/</code>。不创建空目录或全局杂物目录。
+          </p>
+          <h2 id="naming">命名和依赖方向</h2>
+          <ul>
+            <li>
+              目录与业务文件采用小写 kebab-case，例如
+              <code>play-page.ts/html/css</code>；三文件同主名。
+            </li>
+            <li>
+              定义导出使用 PascalCase，例如 <code>PlayPage</code>；普通函数和值使用 camelCase。
+            </li>
+            <li>
+              <code>app</code> 负责装配；<code>pages</code> 连接 UI 与业务；<code>game</code> 不依赖
+              DOM、pages 或 app。
+            </li>
+            <li>公共组件不导入页面、游戏内部或 Engine；数据通过 input、output、model 传递。</li>
+            <li>类型跟随其业务归属；复杂度需要时才拆分，避免集中维护一个全局 AppState。</li>
+          </ul>
+          <h2 id="docs">维护文档的位置</h2>
+          <p>
+            所有开发者文档写在本目录站点的 HTML 中。<code>docs/index.html</code>
+            是唯一手册入口，<code>docs/api/index.html</code> 是 API 索引。页面元数据由
+            <code>scripts/docs/pages.json</code> 管理，导航与公共布局由
+            <code>scripts/docs/site.mjs</code> 维护，公共 API 从当前源码提取。原有 Markdown
+            手册、旧版本教程和发布说明入口已经移除。
+          </p>
+          <p>
+            根 README、各包 README 和模板 README 只保留必要的项目识别、命令及站点指引。<code
+              >SPEC.md</code
+            >
+            和 <code>tasks/</code> 是实施工作文件，职责见<a href="workflow.html">规格与执行流程</a
+            >。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <a href="../engineering/cli.html"
+            ><small>← 上一篇</small><strong>CLI 与项目配置</strong></a
+          ><a href="../engineering/architecture.html"
+            ><small>下一篇 →</small><strong>架构与能力地图</strong></a
+          >
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#repository">引擎仓库</a><a href="#game">独立游戏目录</a
+            ><a href="#naming">命名和依赖方向</a><a href="#docs">维护文档的位置</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+{
+  "node": "v24.12.0",
+  "platform": "win32",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+  "samples": 21,
+  "warmupBatches": 5,
+  "units": "milliseconds per operation; p95 of batch averages, not individual browser frames",
+  "sources": {
+    "packages/ecs/index.ts": "fbaa9b1522a38027a6c2a42b0a490a18c1454a22cee06cc1a54dffc3af5e294f",
+    "packages/app/runtime/input-actions.ts": "21fb55bb56950fc81cc1ecfb8c2353e8405ccd5e67df15bbced403afb89508ab",
+    "packages/renderer-2d/collision.ts": "069d155b80e532470d1aed26a3fb6953479495c3e35f06557b934b2392e8d752"
+  },
+  "checksum": 105029379000,
+  "results": [
+    {
+      "name": "query:1000:0",
+      "batch": 20,
+      "medianMs": 0.05343500000000034,
+      "p95Ms": 0.11632000000000034,
+      "minMs": 0.04295500000000061
+    },
+    {
+      "name": "query:1000:1",
+      "batch": 20,
+      "medianMs": 0.06247499999999917,
+      "p95Ms": 0.13119999999999976,
+      "minMs": 0.05056000000000012
+    },
+    {
+      "name": "query:1000:4",
+      "batch": 20,
+      "medianMs": 0.08307499999999948,
+      "p95Ms": 0.1169249999999991,
+      "minMs": 0.06779000000000082
+    },
+    {
+      "name": "require:1000",
+      "batch": 20,
+      "medianMs": 0.02545499999999947,
+      "p95Ms": 0.027079999999999417,
+      "minMs": 0.02452999999999861
+    },
+    {
+      "name": "query:10000:0",
+      "batch": 20,
+      "medianMs": 0.5171249999999986,
+      "p95Ms": 0.5602099999999979,
+      "minMs": 0.45743499999999815
+    },
+    {
+      "name": "query:10000:1",
+      "batch": 20,
+      "medianMs": 0.6361649999999998,
+      "p95Ms": 0.7022600000000011,
+      "minMs": 0.6094150000000014
+    },
+    {
+      "name": "query:10000:4",
+      "batch": 20,
+      "medianMs": 0.888760000000002,
+      "p95Ms": 1.021195,
+      "minMs": 0.8456000000000017
+    },
+    {
+      "name": "require:10000",
+      "batch": 20,
+      "medianMs": 0.35919999999999846,
+      "p95Ms": 0.37599500000000036,
+      "minMs": 0.33379500000000917
+    },
+    {
+      "name": "actions:idle",
+      "batch": 1000,
+      "medianMs": 0.005369500000000017,
+      "p95Ms": 0.0062366999999999275,
+      "minMs": 0.0050888999999999665
+    },
+    {
+      "name": "actions:held",
+      "batch": 1000,
+      "medianMs": 0.0062048999999999525,
+      "p95Ms": 0.006634799999999814,
+      "minMs": 0.005776200000000017
+    },
+    {
+      "name": "collision:1000:sparse",
+      "batch": 5,
+      "medianMs": 0.7933999999999741,
+      "p95Ms": 1.0442999999999756,
+      "minMs": 0.6831400000000031
+    },
+    {
+      "name": "collision:1000:same-x",
+      "batch": 5,
+      "medianMs": 1.549200000000019,
+      "p95Ms": 1.716060000000016,
+      "minMs": 1.4544200000000274
+    }
+  ]
+}

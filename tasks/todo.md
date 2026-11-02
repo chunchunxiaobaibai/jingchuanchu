@@ -6,7 +6,7 @@
 
 - 本次交付：用户授权上传 GitHub 与 0.5.0-rc.1 预发布；T01—T44 自动实现及两项验收缺陷修复已完成。
 - H01—H04 浏览器/设备/性能验收仍未执行，预发布说明保留该边界；本次不自动启动浏览器，不发布 npm，不移动旧标签或替换旧附件。
-- 发布验证：349 项 Node 用例完成验证（1 项宿主缺 npm 的用例换匹配 Node 后定向重跑通过），类型/模板、10 包构建、CSS/Less/legacy 实际 tgz 消费、独立基础包与 Node 分发/API 名称检查通过；详情见 [验证记录](../docs/validation.md)。
+- 发布验证：349 项 Node 用例完成验证（1 项宿主缺 npm 的用例换匹配 Node 后定向重跑通过），类型/模板、10 包构建、CSS/Less/legacy 实际 tgz 消费、独立基础包与 Node 分发/API 名称检查通过；详情见 [验证记录](../docs/engineering/validation.html)。
 - DX01—DX03 的类型/引用输入限制仍保留；当前模板使用明确写法，不宣称已消除。
 - 以下 T 项的“下一节点/未提交/不发布”等描述为当时实施检查点，不覆盖后来用户对本次发布的明确授权。
 
@@ -67,7 +67,7 @@
 - T35 本轮 add 子步骤：install.mjs/.d.mts 提供共享 resolveBundleModules 与 addModules，清单/重复/文件名/摘要/内部固定或^版本/闭包及循环在写前检查；CLI add --modules或--all --bundle，all含server/runtime，tooling只进devDependencies。vendor相对file依赖与jingchuanchu-packages.json版本/文件/摘要记录复用事务；原业务/锁文件保留，已存在同摘要附件重用、冲突拒绝、重复无改动不重写。只读package.json实际故障回收新增vendor/记录；命令不自动安装，仅提示npm install更新锁文件。工具README/规格补新CLI与legacy边界。审查修复共享规划器复用时旧第三参数误作all的问题，并用core create只选core+ecs直接回归；未扩大成全模块。
 - T35 自动项完成：tests/install-distribution.test.ts 本地npm pack真实最小ESM tgz六包，含内部依赖/服务端/tooling；add指定及all两模式后在临时项目显式npm install，再只迁移vendor/package.json/package-lock.json，用新空cache离线npm ci成功，Node实际导入内部链/服务端/tooling，lock resolved保持file:vendor相对路径且ci后原文不变。夹具postinstall会主动失败，所有命令ignore-scripts实际未执行；--offline且所有cache均临时目录，无用户工程安装。仅最小夹具，无引擎本体/Vite等外部依赖离线能力结论。工具README/规格已清除“真实tgz待验”陈述并写明范围。
 - T36 本轮编译/归档子步骤：tooling/project默认types/default迁入dist并保留source条件，消除分发脚本./dist约束冲突；app现有application入口随实际tsc递归产出JS/声明/运行模块。verify-app-suite旧消费者create参数显式legacy。pack跳过脚本；首轮10包pack成功后修Windows npm.cmd shell弃用/转义路径为Node直启npm-cli，仅tooling复包验证新启动方式（未无关重打全包）。实际tar读取app/tooling导出文件存在且路径dist，Node无source条件导入dist新AuthService/defineApplication、旧defineView及projectChecker成功。未生成Release/归档套件或改版本/标签。
-- T36 自动项完成：scripts/verify-application-package.ts 复用已生成实际tgz，在临时bundle根据真实manifest/摘要安装tooling，并用包内CLI生成新应用及全部类型定义；项目未加source条件/仓库绝对路径，真正默认check/TS/build通过，Vite manifest 2动态页面chunk。Node解析新/旧入口落在临时node_modules/app/dist，未知模板字段被实际CLI拒绝并指向hud.html:1，随后恢复；显式legacy浏览器构建也通过，engine lock全部file:vendor且无ws。报告dist/audit/application-package-report.json=passed，临时消费目录已清理。新增npm run test:app:package入口（前置已有build/pack），未重复全包构建/API/pack。README和规格记录实际分发验证范围。
+- T36 自动项完成：scripts/verify/application-package.ts 复用已生成实际tgz，在临时bundle根据真实manifest/摘要安装tooling，并用包内CLI生成新应用及全部类型定义；项目未加source条件/仓库绝对路径，真正默认check/TS/build通过，Vite manifest 2动态页面chunk。Node解析新/旧入口落在临时node_modules/app/dist，未知模板字段被实际CLI拒绝并指向hud.html:1，随后恢复；显式legacy浏览器构建也通过，engine lock全部file:vendor且无ws。报告dist/audit/application-package-report.json=passed，临时消费目录已清理。新增npm run test:app:package入口（前置已有build/pack），未重复全包构建/API/pack。README和规格记录实际分发验证范围。
 - T36 外部边界：安装全部--ignore-scripts/--prefer-offline，外部TypeScript/Vite/Less等允许缓存或缺失时registry，不声称真实工具链完全离线。没有浏览器、设备、Release创建/上传、npm发布或标签移动。源码README/规格更新不会触发重复打包；完整Release套件文档/参考游戏验收仍T44。
 - T37 本轮兼容准备：当前templates/browser完整复制到templates/legacy-browser（SHA-256审计30文件完全一致，包含已有未提交内容）；显式legacy脚手架改从独立starter目录读取，旧场景测试改引legacy源码。build-packages复制browser/legacy-browser两目录，新增完整包名选择构建（无参数仍全量），实际只构建tooling并验证dist createProject读新legacy位置，不重建无关运行包/重打tgz。默认browser内容本轮保持原状，后续可安全切application；T37仍未勾选。
 - T37 自动项完成：确认旧browser与legacy保存内容仍逐文件一致后，使用T33最小应用壳作为新参考模板起点；旧src/ui/contracts/game从browser移由legacy保存，browser切schema2/application，AppShell三文件/AppConfig/AppRoutes/main/index/styles/配置就位，首页动态加载占位保证壳可编译。README明确参考游戏实施中、无Canvas/关卡/共享状态，不把临时首页当完成。legacy30文件和生成路径保持，现有scripts/check-project可按profile分流。没有重打套件或改变现有Release/标签。
@@ -82,10 +82,10 @@
 - T43a 自动项完成：DefaultTheme/DuskTheme 定义 background/surface/text/accent/player token 与 ui.pause/ui.settings/game.collectible 语义键；六份原创几何SVG按MIT提供，public/theme-assets-license.txt随构建复制。DefaultTheme道具为图集区域，DuskTheme整体替换为普通图；AppConfig选择主题，AppShell/HUD/画布背景与暂停/设置图标读取所选映射。themed-play-scene在同一规则场景上挂Sprite2D，显示20×20且不改Collider/计时/输入；两主题碰撞收集与渲染调用参数已检验。无玩家上传/运行时切换入口。
 - T43b 当前图片子步骤：惰性createImageTransport封装原生Image，成功使用natural尺寸，错误/取消移除回调并清空src，release释放源；仅支持image/atlas，音频尚未支持。游玩页先theme.load道具，加载中无Canvas/会话，失败明确重试，加载成功且路由提交后才挂Canvas；图片lease属于页面，场景通过引用闭包取图，不进入props或Store。加载中离页晚到raw只回收一次，不创建帧/Canvas。初次将场景放computed触发DataCloneError，已改getScene()引用绑定并通过实际模板/Canvas测试；未改框架语义。下一节点T43b：加入许可明确的小型声音、可取消音频传输与实际AudioDriver，处理解锁/锁定/暂停/退出结果和收集/结算反馈，保持设置偏好诚实显示。
 - T43b 音频驱动子步骤完成：app/web-audio-driver.ts 提供符合现有AudioDriver的惰性Web Audio适配，只有unlock构造/同步调用resume以保留交互机会；解码令牌归当前driver，取消/关闭后晚到buffer不登记。每个voice独立GainNode，暂停停止单次source并记偏移，恢复重建source/循环取模，旧onended不结束新source；结束/stop/应用close断开节点，release清decoded引用，close幂等并取消等待解码。app/asset-transport.ts组合已有图片与可取消fetch音频字节，验证HTTP状态，完成后注销订阅。适配器经3项注入测试；AppConfig与试听接线见下个检查点。场景事件和动画反馈尚未接入，T43b继续不勾选。
-- T43b 声音资源/试听子步骤完成：scripts/generate-reference-audio.mjs以固定正弦频率/包络生成collect/complete/timeout三份22050Hz单声道16位PCM WAV，含素材说明/MIT许可且确定性重建字节一致；GameSounds声明类型化资源键与Vite URL。AppConfig启用组合transport/WebAudioDriver，构造仍不创建实际AudioContext。游玩按钮在事件调用栈内unlock，ready后才下载/播放试听，未解锁不加载或积压；显示锁定/失败/加载/已启动/静音，离页取消并停止所属试听。发现mixer曾ready后永远跳过driver.unlock会阻止后台挂起后的显式恢复，已移除ready短路，保留pending合并；直接回归验证ready→suspended→ready重新询问驱动，旧根入口未改。下一节点：收集音效用场景owner（暂停停止），完成/超时音效用仍活动的游戏页owner（避免Canvas完成暂停立即取消提示音），处理blocked/failed/取消并提供可见反馈；新增必要clock/tween动画，不能让音频失败阻塞核心玩法。
+- T43b 声音资源/试听子步骤完成：scripts/assets/generate-reference-audio.mjs以固定正弦频率/包络生成collect/complete/timeout三份22050Hz单声道16位PCM WAV，含素材说明/MIT许可且确定性重建字节一致；GameSounds声明类型化资源键与Vite URL。AppConfig启用组合transport/WebAudioDriver，构造仍不创建实际AudioContext。游玩按钮在事件调用栈内unlock，ready后才下载/播放试听，未解锁不加载或积压；显示锁定/失败/加载/已启动/静音，离页取消并停止所属试听。发现mixer曾ready后永远跳过driver.unlock会阻止后台挂起后的显式恢复，已移除ready短路，保留pending合并；直接回归验证ready→suspended→ready重新询问驱动，旧根入口未改。下一节点：收集音效用场景owner（暂停停止），完成/超时音效用仍活动的游戏页owner（避免Canvas完成暂停立即取消提示音），处理blocked/failed/取消并提供可见反馈；新增必要clock/tween动画，不能让音频失败阻塞核心玩法。
 - T43b 自动项完成：themed-play-scene在collect-rules之后观察所属run的分数和结束状态，一步多收集合并为一次声/脉冲，每局完成仅一次回调。收集声音使用scene owner，暂停/重开/退出停止；通关/超时使用游戏页owner，Canvas完成暂停不误取消提示。playSound统一展示blocked/failed/played/静音，按请求与run代次忽略旧响应并停止晚到voice，重开停止旧页面提示音，音频错误不阻塞收集/时钟。玩家收集脉冲用所属clock.tween，视觉直径1.35→1、0.18秒，不改Collider半径16；暂停冻结、恢复继续，场景退出清理，不创建额外RAF。最终Engine自然收集8个触发一次通关；Node DOM实际Canvas/音频服务验证超时提示音在停帧后启动、重开停止旧声与收集失败后仍运行。下一节点T44：单一参考模板来源、完整新项目create/check/build、打包后独立消费和迁移说明；保留legacy-v0.4分支，浏览器H项单独留待授权，不把自动完成宣称发布就绪。
 - T44 模板统一子步骤完成：application-starter.mjs移除独立字符串应用壳，源运行读取templates/browser、built工具读取随包starters/browser；按Buffer收集完整源码/声音/图标/许可后统一事务写入，Less仅转换样式文件名与文本导入，不解码二进制。package/config/项目名仅做版本/预设/样式/本地vendor元数据适配；client仍只加net依赖，不自动连后端。默认模板补直接使用的core/ecs依赖、.gitignore；新check-project只走application，旧规则检查器继续在legacy模板（旧fixture改指该处且6/6）。音效生成配方移到模板scripts/generate-audio.mjs，仓库旧脚本保留为转发入口，生成项目可自行重建声音。生成测试改用bonus/score/custom避开已有play/game/default名称，已有路由冲突保持拒绝；CSS/Less媒体字节与完整页验证通过。下一节点T44：更新verify-application-package的生成名称/完整媒体断言，再重建受影响运行包与tooling并打包，执行仓库外无source条件的CSS/Less完整生成/安装/check/build与旧消费者；新文档独立说明源码/套件创建和显式迁移，旧0.4手册不改成新接口说明。
-- T44 自动项完成：verify-application-package使用真实10份tgz，在仓库外安装tooling再生成完整CSS/Less与显式legacy项目；分别安装/生成新业务/check/tsc/Vite build，现代项目各6个懒页面分块、3 WAV、许可复制、模板错误原位置定位，根新/旧入口运行和vendor相对依赖通过，无ws进入单机项目、无source条件。发现npm会丢弃内嵌.gitignore，构建时改存gitignore.txt资源、创建时恢复原名，并在实际tgz消费者验证。隔离套件构建/Node验证通过：补齐starter/network示例内部file依赖闭包，修复Windows tar盘符/CRLF与npm调用；未加载/启动浏览器分支，浏览器脚本更新为新页面入口但未执行。输出仅dist/audit/t44-distribution，不覆盖dist/releases或任何远端附件。新增docs/development/application-framework.md，提供完整创建/开发/主题/声音/保存与显式迁移；旧0.4手册只补新入口导向，根SPEC和参考规格清理过时实施状态，test:app:distribution复用实际tgz消费验证，避免两份默认模板/重复验证命令。下一节点仅H01—H04或用户新的明确任务；自动实施停止。
+- T44 自动项完成：verify-application-package使用真实10份tgz，在仓库外安装tooling再生成完整CSS/Less与显式legacy项目；分别安装/生成新业务/check/tsc/Vite build，现代项目各6个懒页面分块、3 WAV、许可复制、模板错误原位置定位，根新/旧入口运行和vendor相对依赖通过，无ws进入单机项目、无source条件。发现npm会丢弃内嵌.gitignore，构建时改存gitignore.txt资源、创建时恢复原名，并在实际tgz消费者验证。隔离套件构建/Node验证通过：补齐starter/network示例内部file依赖闭包，修复Windows tar盘符/CRLF与npm调用；未加载/启动浏览器分支，浏览器脚本更新为新页面入口但未执行。输出仅dist/audit/t44-distribution，不覆盖dist/releases或任何远端附件。新增应用开发手册（本次已归并到 docs/guide/quick-start.html），提供完整创建/开发/主题/声音/保存与显式迁移；旧版手册现已由 HTML 站点统一替换，根SPEC和参考规格清理过时实施状态，test:app:distribution复用实际tgz消费验证，避免两份默认模板/重复验证命令。下一节点仅H01—H04或用户新的明确任务；自动实施停止。
 - 输入遗留 DX03（静态审查）：defineApplication.inputs 仍整体按数据 snapshot，不能直接传含函数的引用型根输入；当前可在根 setup 暴露场景/选项给 GameCanvas。后续统一应用根输入与显式 reference input 契约，未声称该入口已兼容引用。
 - H01—H04 均未自动执行：不得自动开浏览器/Playwright/截图；不提交、不推送、不发布或移动标签。完成状态不等于已发布或实际游玩通过。
 - 类型遗留 DX01：依赖上下文的生命周期钩子写在 setup 前可能把 exposed 推断为 {}；默认 setup 在前，或完整显式泛型。单独 setup 返回类型不能修复；正/负向 fixture 已通过，仍待改善推断。
@@ -103,7 +103,7 @@
 | [x] T05   | 新三文件关联、CSS/Less 和来源信息                      | tooling/compiler.mjs、vite.mjs、component-template.test.ts、资源 fixture       | component-template.test.ts                                         |
 | [x] T06   | 表达式/属性/事件的虚拟 TS 类型诊断（C4）               | tooling/template-check.mjs、template 编译器、runtime/template.ts、类型 fixture | 模板定向测试、类型 fixture                                         |
 | [x] T07   | 原生和自定义 model、转换、输入法状态（C2）             | runtime/models.ts、template.ts、template-check.mjs、form-model.test.ts         | form-model.test.ts；只读 model 负向类型                            |
-| [x] T08   | when/each/key/slot 与 nextTick（C3）                   | template.ts、component-runtime.ts、模板编译器、component-structure.test.ts               | 实例/分支/重排/slot 定向测试                                       |
+| [x] T08   | when/each/key/slot 与 nextTick（C3）                   | template.ts、component-runtime.ts、模板编译器、component-structure.test.ts     | 实例/分支/重排/slot 定向测试                                       |
 | [x] T09   | Store state/getters/actions、按 owner 实例化（S1/S2）  | runtime/store.ts、component-owner.ts、stores.test.ts、类型 fixture             | stores.test.ts；类型检查                                           |
 | [x] T10   | Store reset、异步代次和 user-scoped 标记（S3）         | store.ts、stores.test.ts                                                       | stores.test.ts                                                     |
 | [x] T11   | 类型化服务定义和父子 owner 解析（A1/A3）               | runtime/services.ts、application-types.ts、services.test.ts                    | services.test.ts                                                   |
@@ -116,7 +116,7 @@
 | [x] T18   | 分组 lease、取消/晚到资源/失败重试（L2）               | assets.ts、asset-groups.test.ts                                                | asset-groups.test.ts                                               |
 | [x] T19   | 主题定义、token、整体覆盖与 DOM/Canvas 解析（T1—T3）   | runtime/theme.ts、theme-types.ts、themes.test.ts、主题类型 fixture             | themes.test.ts；类型 fixture                                       |
 | [x] T20   | contain 视口、尺寸变化与坐标映射（V1）                 | runtime/viewport.ts、viewport-input.test.ts                                    | 注入几何驱动测试                                                   |
-| [x] T21   | 键盘/主指针/虚拟按键动作采样及清理（V2/V3）            | runtime/input-actions.ts、browser-actions.ts、动作/宿主/类型 fixture                  | 动作/焦点/暂停定向测试                                             |
+| [x] T21   | 键盘/主指针/虚拟按键动作采样及清理（V2/V3）            | runtime/input-actions.ts、browser-actions.ts、动作/宿主/类型 fixture           | 动作/焦点/暂停定向测试                                             |
 | [x] T22   | 游戏 clock 单次/重复/取消（F1）                        | runtime/game-clock.ts、game-feedback.test.ts                                   | 手动 advance 测试                                                  |
 | [x] T23   | 数值缓动、完成/取消和错误来源（F2/F3）                 | runtime/tweens.ts、game-feedback.test.ts                                       | game-feedback.test.ts                                              |
 | [x] T24   | GameCanvas、defineGameScene、页面所属循环（H1—H3）     | runtime/canvas-host.ts、canvas-host.test.ts、注入驱动 fixture                  | canvas-host.test.ts                                                |
@@ -143,6 +143,21 @@
 | [x] T43b  | 加载反馈与游玩音效接入                                 | 加载 UI、资源组声明、游戏音频接入、集成测试                                    | 加载/取消/播放结果集成                                             |
 | [x] T44   | 默认项目独立构建与文档迁移                             | 模板配置/README、迁移手册、verify-app-suite.ts                                 | check:templates、test:project、dist:release、test:app:distribution |
 
+## 2026-11-02：沿用现有设计的性能迭代
+
+规格：[performance-spec](performance-spec.md)；执行顺序：[plan](plan.md) 的 P01—P06。保留前轮改动与当前工作区内容，不改引擎架构或公开 API。
+
+| 状态 | 任务                 | 结果                                                                                                                                                                          |
+| ---- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [x]  | P01 起点与热路径测量 | 已保存 iterations/p01-baseline.json 与 p01-native.json，包含源码 SHA-256；后续测试与测量顺序执行                                                                              |
+| [x]  | P02 query 快照与遍历 | 单份预分配句柄快照、索引循环；ECS/renderer/collision 定向 12/12，调整后 ECS 6/6；p02-query-final.json 中 10k 的 0/1/4 组件查询较 P01 降低约 21%/40%/34%；首版 push 方案未采用 |
+| [x]  | P03 require 组件定位 | 私有 SparseSet 一次定位 slot；ecs/scenes/renderer/collision 13/13；p03-require.json 中 10k require 较 P02 降低约 15%，undefined/缺失/回收错误保持                             |
+| [x]  | P04 动作采样         | 固定条目枚举、冻结结构快照、指针变化时复制；input/browser-actions/GameCanvas 11/11；p04-actions.json 空闲/持有采样较 P03 降低约 78%/80%，保持边沿与深冻结                     |
+| [x]  | P05 矩形碰撞分配     | 保留四角算术/扫掠排序，去除点与 map 数组；collision/renderer/reference-scene 9/9；p05-collision.json 较 P04 稀疏/同 X 降低约 58%/14%，平方扫描边界保留                        |
+| [x]  | P06 收敛与浏览器复测 | 48/48 组合定向测试、类型与 118 原公开名称/入口检查通过；热路径双次复测、require 同进程专项、native 与生产 Chrome 像素/参考游戏检查通过，完整记录见下方链接                    |
+
+本轮交付记录与原始数据：[iterations/README](../artifacts/performance/iterations/README.md)。P06 的 10k 单/四组件查询较 P01 降低约 45%/35%，输入采样约 74%—80%，稀疏/同 X 碰撞约 73%—74%/40%—42%；这些是累计热路径结果，不代表完整游戏 FPS。require 同进程专项两次确认 10k 访问降低约 13%—15%。native 对照中 10k 引擎移动/绘制较本轮起点降低约 31%/22%，仍慢于原生路径。生产浏览器像素一致、参考游戏 362 帧采样及暂停/恢复通过；不扩展为完整 H01—H04 或设备验收。未推送、发布或执行完整分发回归。
+
 ## 人工/浏览器验收（不自动执行）
 
 - [ ] H01 获得明确授权后：实际游玩加载→关卡→暂停→设置→结算→重开，记录浏览器及目标设备。
@@ -151,3 +166,11 @@
 - [ ] H04 根据实际性能问题或交付需要测量实体规模、帧耗时/内存与构建体积；未经测量不填结论。
 
 自动项完成而人工项未验收时，在交付记录中明确区分，不用一行“测试通过”合并两者。
+
+## 2026-10-29：仓库目录与独立 HTML 手册
+
+- 已移除 docs 中的旧 Markdown 手册、历史发布/测量内容及旧文档入口；开发内容统一为 docs/index.html 下的 50 页 PC HTML 手册。SPEC 与 tasks 继续承担实施依据和执行记录，不作为对外使用手册。
+- 指南、API、工程维护和模块契约统一导航；API 从当前 10 个包的 21 个入口提取，覆盖 326 项公开导出。提供全站搜索、API 过滤、页内目录、代码复制和主题记忆；未增加移动端适配。
+- scripts 按 build、verify、benchmarks、assets、docs、distribution 分类，命令与文档引用同步更新；分发说明迁至 scripts/distribution/readme.html，套件使用 README.html 并携带独立文档站。根、包、模板和示例 README 收敛为入口及必要运行说明。
+- 实际检查：npm run typecheck；npm run docs:build；npm run docs:check（50 页、3407 个本地链接、605 条搜索记录、326 项 API）；必要文件 Prettier 与 JS 语法检查；CSS 解析/PC 布局静态检查；Node DOM 搜索/过滤/主题检查；本机 HTTP 文档/资源/状态码检查；独立临时复制的手册及分发 README 检查（51 个 HTML、3411 个本地链接）；git diff --check。
+- 未执行完整 dist:release、全量测试或真实浏览器/设备/视觉验收；未启动浏览器、Playwright、截图、推送或发布。Node DOM 与 HTTP 检查不代表真实浏览器界面通过。

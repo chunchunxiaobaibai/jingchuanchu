@@ -1,45 +1,7 @@
 # @xiaobaibaifqy/jingchuanchu-net-server
 
-Node WebSocket 服务适配，依赖 @xiaobaibaifqy/jingchuanchu-net 和外部 ws。HTTP listen 与异步退出由应用管理。
+Jingchuanchu (镜川初) TypeScript engine net-server module。版本 0.5.0-rc.1，MIT 授权。
 
-## 安装
+开发指南、参数及使用约束统一在配套套件的 docs/index.html；API 见 docs/api/net-server.html。源码仓库内打开 ../../docs/index.html。
 
-公共 npm 安装：
-
-```bash
-npm install @xiaobaibaifqy/jingchuanchu-net-server
-```
-
-也可通过镜川初分发套件的 install.mjs 选择模块，自动补齐内部依赖。本地 tgz 安装时需同时提供所需内部包。
-
-## 使用
-
-```ts
-import { createServer } from 'node:http';
-import { WebSocketHost } from '@xiaobaibaifqy/jingchuanchu-net-server';
-const http = createServer();
-const host = new WebSocketHost(
-  http,
-  { parse: (value: unknown) => value },
-  {
-    open() {},
-    message() {},
-    close() {},
-    error() {},
-  },
-);
-await host.close();
-// 实际游戏需要自己的 decoder 和规则，示例只展示构造/释放。
-```
-
-包提供 ESM、TypeScript 声明与源码。TS >=5.4；浏览器功能需要对应浏览器 API，服务端开发使用 Node >=22.12。完整 API、模块组合和可运行模板在分发套件 docs/development 中。
-
-## 0.4.0 扩展
-
-WebSocketHost 的构造、处理器与 close 保留。客户端可选的应用层心跳需要游戏 decoder 与 message 处理器接收并回应；服务端原有 WebSocket 控制帧心跳仍由本包负责。房间身份和重连恢复依然属于游戏规则。
-
-本仓库 0.4.0 尚未上传 npm，新增能力请使用本地 tgz 或分发套件；公共包当前为 0.3.0。完整契约见分发套件 `docs/development/extensions-0.4.md`。
-
-## 授权
-
-MIT，见 [LICENSE](LICENSE)。
+包提供编译后的 ESM 和 TypeScript 声明。请使用同一版本套件的配套依赖；浏览器项目只安装所需模块，tooling 作为开发依赖。

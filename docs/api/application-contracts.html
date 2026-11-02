@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>应用 API 使用契约 | 镜川初文档</title>
+    <meta name="description" content="参数、返回结果、生命周期和使用约束。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="api/application-contracts.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a
+        ><a href="../api/index.html" aria-current="page">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>API 参考</h2>
+          <a href="../api/index.html">API 参考</a
+          ><a href="../api/application-contracts.html" class="selected" aria-current="page"
+            >应用 API 使用契约</a
+          >
+        </section>
+        <section>
+          <h2>按包查阅</h2>
+          <a href="../api/app.html">应用与游戏能力</a><a href="../api/core.html">引擎与作用域</a
+          ><a href="../api/ecs.html">实体与组件</a><a href="../api/browser.html">浏览器运行</a
+          ><a href="../api/renderer-2d.html">2D 渲染</a><a href="../api/input.html">键盘与指针</a
+          ><a href="../api/assets.html">资源缓存</a><a href="../api/net.html">网络客户端</a
+          ><a href="../api/net-server.html">网络服务端</a
+          ><a href="../api/tooling.html">CLI 与构建工具</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb"><a href="../index.html">文档</a><span>/</span><span>API</span></div>
+        <div class="page-heading">
+          <p class="eyebrow">API REFERENCE</p>
+          <h1>应用 API 使用契约</h1>
+          <p>参数、返回结果、生命周期和使用约束。</p>
+        </div>
+        <article data-doc-content>
+          <p class="lead">
+            以下 API 从
+            <code>@xiaobaibaifqy/jingchuanchu-app/application</code>
+            导入。本页解释默认值、返回状态与所有权；完整类型签名见<a href="app.html#application"
+              >应用包 API</a
+            >。
+          </p>
+          <h2 id="响应式与组件">响应式与组件</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>API</th>
+                  <th>参数 / 返回</th>
+                  <th>使用要点</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>signal&lt;T&gt;</code></td>
+                  <td><code>initial → WritableSignal&lt;T&gt;</code></td>
+                  <td>调用读取深只读快照；set(value)/update(reducer) 替换</td>
+                </tr>
+                <tr>
+                  <td><code>computed&lt;T&gt;</code></td>
+                  <td><code>derive → ReadSignal&lt;T&gt;</code></td>
+                  <td>惰性缓存、动态依赖；不得异步或写依赖</td>
+                </tr>
+                <tr>
+                  <td><code>effect</code></td>
+                  <td><code>(run, scope, {onError?}?) → Cleanup</code></td>
+                  <td>微任务运行；run(onCleanup) 同步，退出停止</td>
+                </tr>
+                <tr>
+                  <td><code>batch</code></td>
+                  <td><code>callback → 回调返回值</code></td>
+                  <td>立即写、合并通知，不回滚</td>
+                </tr>
+                <tr>
+                  <td><code>nextTick</code></td>
+                  <td><code>() → Promise&lt;void&gt;</code></td>
+                  <td>等视图批次，不等 I/O 或游戏帧</td>
+                </tr>
+                <tr>
+                  <td><code>input&lt;T&gt;</code></td>
+                  <td><code>{required:true} 或 {default:值/工厂} → InputDefinition</code></td>
+                  <td>默认 value 快照；mode:'reference' 保留显式能力身份</td>
+                </tr>
+                <tr>
+                  <td><code>output&lt;T&gt;</code></td>
+                  <td><code>() → OutputDefinition&lt;T&gt;</code></td>
+                  <td>由 context.emit(name,payload) 发出；无类型参数为 void</td>
+                </tr>
+                <tr>
+                  <td><code>model&lt;T&gt;</code></td>
+                  <td><code>required/default → ModelDefinition</code></td>
+                  <td>子组件可写、父目标须可写</td>
+                </tr>
+                <tr>
+                  <td><code>writableModel&lt;T&gt;</code></td>
+                  <td><code>{get,set,convert?,event?} → WritableModel</code></td>
+                  <td>convert:string/number/boolean/strings；event 默认 input，可改 change</td>
+                </tr>
+                <tr>
+                  <td><code>defineComponent / definePage</code></td>
+                  <td><code>options → ComponentDefinition / PageDefinition</code></td>
+                  <td>selector、inputs/outputs/models、components、setup、生命周期、资源路径</td>
+                </tr>
+                <tr>
+                  <td><code>mountComponent</code></td>
+                  <td>
+                    <code
+                      >(host, definition, {inputs?,models?,outputs?,owner?,onError?}?) →
+                      ComponentInstance</code
+                    >
+                  </td>
+                  <td>低层挂载；定义须经 tooling 编译</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            WritableModel 额外有 draft()/validation()/resetDraft()，validation 区分
+            valid、empty-number、invalid-number。模板 model:value 用文本/数值/多选，model:checked
+            用布尔；数值与多选使用显式转换。程序写回不产生用户事件；动态 select
+            在选项变更后重新同步。
+          </p>
+          <p>
+            ComponentInstance 提供
+            exposed、owner、setInputs(patch)、activate/deactivate/dispose；绑定到父目标的 model
+            应通过父目标更新。普通业务优先用 mountApplication/bootstrapApplication
+            获取配置完整的上下文，不手工创建内部 owner。
+          </p>
+          <p>
+            ComponentContext 可用
+            inputs/models、scope/signal、own、emit、element(ref)、on(ref,event,listener)、useStore、useService，以及已配置的
+            router/route/assets/audio/useTheme。缺少对应能力时访问会报错，context.audio/assets
+            不是自动安装的浏览器适配器。
+          </p>
+          <p>
+            生命周期：setup → onInit → 子 onMount → 父 onMount；输入变化调用
+            onInputsChanged(previous/current)，DOM 变化调用
+            onBeforeUpdate/onUpdated，显式停用/恢复调用 onDeactivate/onActivate，退出 onDestroy 与
+            Scope 清理。所有钩子同步；context.exposed 在 setup 之后可用。当前 setup
+            写在依赖其推断的钩子前。
+          </p>
+          <p>
+            示例：<a href="../guide/components.html">组件与页面教程</a>。契约：<a
+              href="../specs/reactive-core.html"
+              >响应式</a
+            >、<a href="../specs/component-model.html">组件</a>。
+          </p>
+          <h2 id="store-service-与应用">Store、Service 与应用</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>API</th>
+                  <th>参数 / 返回</th>
+                  <th>使用要点</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>defineStore</code></td>
+                  <td><code>{name,userScoped?,setup} → StoreDefinition</code></td>
+                  <td>
+                    setup 返回 state/getters/actions；state 用可写 signal，getters 用只读 signal
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>defineService</code></td>
+                  <td><code>{name,factory} → ServiceDefinition&lt;T&gt;</code></td>
+                  <td>同步工厂，异步业务放服务方法</td>
+                </tr>
+                <tr>
+                  <td><code>provideService</code></td>
+                  <td><code>(definition, overrideFactory?) → ServiceProvider</code></td>
+                  <td>放入 defineApplication.providers，重复注册报错</td>
+                </tr>
+                <tr>
+                  <td><code>defineApplication</code></td>
+                  <td><code>options → ApplicationDefinition</code></td>
+                  <td>root 必需；providers/assets/audio/theme/routes/router/inputs/onError 可选</td>
+                </tr>
+                <tr>
+                  <td><code>mountApplication</code></td>
+                  <td><code>(host, definition) → Promise&lt;ApplicationInstance&gt;</code></td>
+                  <td>初始化与首路由提交后返回，失败回收已创建资源</td>
+                </tr>
+                <tr>
+                  <td><code>bootstrapApplication</code></td>
+                  <td>
+                    <code>(definition,{document?}?) → Promise&lt;ApplicationInstance&gt;</code>
+                  </td>
+                  <td>文档中必须恰有一个根 selector 宿主</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Store 按应用懒创建并共享，不同挂载隔离；对外 state/getters 为只读 readers，actions
+            保留参数/返回类型。StoreInstance.reset 保留实例身份、重置初始 state、取消旧任务；dispose
+            结束实例。userScoped 默认
+            false，是业务账号隔离标记，须与账号清理显式装配，不会自动迁移存档。
+          </p>
+          <p>
+            StoreContext.runTask(run,{key?}?) 返回 completed(value)/cancelled。同 key
+            请求替换；reset/dispose 取消；任务必须通过 task.commit(() =&gt; 同步写入)
+            提交。task.signal 是引擎 CancellationSignal。onReset/own 可登记清理，useStore/useService
+            解析依赖；循环依赖会报错。
+          </p>
+          <p>
+            ApplicationInstance 提供 root、router（无 routes 时 undefined）、assets/audio（未配置时
+            undefined）、useTheme、state()（running/disposed）和 dispose。dispose
+            幂等，手工清理错误聚合后抛出。根 inputs
+            当前按数据快照，不接受带函数的引用定义；场景/驱动在根 setup 暴露。onError 收到
+            ApplicationError 的 module/source/operation/cause，异步观察器错误交宿主报告。
+          </p>
+          <h2 id="路由与预加载">路由与预加载</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>API</th>
+                  <th>参数 / 返回</th>
+                  <th>默认与约束</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>defineRoutes</code></td>
+                  <td><code>route[] → 保留字面量的路由数组</code></td>
+                  <td>page/loadPage/redirect 三选一；name 唯一、模式冲突拒绝</td>
+                </tr>
+                <tr>
+                  <td><code>createRouteMatcher</code></td>
+                  <td><code>routes → match(path)/resolve(target)</code></td>
+                  <td>根绝对路径、子相对路径，:param/*catch；参数独立编码</td>
+                </tr>
+                <tr>
+                  <td><code>createRouter</code></td>
+                  <td><code>{routes,history,renderer,guards?,onError?} → Router</code></td>
+                  <td>低层入口，需显式提供 HistoryDriver/RouteRenderer</td>
+                </tr>
+                <tr>
+                  <td><code>createMemoryHistoryDriver</code></td>
+                  <td><code>initialPath? → HistoryDriver</code></td>
+                  <td>默认 /，Node 测试可用</td>
+                </tr>
+                <tr>
+                  <td><code>createBrowserHistoryDriver</code></td>
+                  <td><code>{window?,mode?,base?,onError?}? → HistoryDriver</code></td>
+                  <td>默认 hash；base 仅用于 history；每 window 单一 owner</td>
+                </tr>
+                <tr>
+                  <td><code>RouterOutlet</code></td>
+                  <td><code>内置组件</code></td>
+                  <td>在根/布局 components 中显式注册，模板 router-outlet</td>
+                </tr>
+                <tr>
+                  <td><code>RouteLink</code></td>
+                  <td><code>内置组件</code></td>
+                  <td>to 必需，replace=false、target='_self'、download=null；navigated 输出结果</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            RouteDefinition
+            关键字段：path、name?、children?、guards?、beforeLeave?、prepare?、preload?、meta?。prepare
+            返回页面 inputs；loadPage 返回 definePage 定义。RouteLocation 有
+            path/fullPath/params/query/hash/matched/meta。GuardResult 为
+            allow、deny(reason?)、redirect(target)。导航按离开守卫、全局守卫、目标链守卫、加载、prepare、提交处理。
+          </p>
+          <p>
+            Router.current/pending/error 为只读 signal；resolve/href
+            生成位置/链接，push/replace/back 返回 Promise&lt;NavigationResult&gt;，invalidate
+            取消导航并释放当前视图，dispose 释放驱动和视图。NavigationResult 为
+            committed/redirected/cancelled/denied/failed；同名导航也可能重建叶页面，不等同缓存实例。
+          </p>
+          <p>
+            preload(target,{trigger?}?) 返回 loaded/skipped/cancelled/failed，不运行守卫、prepare
+            或页面。自动 intent/idle 需要路由 preload:'intent'/'idle'，受保护链跳过；idle 还需
+            AppConfig.router.idle.targets。显式预加载省略 trigger
+            时只加载指定代码，不替代授权。并发加载去重，失败可重试。
+          </p>
+          <p>
+            应用 router 配置可用 history 工厂，或 mode:'hash'|'history' 与
+            base；两种方式互斥。guards 是同步工厂，返回守卫数组。原生非托管 History/hash
+            改写不会被猜成可恢复导航；通过 Router 管理导航。
+          </p>
+          <h2 id="资源与主题">资源与主题</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>API</th>
+                  <th>参数 / 返回</th>
+                  <th>默认与约束</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>defineAssetGroup</code></td>
+                  <td><code>{name,entries} → AssetGroup&lt;E&gt;</code></td>
+                  <td>image/atlas/audio/json；json.parse 同步，optional 可失败</td>
+                </tr>
+                <tr>
+                  <td><code>context.assets.load</code></td>
+                  <td>
+                    <code
+                      >(group,{signal?,onProgress?}?) →
+                      Promise&lt;AssetGroupLease&lt;E&gt;&gt;</code
+                    >
+                  </td>
+                  <td>get(key)/release；退出后不可读，共享池默认并发 4</td>
+                </tr>
+                <tr>
+                  <td><code>defineTheme</code></td>
+                  <td><code>{name,tokens,assets} → ThemeDefinition</code></td>
+                  <td>token 为 string/number，assets 语义键</td>
+                </tr>
+                <tr>
+                  <td><code>extendTheme</code></td>
+                  <td><code>(base,{name,tokens?,assets?}) → 同族派生主题</code></td>
+                  <td>仅覆盖已有键、资源描述整体替换</td>
+                </tr>
+                <tr>
+                  <td><code>context.useTheme / app.useTheme</code></td>
+                  <td><code>默认主题契约 → ThemeContext</code></td>
+                  <td>返回实际选定主题的 name/tokens/resolve/load</td>
+                </tr>
+                <tr>
+                  <td><code>ThemeContext.resolve</code></td>
+                  <td><code>key → ThemeAsset</code></td>
+                  <td>只解析，不加载；image 或 atlas-region</td>
+                </tr>
+                <tr>
+                  <td><code>ThemeContext.load</code></td>
+                  <td><code>(key,{signal?}?) → Promise&lt;ThemeImageLease&gt;</code></td>
+                  <td>image/frame、fallback/diagnostic/release；失败只回退最初默认一次</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            AssetTransport 为 load(entry,signal) 和可选 release(entry,raw)。应用传入同步 transport
+            工厂；image/atlas 的 raw 要有 source/width/height，audio 要有 ArrayBuffer，json
+            要有待解码值。进度为固定条目计数 total/completed/failed/pending 和 status。租约归实际
+            owner，调用方不能把共享资源交给已退出页面。
+          </p>
+          <p>
+            示例与浏览器 JSON 适配见 <a href="../guide/services.html">资源与应用服务</a>；默认参考
+            transport 并不内置 JSON fetch。
+          </p>
+          <h2 id="视口-动作-场景与反馈">视口、动作、场景与反馈</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>API</th>
+                  <th>参数 / 返回</th>
+                  <th>默认与约束</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>createViewport</code></td>
+                  <td>
+                    <code>{canvas,width,height,scope,fit?,maxPixelRatio?,driver?} → Viewport</code>
+                  </td>
+                  <td>fit 仅 contain，DPR 上限默认 2 且不可超过 2；layout()/toGamePoint/dispose</td>
+                </tr>
+                <tr>
+                  <td><code>defineActions</code></td>
+                  <td><code>entries → ActionDefinitions</code></td>
+                  <td>axis 的 negative/positive，button 的 keys/pointer；可设 preventDefault</td>
+                </tr>
+                <tr>
+                  <td><code>createActions</code></td>
+                  <td><code>{definition,canvas,viewport,scope,host?} → Actions</code></td>
+                  <td>read/setVirtual/clear/setActive/dispose；不启动循环</td>
+                </tr>
+                <tr>
+                  <td><code>defineGameScene</code></td>
+                  <td>
+                    <code
+                      >{id,actions?,prepare?,setup,onPause?,onResume?} → GameSceneDefinition</code
+                    >
+                  </td>
+                  <td>prepare 可异步，其他钩子同步，props 普通数据</td>
+                </tr>
+                <tr>
+                  <td><code>GameCanvas</code></td>
+                  <td><code>内置组件</code></td>
+                  <td>scene/options 为 required 引用，props 默认 {}；需显式注册</td>
+                </tr>
+                <tr>
+                  <td><code>createGameClock</code></td>
+                  <td><code>{scope,source?} → GameClock</code></td>
+                  <td>advance(delta)/setActive/dispose，独立使用时由已有循环推进</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            GameCanvasOptions 关键参数：width/height
+            正有限数、background?、maxPixelRatio?；driver/createRenderer/clock
+            为注入扩展，普通页面无需提供。挂载后 options 固定。ready/error/statusChanged
+            输出句柄/错误/状态；状态为
+            idle/preparing/running/paused/stopped/disposed。GameCanvasHandle.status 是
+            signal，pause/resume、异步 restart/switchTo、forScene(scene).setVirtual
+            可用。组件字段不能跨 scene/props 静态关联，switchTo 保留关联类型。
+          </p>
+          <p>
+            GameSceneContext 有
+            props/prepared/world/clock/actions、create/addSystem、scope/signal、assets/audio/useStore/useTheme。固定系统在采样动作并推进
+            clock 后执行，phase:'render' 用于渲染阶段。场景的 Engine 来自底层 context，但通用 UI
+            不应直接操作它。
+          </p>
+          <p>
+            GameClock.after/every(seconds,callback) 返回 status/cancel 句柄，秒数必须正有限。every
+            每步最多触发一次；tween({from,to,duration,easing?,onUpdate,onComplete?})
+            支持数值或同键数值对象，easing 默认
+            linear。计时/缓动回调同步，抛错移除任务并带来源报告。scene.clock 已由 GameCanvas
+            固定步推进，禁止叠加时钟/帧循环。
+          </p>
+          <p>示例：<a href="../guide/gameplay.html">2D 场景教程</a>。</p>
+          <h2 id="音频-保存与账号">音频、保存与账号</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>API</th>
+                  <th>参数 / 返回</th>
+                  <th>使用要点</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>app.audio / context.audio / scene.audio</code></td>
+                  <td><code>AudioControls</code></td>
+                  <td>
+                    state/preferences、unlock、playMusic/playEffect、pauseMusic/resumeMusic、setVolume/setMuted/restorePreferences
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>defineSave&lt;S,D&gt;</code></td>
+                  <td><code>{key,version,select,parse,restore,migrate?} → SaveDefinition</code></td>
+                  <td>版本正整数；同步白名单/解析，业务显式 restore</td>
+                </tr>
+                <tr>
+                  <td><code>new SaveService</code></td>
+                  <td><code>{storage?,namespace?}?</code></td>
+                  <td>默认惰性 localStorage、anonymous；用户 namespace 固定 userId</td>
+                </tr>
+                <tr>
+                  <td><code>SaveService.save</code></td>
+                  <td><code>(definition,state) → saved/invalid/unavailable</code></td>
+                  <td>只有存储 set 成功才 saved</td>
+                </tr>
+                <tr>
+                  <td><code>SaveService.load</code></td>
+                  <td><code>definition → loaded/empty/corrupt/incompatible/unavailable</code></td>
+                  <td>loaded 有只读 data 和可选 migratedFrom，不自动恢复/改写</td>
+                </tr>
+                <tr>
+                  <td><code>SaveService.reset</code></td>
+                  <td><code>definition → reset/unavailable</code></td>
+                  <td>只删除当前命名空间下指定键</td>
+                </tr>
+                <tr>
+                  <td><code>createLocalStorageAdapter</code></td>
+                  <td><code>storage? → StorageAdapter</code></td>
+                  <td>get/set/remove 为异步接口，实际 localStorage 按需访问</td>
+                </tr>
+                <tr>
+                  <td><code>new AuthService</code></td>
+                  <td><code>{scope,provider}</code></td>
+                  <td>
+                    session/generation/disposed、ensureSession/login/logout/invalidate/registerCleanup/dispose
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>new AccessService</code></td>
+                  <td><code>{auth,keys,permissions}</code></td>
+                  <td>can 同步展示判断，check 异步确认会话；allow/deny(reason)</td>
+                </tr>
+                <tr>
+                  <td><code>createAccessGuard</code></td>
+                  <td><code>{access,resolve,anonymous?,forbidden?} → RouteGuard</code></td>
+                  <td>在应用 router.guards 装配；重定向目标显式 public</td>
+                </tr>
+                <tr>
+                  <td><code>resolveAccessReturnTarget</code></td>
+                  <td><code>(value,{resolve,login,fallback}) → string</code></td>
+                  <td>校验站内返回目标，导航仍须经过守卫</td>
+                </tr>
+                <tr>
+                  <td><code>bindAccessRouter</code></td>
+                  <td><code>{auth,router,scope} → Cleanup</code></td>
+                  <td>账号变化时使受保护页面/待提交导航失效</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            audio 配置需要 assets；driver 同步工厂、ownsDriver 默认 true、maxEffects 默认
+            16、effectPolicy 默认 drop-new。AudioState 为
+            locked/ready/suspended/failed/disposed；unlock 返回
+            ready/blocked/failed/cancelled；播放返回 played(playback)/blocked/failed/cancelled。音量
+            0—1、master×分组，music 默认循环；未解锁不排队补播。页面/场景音频按 owner
+            释放，不等同全局音量私有化。
+          </p>
+          <p>
+            AuthProvider 提供 restore/login/logout/decode，session 初始 unknown，恢复中
+            restoring，失败 failed；有效身份为 anonymous/authenticated。logout 失败可同时
+            localCleared:true、remoteRevocation:unconfirmed，不能宣称服务器已撤销。AccessPolicy 为
+            public 或 required session + all/any；缺失/无效策略不放行。业务服务端独立授权，示例见
+            <a href="../engineering/project-structure.html">账号适配</a>。
+          </p>
+          <h2 id="错误与诊断">错误与诊断</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>类型</th>
+                  <th>主要来源</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>ComponentError / TemplateError</td>
+                  <td>组件生命周期、模板表达式和原 HTML 位置</td>
+                </tr>
+                <tr>
+                  <td>StoreError / ServiceError / ApplicationError</td>
+                  <td>Store/action/task、Provider 与应用装配</td>
+                </tr>
+                <tr>
+                  <td>RouteError</td>
+                  <td>resolve、guard、load、prepare、commit、history、cleanup</td>
+                </tr>
+                <tr>
+                  <td>AssetError / ThemeError</td>
+                  <td>资源组/键/URL、主题和回退</td>
+                </tr>
+                <tr>
+                  <td>ViewportError / ActionError / GameSceneError / CanvasHostError</td>
+                  <td>视口、输入、场景与宿主</td>
+                </tr>
+                <tr>
+                  <td>GameClockError / TweenError</td>
+                  <td>同步计时/缓动回调及任务来源</td>
+                </tr>
+                <tr>
+                  <td>AudioError / SaveError / AuthError / AccessError</td>
+                  <td>设备/播放、存档、会话、权限</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            先检查 status 判别结果，再检查错误的 module/source/operation/cause。手工 dispose
+            的清理错误仍可同步抛出；不要用 catch 吞掉所有失败后展示“成功”。编译诊断定位原
+            HTML，真实浏览器、音频、焦点和性能结果单独记录。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <span></span
+          ><a href="../api/app.html"><small>下一篇 →</small><strong>应用与游戏能力</strong></a>
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#响应式与组件">响应式与组件</a
+            ><a href="#store-service-与应用">Store、Service 与应用</a
+            ><a href="#路由与预加载">路由与预加载</a><a href="#资源与主题">资源与主题</a
+            ><a href="#视口-动作-场景与反馈">视口、动作、场景与反馈</a
+            ><a href="#音频-保存与账号">音频、保存与账号</a><a href="#错误与诊断">错误与诊断</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

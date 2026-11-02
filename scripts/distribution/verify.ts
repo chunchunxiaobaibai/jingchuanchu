@@ -104,6 +104,12 @@ try {
     }
   }
   await checkLinks(bundle);
+  await access(join(bundle, 'README.html'));
+  run(
+    process.execPath,
+    [resolve('scripts/docs/check.mjs'), '--directory', join(bundle, 'docs')],
+    root,
+  );
   const installer = join(bundle, 'install.mjs');
   const core = join(temporary, 'core-project');
   run(process.execPath, [installer, '--preset', 'core', '--target', core, '--offline'], root);

@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
 import { Canvas2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
 import { canvas2DModule } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/module';
+import { Position2D, Shape2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { Sprite2D, Transform2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/features';
 import { setText, createKeyedList } from '@xiaobaibaifqy/jingchuanchu-browser/dom';
 
 class NodeStub {
@@ -37,6 +39,63 @@ class NodeStub {
     for (const node of [...this.children]) this.removeChild(node);
   }
 }
+
+test('world drawing preserves mixed layer ties and observes direct edits on the next draw', () => {
+  const engine = new Engine();
+  const world = engine.world;
+  const calls: string[] = [];
+  let color = '';
+  const context = {
+    setTransform() {},
+    save() {},
+    restore() {},
+    transform() {},
+    scale() {},
+    set fillStyle(value: string) {
+      color = value;
+    },
+    fillRect() {
+      calls.push(color);
+    },
+    drawImage() {
+      calls.push('sprite');
+    },
+  };
+  const renderer = new Canvas2D(
+    { getContext: () => context } as unknown as HTMLCanvasElement,
+    960,
+    600,
+    1,
+  );
+  const shape = (name: string, position: boolean) => {
+    const entity = world.create();
+    world.set(entity, Shape2D, { kind: 'rect', color: name, width: 10, height: 10, layer: 1 });
+    if (position) world.set(entity, Position2D, { x: 1, y: 2 });
+    else world.set(entity, Transform2D, { x: 3, y: 4 });
+    return entity;
+  };
+  // Transform-only shapes follow positioned shapes on equal layers, then sprites.
+  const transformed = shape('transformed', false);
+  const positioned = shape('positioned', true);
+  world.set(positioned, Transform2D, { x: 5, y: 6 });
+  const sprite = world.create();
+  world.set(sprite, Sprite2D, { image: {} as CanvasImageSource, width: 10, height: 10, layer: 1 });
+  try {
+    renderer.drawWorld(world);
+    assert.deepEqual(calls, ['positioned', 'transformed', 'sprite']);
+    calls.length = 0;
+    world.require(sprite, Sprite2D).layer = -1;
+    world.require(transformed, Shape2D).layer = 2;
+    renderer.drawWorld(world);
+    assert.deepEqual(calls, ['sprite', 'positioned', 'transformed']);
+    calls.length = 0;
+    world.destroy(positioned);
+    renderer.drawWorld(world);
+    assert.deepEqual(calls, ['sprite', 'transformed']);
+  } finally {
+    engine.dispose();
+  }
+});
 
 test('unchanged HUD and list snapshots retain text nodes and keyed rows', () => {
   const hud = new NodeStub();

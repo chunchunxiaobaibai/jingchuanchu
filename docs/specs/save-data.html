@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>save-data：游戏进度和偏好 | 镜川初文档</title>
+    <meta name="description" content="模块边界、所有权、取消语义及直接验收要求。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="specs/save-data.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details open>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html" class="selected" aria-current="page">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>模块契约</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>save-data：游戏进度和偏好</h1>
+          <p>模块边界、所有权、取消语义及直接验收要求。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            公共规则见
+            <a href="../engineering/workflow.html">SPEC</a>。位置：runtime/save-data.ts；与 Store
+            通过显式 select/restore 对接，不自动序列化全部状态。
+          </p>
+
+          <h2 id="已实现的版本与数据路径">已实现的版本与数据路径</h2>
+          <p>
+            defineSave 的 version 为正安全整数；select/parse 为同步数据函数，migrate 为
+            <code>{旧版本号: oldData =&gt; 当前格式}</code>
+            的显式映射，只允许小于当前版本的声明。选出的 DTO 必须是有限 JSON 数据，不接受
+            undefined、函数、类/DOM/Engine、稀疏数组、符号字段、访问器或循环；parse
+            前复制选择结果，避免解析器修改调用方选中的对象。restore
+            由业务显式调用，服务不替业务提交状态。
+          </p>
+          <p>
+            save(definition,state) 选择/校验后写 <code>{schemaVersion,data}</code>，返回
+            saved/invalid/unavailable；只有 adapter.set 成功才返回 saved。load(definition) 返回
+            loaded(data,migratedFrom?)/empty/corrupt/incompatible/unavailable；数据深只读，迁移后仍经当前
+            parse，未知/较新版本不猜测迁移，不自动回写、删除或调用 restore。
+          </p>
+          <p>
+            <code>new SaveService({storage?,namespace?})</code> 默认适配器只在显式操作时查找
+            localStorage，构造不访问宿主存储；当前匿名实际键为
+            <code>jcc:save:anonymous:${encodeURIComponent(definition.key)}</code>。StorageAdapter 的
+            get 返回 string|null，set/remove 返回 Promise&lt;void&gt;；拒绝和非法返回值保留
+            SaveError.key/operation/cause/storageKey。此阶段没有自动节流、每 tick
+            写入或用户切换逻辑。
+          </p>
+          <h2 id="契约">契约</h2>
+          <p>
+            defineSave({key, version, select, parse, migrate?, restore}) 定义保存记录；SaveService
+            提供 save、load、reset，返回包含成功、空记录、损坏、版本不兼容、存储不可用的结果。
+          </p>
+          <p>
+            StorageAdapter 提供 get/set/remove 的 Promise 接口，默认以 localStorage
+            包装实现并捕获异常；未来可替换为其他存储。记录包含 schemaVersion 和 data，parse
+            校验外部读入的数据。migrate 只处理声明支持的旧版本，不猜测未知格式。
+          </p>
+          <p>
+            load 返回校验后的数据及结果，不自行调用 restore 改写业务状态。业务在所属 Store 的
+            runTask/commit 内调用恢复操作；用户切换或 owner 退出后不提交旧加载结果。
+          </p>
+          <p>
+            select 白名单只包括偏好和明确的游戏进度：音量、静音、解锁关卡、高分等。不得存储
+            token、密码、Engine、World、Entity 或
+            DOM。账号项目使用明确的用户命名空间；匿名偏好与用户进度分开，不能在用户切换后恢复上个账号的数据。
+          </p>
+          <p>
+            默认显式保存，在结算/设置提交时调用；可配置节流但不在每个 tick
+            自动写入。损坏或不兼容记录可以回退初始值并提示错误，不静默删除原记录；reset
+            由明确业务操作触发。保存失败不得把内存状态改成已持久化成功。
+          </p>
+          <h2 id="直接验收">直接验收</h2>
+          <p>D1：选择字段、保存加载、支持版本迁移和 schema 校验正确，未选字段不进入记录。</p>
+          <p>D2：损坏/不兼容/存储拒绝均有结果，原坏记录不被自动删除。</p>
+          <p>D3：匿名与两名用户记录隔离，退出不串档；普通页面状态不被误恢复。</p>
+          <p>测试：tests/save-data.test.ts，注入存储实现；测试不操作开发者真实浏览器存档。</p>
+          <h2 id="命名空间-坏档与显式重置">命名空间、坏档与显式重置</h2>
+          <p>
+            namespace 默认为 <code>{kind:'anonymous'}</code>；用户记录显式提供
+            <code>{kind:'user',userId}</code>，userId
+            必须非空且可编码。构造时计算不可变前缀，后续修改传入对象不会切换旧实例的账户。匿名键保持
+            <code>jcc:save:anonymous:${encodedKey}</code>，用户键为
+            <code>jcc:save:user:${encodedUserId}:${encodedKey}</code
+            >；分段编码避免分隔符碰撞，匿名与同名用户仍分离。
+          </p>
+          <p>
+            reset(definition) 只 remove 当前实例命名空间中的该记录，返回 reset/unavailable；不调用
+            restore、不改内存状态。坏 JSON、坏 envelope、parse
+            失败与不兼容版本均保留原始字符串，不自动删除、回写或恢复初值。删除失败也保留错误来源，不能报告已重置。
+          </p>
+          <p>
+            用户切换创建对应命名空间的服务实例；旧 load 仍只返回 DTO，业务必须用
+            Store.runTask/commit 代次控制恢复。测试用真实 StoreTasks.invalidate
+            模拟用户切换，验证旧读入晚到后不能提交；模块不把 load 变成隐式账户会话或自动恢复任务。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#已实现的版本与数据路径">已实现的版本与数据路径</a><a href="#契约">契约</a
+            ><a href="#直接验收">直接验收</a
+            ><a href="#命名空间-坏档与显式重置">命名空间、坏档与显式重置</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

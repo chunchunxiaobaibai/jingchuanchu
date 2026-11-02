@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>分发与版本维护 | 镜川初文档</title>
+    <meta name="description" content="当前源码的构建方式、交付流程与验证边界。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="engineering/distribution.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html" aria-current="page">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html" class="selected" aria-current="page"
+            >分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>工程与维护</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>分发与版本维护</h1>
+          <p>当前源码的构建方式、交付流程与验证边界。</p>
+        </div>
+        <article data-doc-content>
+          <h2 id="交付给其他开发者">交付给其他开发者</h2>
+          <p>
+            本文描述当前源码的本地分发归档。当前预发布版本为
+            0.5.0-rc.1；交付时记录源码快照和归档摘要。不需要 npm 账号、作用域权限或引擎仓库访问权。
+            把 <code>jingchuanchu-engine-0.5.0-rc.1.tar.gz</code> 与对应
+            <code>.sha256</code> 文件一起交给使用者。解压后打开 README.html 和
+            docs/index.html，选择安装模块或运行 starter。
+          </p>
+          <p>
+            归档含 npm tgz、每包
+            README/LICENSE/源码/ESM/声明、整套开发文档、安装器和示例。单机无需安装 ws
+            或联网游戏规则；服务端安装会正常从 npm 获取 ws。 SHA-256
+            检查确认文件与分发清单一致，不代替发行者身份的验证。
+          </p>
+          <h2 id="在引擎仓库生成分发包">在引擎仓库生成分发包</h2>
+          <div class="code-block">
+            <div class="code-label">bash</div>
+            <pre><code>npm ci
+npm run dist:release</code></pre>
+          </div>
+          <p>
+            dist:release 构建 10 个包、打包
+            tgz、检查模板并生成归档，不自动上传或启动浏览器。需要独立包消费验证时，执行 npm run
+            test:app:distribution；需要完整 Node 分发验证时，执行 npm run
+            test:distribution:node（会重新构建套件并验证安装器、独立示例/模板与实际网络往返）。不要因文档修改重复运行分发或全量检查。test:2d/test:distribution
+            会启动浏览器，仅在明确安排时执行。
+          </p>
+          <div class="code-block">
+            <div class="code-label">text</div>
+            <pre><code>dist/releases/
+  jingchuanchu-engine-0.5.0-rc.1/          可直接查看与使用的目录
+  jingchuanchu-engine-0.5.0-rc.1.tar.gz    交付归档
+  jingchuanchu-engine-0.5.0-rc.1.tar.gz.sha256</code></pre>
+          </div>
+          <p>
+            生产机器需要 Node &gt;=22.12、npm、tar，构建与测试使用仓库锁文件。归档不包含
+            node_modules、游戏房间数据、环境配置或个人浏览器资料。
+          </p>
+          <h2 id="不同安装方式">不同安装方式</h2>
+          <h3 id="windows-现有项目">Windows 现有项目</h3>
+          <p>生成套件后，在 PowerShell 执行（替换自己的项目路径）：</p>
+          <div class="code-block">
+            <div class="code-label">powershell</div>
+            <pre><code>node "E:\CodexProject\xiaobaifqy-engine\dist\releases\jingchuanchu-engine-0.5.0-rc.1\install.mjs" --preset singleplayer --target "E:\MyGame"</code></pre>
+          </div>
+          <p>
+            <code>core</code> 只安装内核；<code>singleplayer</code> 安装网页单机模块；<code
+              >client</code
+            >
+            加入网络客户端；<code>server</code> 安装服务端及其依赖。安装器直接使用本地 tgz，无需 npm
+            登录或发布权限。<code>--offline</code> 表示不访问 registry，服务端的
+            <code>ws</code> 必须已经缓存。
+          </p>
+          <p>安装后仍通过公开包名引用，例如：</p>
+          <div class="code-block">
+            <div class="code-label">typescript</div>
+            <pre><code>import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';</code></pre>
+          </div>
+          <h3 id="项目独立保存安装包">项目独立保存安装包</h3>
+          <p>
+            直接使用安装器时，项目依赖指向分发目录。要让项目迁移后仍能 <code>npm ci</code>，把选中的
+            tgz 及其内部依赖一起复制到项目
+            <code>vendor/</code>，然后在项目目录重新安装。仅内核示例：
+          </p>
+          <div class="code-block">
+            <div class="code-label">powershell</div>
+            <pre><code>npm install ./vendor/xiaobaibaifqy-jingchuanchu-ecs-0.5.0-rc.1.tgz ./vendor/xiaobaibaifqy-jingchuanchu-core-0.5.0-rc.1.tgz</code></pre>
+          </div>
+          <p>
+            网页单机还需 browser、renderer-2d、input、assets；网络客户端再加 net，服务端再加 net 和
+            net-server。一次安装全部选中包，避免内部 <code>^0.5.0-rc.1</code> 依赖去公共 registry
+            查找尚未发布的版本。保存 <code>vendor/</code>、<code>package.json</code> 和
+            <code>package-lock.json</code>；升级引擎后重新打包并安装同一版本的全部选中包。
+          </p>
+          <h3 id="方式比较">方式比较</h3>
+          <ol>
+            <li>安装器：选择 preset 或 modules，自动选择内部依赖并验证所选 tgz。</li>
+            <li>
+              原生 npm：同时提供所选包和内部依赖的 tgz；例如 core 同时需要 ecs。只给 core 会尝试从
+              registry 查找 ecs。
+            </li>
+            <li>私有或公共 registry：发布后按正常 npm 包名安装，依赖由 registry 解析。</li>
+          </ol>
+          <p>
+            源码中 <code>source</code> 条件用于本仓库开发，外部消费默认 ESM/.d.ts。不要把整个
+            workspace 的 Node 运行参数复制到消费者配置中。 每个引擎包都包含 MIT
+            LICENSE。发行归档的模板和文档也采用同一授权；保留许可证原文。
+          </p>
+          <h2 id="application-项目保存与升级">application 项目保存与升级</h2>
+          <p>
+            新项目优先用配套 tooling create --bundle：自动复制依赖闭包到
+            vendor，离开套件目录仍可重建。已有 application 项目用 add --modules 选择模块并写入
+            vendor，再 npm install 更新锁文件。--all 包含服务端包，不适合无差别加入网页项目。
+          </p>
+          <p>
+            同一套件内的已有相同字节附件可复用；同名不同字节附件拒绝覆盖。若同版本号源码快照与历史产物内容不同时，优先新建项目并迁移业务，不覆盖旧
+            vendor 后期待相同 file
+            依赖自动更新。真实版本升级需同步选中的所有内部依赖，保存来源、摘要和锁文件，并重新
+            check/build 与游戏验收。
+          </p>
+          <p>
+            如需发布 npm，由独立发布任务按
+            <a href="../engineering/distribution.html">维护手册</a> 执行；不能把 dist:release
+            当作远端发布。本地安装不要求 npm 发布权限。
+          </p>
+          <h2 id="维护版本">维护版本</h2>
+          <p>
+            root 和所有引擎包使用同一版本，内部依赖范围跟随版本；当前源码版本为 0.5.0-rc.1，作为
+            GitHub 预发布交付，npm 发布仍是独立操作。 改变 API 时更新 CHANGELOG、API
+            参考、模板与消费测试，重新生成包，不直接修改已生成的 dist。 外部项目应保存
+            lockfile；升级时更新引擎包及其内部依赖，并运行自己游戏的类型检查、逻辑测试和浏览器验证。
+          </p>
+          <p>
+            分发构建会检查版本统一、MIT 文件、公开入口和打包文件，输出清单以及源码 Git
+            revision。建立正式版本标记后可据 revision 重现此发行版。
+          </p>
+          <p>
+            依据：<a href="https://docs.npmjs.com/files/package.json/">npm package.json</a>、<a
+              href="https://opensource.org/license/mit"
+              >MIT 原文</a
+            >。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <a href="../engineering/architecture.html"
+            ><small>← 上一篇</small><strong>架构与能力地图</strong></a
+          ><a href="../engineering/browser-support.html"
+            ><small>下一篇 →</small><strong>浏览器功能接入</strong></a
+          >
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#交付给其他开发者">交付给其他开发者</a
+            ><a href="#在引擎仓库生成分发包">在引擎仓库生成分发包</a
+            ><a href="#不同安装方式">不同安装方式</a
+            ><a href="#application-项目保存与升级">application 项目保存与升级</a
+            ><a href="#维护版本">维护版本</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

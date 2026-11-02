@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Engine } from '@xiaobaibaifqy/jingchuanchu-core';
 import { Position2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { Transform2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/features';
 import {
   Collider2D,
   detectCollisions,
@@ -44,4 +45,57 @@ test('circle/AABB detection, masks, enter/stay/exit and recycled handles', () =>
   engine.advance(engine.step);
   assert.equal(events.at(-1), 'enter');
   engine.dispose();
+});
+
+test('rectangle AABBs include parent rotation, negative scale and offsets without stale bounds', () => {
+  const engine = new Engine(),
+    world = engine.world;
+  const parent = world.create(),
+    rectangle = world.create(),
+    point = world.create();
+  world.set(parent, Transform2D, { x: 100, y: 50, rotation: Math.PI / 2, scaleX: 2, scaleY: 3 });
+  world.set(rectangle, Transform2D, { x: 5, y: 7, scaleX: -1, scaleY: 2, parent });
+  world.set(rectangle, Collider2D, { kind: 'rect', width: 4, height: 6, offsetX: 2, offsetY: -1 });
+  world.set(point, Position2D, { x: 60, y: 52 });
+  world.set(point, Collider2D, { kind: 'circle', radius: 0 });
+  try {
+    assert.deepEqual(detectCollisions(world), [{ a: rectangle, b: point }]);
+    world.require(rectangle, Collider2D).offsetX = 12;
+    assert.deepEqual(detectCollisions(world), []);
+    world.require(rectangle, Collider2D).offsetX = 2;
+    world.require(parent, Transform2D).rotation = 0;
+    assert.deepEqual(detectCollisions(world), []);
+    world.require(parent, Transform2D).rotation = Math.PI / 2;
+    assert.deepEqual(detectCollisions(world), [{ a: rectangle, b: point }]);
+    world.destroy(parent);
+    assert.throws(() => detectCollisions(world), /Stale transform parent/);
+  } finally {
+    engine.dispose();
+  }
+});
+
+test('zero-size rectangles keep inclusive boundaries and invalid dimensions still reject', () => {
+  const engine = new Engine(),
+    world = engine.world;
+  const a = world.create(),
+    b = world.create();
+  world.set(a, Position2D, { x: 10, y: 20 });
+  world.set(a, Collider2D, { kind: 'rect', width: 0, height: 0 });
+  world.set(b, Position2D, { x: 10, y: 20 });
+  world.set(b, Collider2D, { kind: 'circle', radius: 0 });
+  try {
+    assert.deepEqual(detectCollisions(world), [{ a, b }]);
+    const collider = world.require(a, Collider2D);
+    assert.equal(collider.kind, 'rect');
+    if (collider.kind !== 'rect') throw new Error('Expected rectangle');
+    for (const bad of [-1, NaN, Infinity]) {
+      collider.width = bad;
+      assert.throws(() => detectCollisions(world), /Invalid collider dimensions/);
+    }
+    collider.width = 0;
+    collider.height = -1;
+    assert.throws(() => detectCollisions(world), /Invalid collider dimensions/);
+  } finally {
+    engine.dispose();
+  }
 });

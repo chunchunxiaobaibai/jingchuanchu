@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>reference-game：完整轻量 2D 游戏与交付 | 镜川初文档</title>
+    <meta name="description" content="模块边界、所有权、取消语义及直接验收要求。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="specs/reference-game.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details open>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html" class="selected" aria-current="page"
+            >完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>模块契约</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>reference-game：完整轻量 2D 游戏与交付</h1>
+          <p>模块边界、所有权、取消语义及直接验收要求。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            公共规则见 <a href="../engineering/workflow.html">SPEC</a>。交付位置为新的默认
+            templates/browser，而不是在引擎包里加入玩法。示例用于证明公共能力协作，不恢复归档游戏，也不迁移外部
+            my-game。
+          </p>
+
+          <h2 id="最小游戏">最小游戏</h2>
+          <p>
+            一个固定逻辑画布内的收集小游戏：方向键/虚拟方向按钮移动，点按设置目标，碰到道具增加分数；倒计时结束进入结算。复用现有精灵、帧动画、矩形/圆碰撞，反馈使用基本缓动和音效。无需复杂物理、骨骼或地图编辑器。
+          </p>
+          <p>
+            页面为首页、关卡选择、游玩、设置与结算。游戏页使用 GameCanvas 和独立
+            HUD；暂停面板留在游戏页内，设置页离开游戏是否保留进度由共享 GameStore
+            显式决定，不能靠页面未销毁泄漏活动来保留。
+          </p>
+          <p>
+            提供两套小型开发者主题，至少替换暂停/设置按钮和一种 Canvas
+            道具图标。资源由仓库内明确许可的最小素材提供，不要求下载外部主题服务。普通图片与图集替换都走同一语义键；音频默认受静音/音量控制并处理未解锁状态。
+          </p>
+          <p>
+            保存在白名单内的高分、关卡进度、音量/静音等偏好，不保存活动 Entity
+            或登录凭据。默认单机项目无登录入口；认证/权限另有最小带后端适配的测试示例，不把完整账号产品混入参考游戏。
+          </p>
+          <h2 id="实施验收矩阵">实施验收矩阵</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>场景</th>
+                  <th>必须观察到的结果</th>
+                  <th>自动/人工边界</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>创建与构建</td>
+                  <td>不编辑引擎源码即可生成、check、静态构建</td>
+                  <td>独立项目自动验证</td>
+                </tr>
+                <tr>
+                  <td>表单与组件</td>
+                  <td>昵称草稿、预览、按钮可用状态联动，model 可复用</td>
+                  <td>Node DOM；输入法体验人工</td>
+                </tr>
+                <tr>
+                  <td>导航与预加载</td>
+                  <td>代码按页拆分，提前加载不启动游戏，取消不覆盖新页</td>
+                  <td>驱动/静态产物自动；浏览器历史人工</td>
+                </tr>
+                <tr>
+                  <td>游玩/暂停/重开</td>
+                  <td>单一循环、暂停保留 HUD，离页活动释放</td>
+                  <td>Engine/驱动自动；实际手感人工</td>
+                </tr>
+                <tr>
+                  <td>主题</td>
+                  <td>配置选择替换 DOM 和 Canvas 图标，碰撞/尺寸契约不变</td>
+                  <td>解析/逻辑自动；真实画面人工</td>
+                </tr>
+                <tr>
+                  <td>资源与音频</td>
+                  <td>进度/失败可见、解锁后播放、静音偏好保留</td>
+                  <td>注入 Driver 自动；设备播放人工</td>
+                </tr>
+                <tr>
+                  <td>保存恢复</td>
+                  <td>合法数据恢复、坏档不静默删除、页面私有状态不串</td>
+                  <td>存储适配自动</td>
+                </tr>
+                <tr>
+                  <td>交付</td>
+                  <td>vendor 相对依赖、公开入口类型/执行、无意外服务端依赖</td>
+                  <td>tgz 外部消费自动</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Node DOM
+            和静态构建不算通过真实浏览器游玩。人工未执行时在验证记录中保留“未验证”；不把任务列表全部勾选为发布就绪。只有相关授权到位才进行对应浏览器操作。
+          </p>
+          <h2 id="开发体验记录">开发体验记录</h2>
+          <p>
+            对“新增页面、复用组件、替换一套图标、加一个动作、保存一个偏好”各记录修改文件、手工同步/监听及诊断位置。应能沿业务目录完成，不依赖复制
+            AppState、改框架内部、拼接 chunk 地址或重复创建清理逻辑。
+          </p>
+          <p>
+            性能只对该参考游戏记录构建体积、选定设备/场景、实体规模和帧/内存数据；没有测量前不写更快、更轻或支持任意规模。GPU/复杂物理需求由真实测量另开任务，不挡当前小型
+            2D 闭环。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#最小游戏">最小游戏</a><a href="#实施验收矩阵">实施验收矩阵</a
+            ><a href="#开发体验记录">开发体验记录</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

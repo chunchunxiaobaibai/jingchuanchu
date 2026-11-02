@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>page-router：导航、懒加载和预加载 | 镜川初文档</title>
+    <meta name="description" content="模块边界、所有权、取消语义及直接验收要求。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="specs/page-router.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a><a href="../api/index.html">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details open>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html" class="selected" aria-current="page"
+            >导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>模块契约</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">ENGINEERING HANDBOOK</p>
+          <h1>page-router：导航、懒加载和预加载</h1>
+          <p>模块边界、所有权、取消语义及直接验收要求。</p>
+        </div>
+        <article data-doc-content>
+          <p>
+            公共规则见
+            <a href="../engineering/workflow.html">SPEC</a
+            >。位置：runtime/router/{types,matcher,loader,router,history}.ts。router
+            接受通用守卫，不导入具体 auth 模块。
+          </p>
+
+          <h2 id="公共形状">公共形状</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>const routes = defineRoutes([
+  { name: 'home', path: '/', page: HomePage },
+  {
+    name: 'play',
+    path: '/play/:levelId',
+    loadPage: () =&gt; import('../pages/play/play-page.js').then((m) =&gt; m.PlayPage),
+    preload: 'intent',
+    children: [],
+    prepare: async (context) =&gt; ({ levelId: context.params.levelId }),
+  },
+]);
+await context.router.push({ name: 'play', params: { levelId: 'one' } });
+await context.router.preload({ name: 'play', params: { levelId: 'one' } });</code></pre>
+          </div>
+          <p>
+            路由定义支持
+            name、path、page/loadPage（二选一）、children、redirect、guards、beforeLeave、prepare、preload、meta。name
+            应唯一；相同匹配模式冲突要诊断。支持静态段、:param、末尾
+            *catchAll；静态优先，参数安全解码，无匹配走显式 fallback。根 path 必须以 /
+            开头，children 使用相对 path，空子 path
+            是默认页；末尾单斜杠归一化。静态匹配按段优先，嵌套默认页优先于同地址的父布局。首阶段不实现任意正则路由语法。
+          </p>
+          <p>
+            RouteTarget 是合法应用内 path 或带 name/params/query/hash 的目标。配置为 const
+            时名称/所需参数可类型推导，动态路径仍运行校验；拒绝外部 scheme。Router 提供
+            push、replace、back、preload 及只读 current/pending/error；导航返回
+            committed/cancelled/denied/redirected/failed 的结构化结果。
+          </p>
+          <p>
+            createRouteMatcher.match(path) 返回只读 RouteLocation 或 null；resolve(target)
+            对未知名称、缺少/多余参数、无匹配和非法路径抛
+            RouteError。命名目标不能绕过静态优先级，生成地址被其他非后代记录接管时明确报错。显式末尾
+            catchAll 路由可作为 404，未配置时不自动生成空白页。query
+            重复键返回只读数组，null/undefined 目标查询值省略；hash 含 # 前缀，params
+            为解码后的字符串。
+          </p>
+          <p>
+            RouteLocation 的 matched 仅包含 name/path/meta/redirect 展示元数据，不携带
+            page/loadPage/守卫函数，可安全进入响应式快照。导航运行时的原始记录由 matcher 内部保存。
+          </p>
+          <p>
+            root/layout 用
+            <code>&lt;router-outlet&gt;</code> 承载子页面，嵌套路由保留未改变的父布局；页面通过
+            <code>context.route()</code> 读取只读位置（含参数/查询），通过
+            <code>context.router</code> 导航。根组件在首次提交前的位置为
+            null，业务需显式处理；候选页面从 setup
+            起读取目标位置，其子组件继承同一页面读取器。普通组件运行时只通过 owner
+            的上下文槽解析，Router 类型使用 type-only
+            引用，不运行时导入导航模块。未装配路由的独立组件访问这两个上下文会明确报缺失，不创建隐式全局
+            Router。prepare 的返回值作为目标页面输入，需经输入定义验证；不赋值给别的页面实例。
+          </p>
+          <p>
+            createRouter({routes,history,renderer,onError?}) 显式注入 HistoryDriver 和
+            RouteRenderer，返回 resolve/push/replace/back、只读 current/pending/error 与
+            dispose；成功创建后 Router 拥有 driver 的退出。renderer.create
+            接收目标、来源、解析页面/输入、可复用布局深度和取消信号，返回候选 commit/dispose。commit
+            同步切换视图并返回同步 rollback 函数；若 commit 自身抛错，renderer
+            负责保留原视图。失败导航在返回 failed
+            前回收已构建的候选；取消则立即返回，晚到候选到达时再回收。
+          </p>
+          <p>
+            当前内部
+            <code>dom-renderer.ts</code> 使用真实组件实例构建脱离活动出口的候选树，按嵌套页面 owner
+            回收；缺失/多个子出口、缺少必需输入和未知输入会拒绝候选。切换失败或 URL 写入失败保留原
+            DOM
+            节点及监听；旧页清理失败仍保留已提交的新页。准备输入的运行时验证沿用组件声明的字段/必填检查，不据
+            TypeScript 泛型声称已校验任意数据类型。
+          </p>
+          <p>
+            <code>RouterOutlet</code> 已从 application 子入口导出，根组件/页面在
+            <code>components: [RouterOutlet]</code> 中显式注册后使用
+            <code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code
+            >；未声明的自定义标签会由模板编译器拒绝。组件通过显式 scope
+            查找自身挂载位置，无全局当前组件。出口登记到最近的页面
+            owner，无页面祖先时登记到应用根组件；不同页面、应用之间隔离，嵌套页面自己的出口不参与父布局出口选择。一个边界要求唯一已挂载的出口，未注册的同名元素不构成有效子出口。页面实例由实际出口
+            owner 持有，出口销毁会回收所属页面并注销登记。
+          </p>
+          <p>
+            DOM renderer 保持内部入口，由 defineApplication/mountApplication
+            装配：根出口就绪后执行初始导航，子出口使用上述登记解析。应用 routes/router
+            配置、驱动工厂和启动失败语义见
+            application-services。父布局按协调器给定深度、路由记录与页面定义复用，叶页始终新建。保留布局的新
+            prepare
+            输入在候选阶段验证，提交时更新；删除此前提供的可选字段时恢复该字段默认值，缺少必填字段/未知字段则拒绝候选。DOM
+            或 URL
+            写入失败恢复原输入快照（包括对象引用），不通知一次失败的输入变更。输入钩子与模板仍按正常微任务队列刷新，不在同步
+            DOM/URL 事务中运行用户钩子。
+          </p>
+          <p>
+            当前页面 context 由内部装配助手绑定：应用 owner 提供 Router 与根位置读取器，每个 DOM
+            候选创建专属页面上下文
+            owner，页面与子组件继承该目标读取器。保留布局在同步提交中更新位置，失败后恢复原位置快照；依赖该读取器的
+            effect 可能重读相同原值，不承诺失败后 effect 调用次数为零。退出页面会同时释放上下文
+            owner。没有隐式全局回退，跨应用不共享
+            Router。应用公开入口已使用这些内部助手，业务无需手工创建上下文 owner 或 DOM
+            renderer；新默认脚手架模板在 之后切换，自动预加载策略/拆块验证仍在 实施。
+          </p>
+          <h2 id="导航提交">导航提交</h2>
+          <p>
+            流程：解析目标 → 离开确认 → 守卫 → 模块加载 → 页面准备 → 候选创建 → 原子切换活动页与
+            URL。GuardResult 形状为 <code>{status:'allow'}</code>、<code
+              >{status:'deny',reason?}</code
+            >
+            或 <code>{status:'redirect',target}</code>；guards 是函数数组，beforeLeave
+            是单个函数，均可异步返回结果，禁止先导航后跳回来。首个重定向结束当前守卫链，检测重定向循环。
+          </p>
+          <p>
+            导航结果为 committed/redirected（已提交到最终目标）、cancelled、denied 或 failed。error
+            信号仅保存纯数据诊断，failed 结果与 onError 保留原始 RouteError/cause。静态 redirect
+            在页面策略前解析；守卫 redirect
+            结束当前链并针对新目标重跑策略，循环或超过有限跳数报失败。
+          </p>
+          <p>
+            新导航使旧导航失效，立即返回
+            cancelled，并取消准备信号；晚到的候选仍会释放。目标准备失败保留原页；页面创建后旧页清理失败报告错误但新页保持已提交，不假装旧页仍可恢复。相同模块不同参数重新运行策略和准备；是否复用页面实例在路由上显式设置，默认不缓存实例。
+          </p>
+          <p>
+            默认 hash 模式；history 模式要求宿主有页面回退配置。注入 HistoryDriver 负责
+            URL/前进后退，用户历史导航也经过相同守卫；拒绝 pop
+            导航需恢复已提交的地址/位置。历史恢复与 URL 提交串行协调，防止失效的 pop
+            恢复覆盖后来的导航；不要拿 Node 模拟证明所有浏览器历史行为已验收。
+          </p>
+          <p>
+            HistoryDriver 提供 read/push/replace、异步 go(delta)/restore(entry)、listen 和
+            dispose；Entry 含 fullPath/position。push/replace/restore 不发送 pop 通知，go
+            发送；越过已知内存历史边界时返回 null。恢复只允许仍存在且地址/位置一致的
+            Entry，不重新导航，因此可由
+            在拒绝历史导航时恢复。内存驱动仅证明协议，不证明真实浏览器历史表现。
+          </p>
+          <p>
+            浏览器适配入口为
+            <code>createBrowserHistoryDriver({window?,mode?,base?,onError?})</code>，默认
+            hash；history 的 base 仅为 pathname，仍要求服务器回退配置。适配器合并
+            popstate/hashchange 重复事件，保存自有位置标记与已知历史跨度，restore 不对外再发
+            pop；退出移除监听、拒绝未完成遍历并释放窗口占用。
+          </p>
+          <p>
+            一个 window 的主 URL 同时由一个浏览器驱动拥有；多应用可注入独立内存驱动或使用不同
+            window。普通对象的既有 history.state 字段保留，其他 payload
+            保存在驱动命名空间内。未标记条目、其他代码直接改写 URL/state
+            或越出应用宿主的历史不猜测位置，明确报告错误，需重建驱动边界；这些跨边界行为仍需
+            人工确认，不能据此宣称可恢复任意浏览器历史。
+          </p>
+          <h2 id="加载策略">加载策略</h2>
+          <p>
+            路由链接的基础接口为 <code>Router.href(target)</code>：先按 resolve 校验目标，再用可选的
+            <code>HistoryDriver.createHref(fullPath)</code>
+            生成地址；未提供时返回应用内完整路径。浏览器驱动生成 hash 地址或包含 history base
+            的地址，生成链接不改变历史。<code>RouteLink</code> 通过 components 显式注册，提供必填
+            to、replace（默认 false）、target（默认 _self）、download（默认 null）输入，默认 slot
+            承载内容（沿用显式
+            <code>&lt;template slot="default"&gt;</code> 投影语法）。普通未被阻止的左键点击由 Router
+            导航，修饰键、非左键、新窗口与下载保留原生行为；navigated
+            输出结构化结果（若链接已销毁则不晚发事件），精确当前地址设置
+            aria-current="page"。RouteLink 已接入 intent，当前也可显式调用 Router.preload；有限 idle
+            调度通过 application 的 router.idle 配置，目标/调度器契约见 application-services。
+          </p>
+          <p>
+            preload 为 none（默认）、intent 或 idle。路由链接用 route-link 组件/指令解析目标，intent
+            由聚焦/指针意图触发；idle 仅处理配置的有限目标，业务也可调用
+            preload。懒加载与预加载共享进行中的 Promise、成功模块缓存；失败不永久缓存失败 Promise。
+          </p>
+          <p>
+            自动调用使用 <code>preload(target, {trigger:'intent'|'idle'})</code>，未传 trigger
+            为显式手动调用。自动策略只接受目标叶记录标记的对应 preload 值；任意父/子记录带进入
+            guards，或 meta.access 存在且不是 'public'，整条匹配链返回 skipped(protected)，子 public
+            不能解除父限制。不执行守卫来判断是否可以预取。标记不匹配返回
+            skipped(policy)，重定向仍跳过。RouteLink 的 pointerenter/focus 调用
+            intent，下载/新窗口目标不自动预取；销毁会移除监听。自动失败通过结构化结果返回，不覆盖导航错误；显式
+            preload 可以加载模块，真实导航仍重验所有策略。idle
+            队列由应用在初始导航后启动，目标去重、逐个调度，退出取消排队回调；已开始 import
+            不强制中断。
+          </p>
+          <p>
+            preload 不改变 URL、不调用 prepare、不创建 Store/页面/Canvas
+            或启动业务网络活动（模块下载本身除外）。import
+            会求值模块顶层，因此定义模块顶层禁止自启动。动态 import
+            不能保证强制中断，但失效导航不可提交其结果；模块缓存与页面缓存、用户数据和图片缓存分别处理。
+          </p>
+          <p>
+            显式 <code>router.preload(target)</code> 返回 <code>loaded</code>（含
+            to）、<code>skipped</code>（reason: redirect）、<code>cancelled</code> 或
+            <code>failed</code>（含 RouteError）。先解析目标，不运行守卫/prepare/页面；含 redirect
+            的匹配链整条跳过，需对最终目标显式预加载。成功模块和进行中 Promise 按 loader
+            函数身份在单个 Router 内共享，失败移出缓存，参数变化仍重跑导航策略/prepare
+            并创建叶页；不缓存页面实例。预加载不会改变 current/pending/error
+            或写历史，错误由结果返回。Router.dispose 立即取消尚未返回的 preload
+            等待并清空模块缓存，无法强制停止底层
+            import，但晚到结果不可提交，也不重新写回已关闭缓存。
+          </p>
+          <p>
+            受保护目标默认不自动预取；实际导航始终重验策略。代码可被公开下载不构成授权。根布局可展示加载/重试反馈；旧部署
+            chunk 失败由明确的失败结果提示重试/刷新，不自动无限刷新。
+          </p>
+          <h2 id="直接验收">直接验收</h2>
+          <p>
+            P1：参数、查询、嵌套出口、重定向、404、push/replace/back
+            和拒绝历史导航可在注入驱动下验证。
+          </p>
+          <p>P2：懒加载只调用一次成功 loader；preload 与导航去重，不执行页面准备/游戏活动。</p>
+          <p>P3：守卫拒绝、快速切换取消、失败回滚、旧页清理失败后的提交状态正确。</p>
+          <p>
+            P4：Vite 静态构建产物确实将游戏页分块；入口没有静态导入所有页面。已用
+            tests/router-bundle.test.ts 的 app/页面三文件 fixture 构建：2 个 JS
+            chunk，游戏页为独立动态入口，不在入口静态依赖闭包中；Node 导入入口不求值游戏页，调用
+            loader 后才求值，重复导入不重复求值，页面 HTML/Less 的作用域元数据仍在。该 fixture
+            将引擎 application 子入口标为外部依赖并在 source 条件下消费，不代表 独立包打包或
+            默认项目完整构建已完成。
+          </p>
+          <p>
+            测试：tests/router.test.ts、tests/router-loading.test.ts，构建拆块用 tooling
+            fixture。手工浏览器历史/首屏网络观察在授权后单独验收。
+          </p>
+          <h2 id="显式路由失效">显式路由失效</h2>
+          <p>
+            Router.invalidate() 是通用同步失效操作，取消当前等待、将 current
+            清空并释放已提交页面候选；不执行 beforeLeave，不允许离开守卫保留已失效的页面。保留
+            Router/HistoryDriver/已加载模块，URL 不自动改变，随后 push/replace 仍走全部守卫。旧
+            load/prepare/candidate 晚到不提交，清理失败带 RouteError
+            来源且状态保持失效。应用可选认证模块用作用域绑定调用此操作，Router 不导入
+            AuthService。退出后调用幂等无操作。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#公共形状">公共形状</a><a href="#导航提交">导航提交</a
+            ><a href="#加载策略">加载策略</a><a href="#直接验收">直接验收</a
+            ><a href="#显式路由失效">显式路由失效</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

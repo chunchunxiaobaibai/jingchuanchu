@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>响应式与模板语法 | 镜川初文档</title>
+    <meta name="description" content="signal、computed、effect 与原生 HTML 模板的日常用法。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="guide/reactivity.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html" aria-current="page">指南</a
+        ><a href="../api/index.html">API</a><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html" class="selected" aria-current="page"
+            >响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>开发指南</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">DEVELOPER GUIDE</p>
+          <h1>响应式与模板语法</h1>
+          <p>signal、computed、effect 与原生 HTML 模板的日常用法。</p>
+        </div>
+        <article data-doc-content>
+          <h2 id="signals">可写状态与派生值</h2>
+          <pre><code>import { signal, computed } from '@xiaobaibaifqy/jingchuanchu-app/application';
+
+const name = signal('玩家');
+const score = signal(0);
+const greeting = computed(() =&gt; `你好，${name()}！得分 ${score()}`);
+
+name.set('小白');
+score.update((value) =&gt; value + 10);</code></pre>
+          <p>
+            TS 中用函数调用读取值。signal 返回深只读快照，通过 set 或 update 替换；computed
+            同步推导、惰性缓存，并追踪当前实际依赖，不在计算中写入状态或等待异步结果。
+          </p>
+          <h2 id="effects">副作用与清理</h2>
+          <pre><code>effect((onCleanup) =&gt; {
+  const value = score();
+  const subscription = externalService.observe(value);
+  onCleanup(() =&gt; subscription.unsubscribe());
+}, context.scope);</code></pre>
+          <p>
+            effect 调度到微任务，清理归 Scope。回调必须同步，重跑前执行上次清理；异步任务通过 Store
+            的 runTask 或显式取消机制管理。batch 合并通知且不回滚状态，nextTick 只等待视图批次。
+          </p>
+          <h2 id="bindings">插值、属性与事件</h2>
+          <pre><code>&lt;h1&gt;{{ greeting }}&lt;/h1&gt;
+&lt;button type="button" :disabled="!canSubmit" @click="submit()"&gt;提交&lt;/button&gt;
+&lt;input model:value="draft" /&gt;
+&lt;input type="checkbox" model:checked="enabled" /&gt;</code></pre>
+          <p>
+            模板自动读取 signal/computed。只允许访问 setup
+            暴露的成员以及结构模板的局部值，事件负载为
+            <code>$event</code>。计算、类型转换、数组处理等放在 TS 中暴露操作或派生值。
+          </p>
+          <h2 id="structures">条件、列表与插槽</h2>
+          <div class="code-block">
+            <div class="code-label">HTML</div>
+            <pre><code>&lt;template when="valid"&gt;
+  &lt;span&gt;可以提交&lt;/span&gt;
+&lt;/template&gt;
+&lt;template each="item of items" key="item.id"&gt;
+  &lt;span&gt;{{ item.name }}&lt;/span&gt;
+&lt;/template&gt;
+&lt;slot name="actions"&gt;&lt;span&gt;默认操作&lt;/span&gt;&lt;/slot&gt;</code></pre>
+          </div>
+          <p>
+            结构模板使用 <code>when</code>、<code>each</code> 与稳定
+            key。组件投影使用显式命名插槽。完整语法及作用域约束见<a
+              href="../specs/component-model.html"
+              >组件模板契约</a
+            >；组合表单与页面示例见<a href="components.html">组件、表单与页面</a>。
+          </p>
+          <p>
+            子组件在父定义的 components 中注册；HTML 使用 kebab-case
+            属性名。输入为只读数据，输出为类型化事件，model 对应可写目标。只读 Store.state 和
+            computed 不可直接作为双向目标，需本地草稿或 writableModel 适配。
+          </p>
+          <h2 id="data">普通数据与能力引用</h2>
+          <p>
+            signal、普通输入和场景 props 保存普通数据。函数、DOM、图像、驱动和 Store
+            实例不能放入快照状态。GameCanvas 的 scene/options 为显式引用输入；页面通过普通函数返回
+            scene 定义并保留稳定 options。
+          </p>
+          <p>
+            复杂表单数字和多选转换采用 writableModel，数字无效草稿通过 validation
+            读取。程序写回不会合成用户事件。详情见<a href="../api/application-contracts.html"
+              >应用 API 使用契约</a
+            >。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <a href="../guide/build-from-source.html"
+            ><small>← 上一篇</small><strong>从源码到独立游戏</strong></a
+          ><a href="../guide/components.html"
+            ><small>下一篇 →</small><strong>组件、表单与页面</strong></a
+          >
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#signals">可写状态与派生值</a><a href="#effects">副作用与清理</a
+            ><a href="#bindings">插值、属性与事件</a><a href="#structures">条件、列表与插槽</a
+            ><a href="#data">普通数据与能力引用</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

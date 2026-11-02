@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>ECS 与游戏循环 | 镜川初文档</title>
+    <meta name="description" content="从可运行代码开始，理解模块边界与完整接入流程。" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="guide/ecs.html" class="article-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html" aria-current="page">指南</a
+        ><a href="../api/index.html">API</a><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="../index.html">为网页 2D 游戏而生。</a
+          ><a href="../guide/quick-start.html">快速上手</a
+          ><a href="../guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="../guide/reactivity.html">响应式与模板语法</a
+          ><a href="../guide/components.html">组件、表单与页面</a
+          ><a href="../guide/services.html">资源、音频与保存</a
+          ><a href="../guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="../guide/gameplay.html">场景与游戏循环</a
+          ><a href="../guide/ecs.html" class="selected" aria-current="page">ECS 与游戏循环</a
+          ><a href="../guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="../guide/engine-modules.html">自定义模块</a
+          ><a href="../guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="../engineering/cli.html">CLI 与项目配置</a
+          ><a href="../engineering/project-structure.html">目录与文件归属</a
+          ><a href="../engineering/architecture.html">架构与能力地图</a
+          ><a href="../engineering/distribution.html">分发与版本维护</a
+          ><a href="../engineering/browser-support.html">浏览器功能接入</a
+          ><a href="../guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="../engineering/contributing.html">参与开发</a
+          ><a href="../engineering/validation.html">检查与验收边界</a
+          ><a href="../engineering/workflow.html">规格与执行流程</a
+          ><a href="../engineering/changelog.html">当前版本</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="../index.html">文档</a><span>/</span><span>开发指南</span>
+        </div>
+        <div class="page-heading">
+          <p class="eyebrow">DEVELOPER GUIDE</p>
+          <h1>ECS 与游戏循环</h1>
+          <p>从可运行代码开始，理解模块边界与完整接入流程。</p>
+        </div>
+        <article data-doc-content>
+          <h2 id="实体是引用-组件是数据">实体是引用，组件是数据</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>import { World, component } from '@xiaobaibaifqy/jingchuanchu-ecs';
+
+const Position = component&lt;{ x: number; y: number }&gt;('Position');
+const Velocity = component&lt;{ x: number; y: number }&gt;('Velocity');
+const world = new World();
+const player = world.create();
+world.set(player, Position, { x: 0, y: 0 });
+world.set(player, Velocity, { x: 120, y: 0 });</code></pre>
+          </div>
+          <p>
+            Entity 含 worldId、index、generation。删除后复用 index 会改变 generation；旧引用或其他
+            World 的引用不能访问新实体。 Entity 不适合 JSON 序列化或作为网络 ID。联网时另建字符串 ID
+            到 Entity 的映射。
+          </p>
+          <p>
+            Component token 按 Symbol 身份区分，同名 token
+            也不同。每种组件只定义一次并导出；系统与生成器共同导入它。
+            <code>set</code> 添加或替换数据，<code>require</code>
+            返回存储中的引用，可以直接修改数值；缺少组件时抛错。<code>get</code> 缺少时返回
+            undefined。
+          </p>
+          <h2 id="查询与结构变更">查询与结构变更</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>for (const entity of world.query(Position, Velocity)) {
+  const position = world.require(entity, Position);
+  const velocity = world.require(entity, Velocity);
+  position.x += velocity.x / 30;
+}</code></pre>
+          </div>
+          <p>
+            查询取组件交集。<code>query()</code> 不给 token
+            时遍历所有存活实体；迭代开始时捕获候选实体引用。
+            组件使用稀疏集，移除采用末尾交换，结果顺序不是创建顺序或稳定排名。需要排序时由游戏明确排序。
+          </p>
+          <p>建议把创建、删除及组件组合变更排到逻辑步末尾：</p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>world.defer((current) =&gt; current.destroy(player));</code></pre>
+          </div>
+          <p>
+            Engine 每个固定逻辑步后调用 <code>flush()</code>；单独使用 World 时由调用者调用。flush
+            中再次 defer 的命令留到下一次 flush，不无限递归执行。
+          </p>
+          <h2 id="世界资源">世界资源</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>import { resource } from '@xiaobaibaifqy/jingchuanchu-ecs';
+
+const Match = resource&lt;{ elapsed: number }&gt;('Match');
+world.setResource(Match, { elapsed: 0 });
+world.getResource(Match).elapsed += 1;</code></pre>
+          </div>
+          <p>
+            资源适合配置、当前关卡、共享服务和房间阶段，不为每位玩家各复制一份。缺少资源时
+            getResource 抛错。 普通游戏状态可直接 setResource；模块提供的服务使用
+            <code>engine.provide(token, service, scope)</code>，以获得重复注册检查和回滚清理。
+          </p>
+          <h2 id="系统与时间">系统与时间</h2>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>engine.addSystem({
+  id: 'movement',
+  phase: 'fixed',
+  order: 10,
+  update({ world, delta }) {
+    for (const entity of world.query(Position, Velocity)) {
+      const position = world.require(entity, Position);
+      position.x += world.require(entity, Velocity).x * delta;
+    }
+  },
+});</code></pre>
+          </div>
+          <p>
+            <code>delta</code> 单位为秒。默认 tickRate=30、maxSteps=5；order 小的先执行，同 order
+            按注册顺序；系统 ID 在同一个引擎中必须唯一。
+          </p>
+          <p>一次 advance 的顺序：</p>
+          <div class="code-block">
+            <div class="code-label">text</div>
+            <pre><code>累加秒数（限制本次补算量）
+  → fixed 系统 → World.flush → 可能继续下一固定步
+  → render 系统（一次）</code></pre>
+          </div>
+          <p>
+            fixed 的 delta 是固定 step；render 的 delta 是本次传入秒数。alpha
+            是累积剩余时间/step，可供自定义插值，内置 Canvas 绘制不自动插值。
+            大间隔只补算有限步数，超额时间丢弃；房间截止时间等应按权威时钟计算，而不是依赖客户端补帧数量。
+            timings 是最近一次 advance 中各系统执行记录，单位毫秒；多个固定步会留下多个同 ID 记录。
+          </p>
+          <h2 id="驱动循环">驱动循环</h2>
+          <p>浏览器安装 browserModule 后显式 start。无界面环境手动推进：</p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>engine.start();
+engine.advance(engine.step);
+engine.advance(engine.step);
+engine.dispose();</code></pre>
+          </div>
+          <p>
+            完整无界面例子见分发 <code>examples/headless.ts</code>，它不导入渲染、输入或网络。
+            不要同时使用 browserModule 和自己的定时器推进同一引擎，否则会重复更新。 stop
+            不清空世界、分数、系统或 tick，只停止运行并清空时间累积；重开一局的状态重置由游戏实现。
+          </p>
+          <p>
+            系统 update 抛错会停止引擎并抛出包含 cause 的错误。手动调用 advance
+            时，调用方还应处理延迟命令中的异常；浏览器驱动会捕获推进异常、停止并通知 onError。
+          </p>
+        </article>
+        <nav class="page-turn" aria-label="相邻章节">
+          <a href="../guide/gameplay.html"><small>← 上一篇</small><strong>场景与游戏循环</strong></a
+          ><a href="../guide/rendering.html"
+            ><small>下一篇 →</small><strong>渲染、碰撞与引擎能力</strong></a
+          >
+        </nav>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+      <aside class="outline" aria-label="本页目录">
+        <div class="outline-inner">
+          <h2>本页目录</h2>
+          <nav>
+            <a href="#实体是引用-组件是数据">实体是引用，组件是数据</a
+            ><a href="#查询与结构变更">查询与结构变更</a><a href="#世界资源">世界资源</a
+            ><a href="#系统与时间">系统与时间</a><a href="#驱动循环">驱动循环</a>
+          </nav>
+          <div class="outline-note">
+            <span>BUILD SOMETHING</span>
+            <p>让每一份灵感<br />都有清晰的起点。</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

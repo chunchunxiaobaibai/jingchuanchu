@@ -1,0 +1,1904 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>API 参考 | 镜川初文档</title>
+    <meta
+      name="description"
+      content="按包与能力查阅当前源码的公开导出。输入关键词即可过滤函数、类型和类。"
+    />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/docs.css" />
+    <script src="../assets/theme.js"></script>
+    <script src="../assets/search-index.js" defer></script>
+    <script src="../assets/docs.js" defer></script>
+  </head>
+  <body data-base="../" data-page="api/index.html" class="api-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="../index.html"
+        ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="../guide/quick-start.html">指南</a
+        ><a href="../api/index.html" aria-current="page">API</a
+        ><a href="../engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>API 参考</h2>
+          <a href="../api/index.html" class="selected" aria-current="page">API 参考</a
+          ><a href="../api/application-contracts.html">应用 API 使用契约</a>
+        </section>
+        <section>
+          <h2>按包查阅</h2>
+          <a href="../api/app.html">应用与游戏能力</a><a href="../api/core.html">引擎与作用域</a
+          ><a href="../api/ecs.html">实体与组件</a><a href="../api/browser.html">浏览器运行</a
+          ><a href="../api/renderer-2d.html">2D 渲染</a><a href="../api/input.html">键盘与指针</a
+          ><a href="../api/assets.html">资源缓存</a><a href="../api/net.html">网络客户端</a
+          ><a href="../api/net-server.html">网络服务端</a
+          ><a href="../api/tooling.html">CLI 与构建工具</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="../specs/access-policy.html">权限策略与路由集成</a
+          ><a href="../specs/application-services.html">应用和作用域</a
+          ><a href="../specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="../specs/audio.html">背景音乐、音效与音量</a
+          ><a href="../specs/auth-session.html">可选账号会话适配</a
+          ><a href="../specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="../specs/component-model.html">组件、模板与绑定</a
+          ><a href="../specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="../specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="../specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="../specs/reactive-core.html">响应式基础</a
+          ><a href="../specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="../specs/save-data.html">游戏进度和偏好</a
+          ><a href="../specs/state-store.html">按业务共享状态</a
+          ><a href="../specs/theme-assets.html">主题与语义资源</a
+          ><a href="../specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace wide">
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb"><a href="../index.html">文档</a><span>/</span><span>API</span></div>
+        <div class="page-heading">
+          <p class="eyebrow">API REFERENCE</p>
+          <h1>API 参考</h1>
+          <p>按包与能力查阅当前源码的公开导出。输入关键词即可过滤函数、类型和类。</p>
+        </div>
+        <article data-doc-content>
+          <div class="api-toolbar">
+            <label for="api-filter">过滤 API</label
+            ><input
+              id="api-filter"
+              type="search"
+              placeholder="输入名称，例如 signal、GameCanvas、World…"
+              autocomplete="off"
+            /><span id="api-count" role="status"></span>
+          </div>
+          <p class="api-help">
+            日常应用开发从 <a href="app.html#application"><code>app/application</code></a> 开始。<a
+              href="application-contracts.html"
+              >使用契约</a
+            >说明默认值、状态结果和清理语义。
+          </p>
+          <p id="api-empty" hidden="">没有匹配的 API，试试其他关键词。</p>
+          <div class="api-grid">
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="应用与游戏能力">
+                  <a href="app.html">应用与游戏能力 <span>↗</span></a>
+                </h2>
+                <code>app</code>
+              </header>
+              <p>应用、组件、响应式状态、路由和页面内游戏。日常开发从 /application 子入口导入。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="app.html#root-bootstrapGame"
+                      ><span>bootstrapGame</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-defineGame"
+                      ><span>defineGame</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-defineInput"
+                      ><span>defineInput</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-defineScene"
+                      ><span>defineScene</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-defineView"
+                      ><span>defineView</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-mountGame"><span>mountGame</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-mountView"><span>mountView</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-viewInputs"
+                      ><span>viewInputs</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-StateStore"><span>StateStore</span><small>类</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-ViewError"><span>ViewError</span><small>类</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-ApplicationContext"
+                      ><span>ApplicationContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-CommandRegistry"
+                      ><span>CommandRegistry</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-CommandSender"
+                      ><span>CommandSender</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-GameApplication"
+                      ><span>GameApplication</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-GameDefinition"
+                      ><span>GameDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-GameSceneContext"
+                      ><span>GameSceneContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-InputDefinition"
+                      ><span>InputDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-ReadonlyData"
+                      ><span>ReadonlyData</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-SceneDefinition"
+                      ><span>SceneDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-StateReader"
+                      ><span>StateReader</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-ViewContext"
+                      ><span>ViewContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-ViewDefinition"
+                      ><span>ViewDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-ViewInput"><span>ViewInput</span><small>类型</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-ViewInstance"
+                      ><span>ViewInstance</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#root-ViewReadContext"
+                      ><span>ViewReadContext</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="application">application</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameCanvas"
+                      ><span>GameCanvas</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteLink"
+                      ><span>RouteLink</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouterOutlet"
+                      ><span>RouterOutlet</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-batch"><span>batch</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-bindAccessRouter"
+                      ><span>bindAccessRouter</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-bootstrapApplication"
+                      ><span>bootstrapApplication</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-computed"
+                      ><span>computed</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-createAccessGuard"
+                      ><span>createAccessGuard</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-createActions"
+                      ><span>createActions</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-createBrowserHistoryDriver"
+                      ><span>createBrowserHistoryDriver</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-createGameClock"
+                      ><span>createGameClock</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-createLocalStorageAdapter"
+                      ><span>createLocalStorageAdapter</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-createMemoryHistoryDriver"
+                      ><span>createMemoryHistoryDriver</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-createRouteMatcher"
+                      ><span>createRouteMatcher</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-createRouter"
+                      ><span>createRouter</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-createViewport"
+                      ><span>createViewport</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineActions"
+                      ><span>defineActions</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineApplication"
+                      ><span>defineApplication</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineAssetGroup"
+                      ><span>defineAssetGroup</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineComponent"
+                      ><span>defineComponent</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineGameScene"
+                      ><span>defineGameScene</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-definePage"
+                      ><span>definePage</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineRoutes"
+                      ><span>defineRoutes</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineSave"
+                      ><span>defineSave</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineService"
+                      ><span>defineService</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineStore"
+                      ><span>defineStore</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-defineTheme"
+                      ><span>defineTheme</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-effect"><span>effect</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-extendTheme"
+                      ><span>extendTheme</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-input"><span>input</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-model"><span>model</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-mountApplication"
+                      ><span>mountApplication</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-mountComponent"
+                      ><span>mountComponent</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-nextTick"
+                      ><span>nextTick</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-output"><span>output</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-provideService"
+                      ><span>provideService</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-resolveAccessReturnTarget"
+                      ><span>resolveAccessReturnTarget</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-signal"><span>signal</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-writableModel"
+                      ><span>writableModel</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AccessError"
+                      ><span>AccessError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AccessService"
+                      ><span>AccessService</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ActionError"
+                      ><span>ActionError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ApplicationError"
+                      ><span>ApplicationError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetError"
+                      ><span>AssetError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioError"
+                      ><span>AudioError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AuthError"
+                      ><span>AuthError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AuthService"
+                      ><span>AuthService</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-CanvasHostError"
+                      ><span>CanvasHostError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ComponentError"
+                      ><span>ComponentError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameClockError"
+                      ><span>GameClockError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameSceneError"
+                      ><span>GameSceneError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteError"
+                      ><span>RouteError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-SaveError"
+                      ><span>SaveError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-SaveService"
+                      ><span>SaveService</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ServiceError"
+                      ><span>ServiceError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-StoreError"
+                      ><span>StoreError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TemplateError"
+                      ><span>TemplateError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeError"
+                      ><span>ThemeError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TweenError"
+                      ><span>TweenError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ViewportError"
+                      ><span>ViewportError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AccessDecision"
+                      ><span>AccessDecision</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AccessGuardOptions"
+                      ><span>AccessGuardOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AccessPolicy"
+                      ><span>AccessPolicy</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AccessReturnOptions"
+                      ><span>AccessReturnOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ActionDefinitions"
+                      ><span>ActionDefinitions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ActionEntries"
+                      ><span>ActionEntries</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ActionEntry"
+                      ><span>ActionEntry</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-Actions"
+                      ><span>Actions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ActionSnapshot"
+                      ><span>ActionSnapshot</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ApplicationAssetOptions"
+                      ><span>ApplicationAssetOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ApplicationAudioOptions"
+                      ><span>ApplicationAudioOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ApplicationDefinition"
+                      ><span>ApplicationDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ApplicationInstance"
+                      ><span>ApplicationInstance</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ApplicationOptions"
+                      ><span>ApplicationOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ApplicationRouterContext"
+                      ><span>ApplicationRouterContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ApplicationRouterOptions"
+                      ><span>ApplicationRouterOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ApplicationStatus"
+                      ><span>ApplicationStatus</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetAtlas"
+                      ><span>AssetAtlas</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetContext"
+                      ><span>AssetContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetEntries"
+                      ><span>AssetEntries</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetEntry"
+                      ><span>AssetEntry</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetGroup"
+                      ><span>AssetGroup</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetGroupLease"
+                      ><span>AssetGroupLease</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetGroupProgress"
+                      ><span>AssetGroupProgress</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetImage"
+                      ><span>AssetImage</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetLoadOptions"
+                      ><span>AssetLoadOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetTransport"
+                      ><span>AssetTransport</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AssetValue"
+                      ><span>AssetValue</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AtlasAssetEntry"
+                      ><span>AtlasAssetEntry</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AtlasFrame"
+                      ><span>AtlasFrame</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AtlasFrames"
+                      ><span>AtlasFrames</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioAssetEntry"
+                      ><span>AudioAssetEntry</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioChannel"
+                      ><span>AudioChannel</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioControls"
+                      ><span>AudioControls</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioDriver"
+                      ><span>AudioDriver</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioGroup"
+                      ><span>AudioGroup</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioKey"
+                      ><span>AudioKey</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioPlayback"
+                      ><span>AudioPlayback</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioPlaybackOptions"
+                      ><span>AudioPlaybackOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioPlaybackState"
+                      ><span>AudioPlaybackState</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioPlayResult"
+                      ><span>AudioPlayResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioPreferences"
+                      ><span>AudioPreferences</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioState"
+                      ><span>AudioState</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioUnlockResult"
+                      ><span>AudioUnlockResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AudioVoice"
+                      ><span>AudioVoice</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AuthIdentity"
+                      ><span>AuthIdentity</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AuthLogoutResult"
+                      ><span>AuthLogoutResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AuthProvider"
+                      ><span>AuthProvider</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AuthResult"
+                      ><span>AuthResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AuthSession"
+                      ><span>AuthSession</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AuthUser"
+                      ><span>AuthUser</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-AxisAction"
+                      ><span>AxisAction</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-BrowserHistoryHost"
+                      ><span>BrowserHistoryHost</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ButtonAction"
+                      ><span>ButtonAction</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ButtonSnapshot"
+                      ><span>ButtonSnapshot</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-CanvasRuntimeRenderer"
+                      ><span>CanvasRuntimeRenderer</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ComponentContext"
+                      ><span>ComponentContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ComponentDefinition"
+                      ><span>ComponentDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ComponentHookContext"
+                      ><span>ComponentHookContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ComponentInstance"
+                      ><span>ComponentInstance</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ComponentMountOptions"
+                      ><span>ComponentMountOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ComponentOptions"
+                      ><span>ComponentOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ComponentReference"
+                      ><span>ComponentReference</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ConvertedModel"
+                      ><span>ConvertedModel</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-DecodedAudio"
+                      ><span>DecodedAudio</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-EffectOptions"
+                      ><span>EffectOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameCanvasHandle"
+                      ><span>GameCanvasHandle</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameCanvasOptions"
+                      ><span>GameCanvasOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameCanvasScene"
+                      ><span>GameCanvasScene</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameCanvasStatus"
+                      ><span>GameCanvasStatus</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameClock"
+                      ><span>GameClock</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GamePoint"
+                      ><span>GamePoint</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameSceneAccess"
+                      ><span>GameSceneAccess</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameSceneContext"
+                      ><span>GameSceneContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameSceneControls"
+                      ><span>GameSceneControls</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameSceneDefinition"
+                      ><span>GameSceneDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameSceneOptions"
+                      ><span>GameSceneOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameTimer"
+                      ><span>GameTimer</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GameTimerStatus"
+                      ><span>GameTimerStatus</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-GuardResult"
+                      ><span>GuardResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-HistoryDriver"
+                      ><span>HistoryDriver</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-HistoryEntry"
+                      ><span>HistoryEntry</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-IdleScheduler"
+                      ><span>IdleScheduler</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ImageAssetEntry"
+                      ><span>ImageAssetEntry</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-InputDefinition"
+                      ><span>InputDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-JsonAssetEntry"
+                      ><span>JsonAssetEntry</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ModelConversion"
+                      ><span>ModelConversion</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ModelDefinition"
+                      ><span>ModelDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ModelValidation"
+                      ><span>ModelValidation</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-NamedRouteTarget"
+                      ><span>NamedRouteTarget</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-NativeValueModel"
+                      ><span>NativeValueModel</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-NavigationContext"
+                      ><span>NavigationContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-NavigationPending"
+                      ><span>NavigationPending</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-NavigationResult"
+                      ><span>NavigationResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-OutputDefinition"
+                      ><span>OutputDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-PageDefinition"
+                      ><span>PageDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-PreparedRoutePage"
+                      ><span>PreparedRoutePage</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ReadonlyData"
+                      ><span>ReadonlyData</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ReadSignal"
+                      ><span>ReadSignal</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteCandidate"
+                      ><span>RouteCandidate</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteDefinition"
+                      ><span>RouteDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteDiagnostic"
+                      ><span>RouteDiagnostic</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteGuard"
+                      ><span>RouteGuard</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteLocation"
+                      ><span>RouteLocation</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteMatch"
+                      ><span>RouteMatch</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteMatcher"
+                      ><span>RouteMatcher</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RoutePage"
+                      ><span>RoutePage</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RoutePreloadOptions"
+                      ><span>RoutePreloadOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RoutePreloadResult"
+                      ><span>RoutePreloadResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteQuery"
+                      ><span>RouteQuery</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteQueryInput"
+                      ><span>RouteQueryInput</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-Router"><span>Router</span><small>类型</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteRenderContext"
+                      ><span>RouteRenderContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteRenderer"
+                      ><span>RouteRenderer</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-RouteTarget"
+                      ><span>RouteTarget</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-SaveDefinition"
+                      ><span>SaveDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-SaveLoadResult"
+                      ><span>SaveLoadResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-SaveNamespace"
+                      ><span>SaveNamespace</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-SaveOptions"
+                      ><span>SaveOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-SaveResetResult"
+                      ><span>SaveResetResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-SaveResult"
+                      ><span>SaveResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ServiceContext"
+                      ><span>ServiceContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ServiceDefinition"
+                      ><span>ServiceDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ServiceFactory"
+                      ><span>ServiceFactory</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ServiceProvider"
+                      ><span>ServiceProvider</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-StorageAdapter"
+                      ><span>StorageAdapter</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-StoreCommitResult"
+                      ><span>StoreCommitResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-StoreContext"
+                      ><span>StoreContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-StoreDefinition"
+                      ><span>StoreDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-StoreInstance"
+                      ><span>StoreInstance</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-StoreTaskContext"
+                      ><span>StoreTaskContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-StoreTaskOptions"
+                      ><span>StoreTaskOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-StoreTaskResult"
+                      ><span>StoreTaskResult</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TemplateClass"
+                      ><span>TemplateClass</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TemplateField"
+                      ><span>TemplateField</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TemplateOutput"
+                      ><span>TemplateOutput</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TemplateScope"
+                      ><span>TemplateScope</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeAsset"
+                      ><span>ThemeAsset</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeAssets"
+                      ><span>ThemeAssets</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeAtlasRegion"
+                      ><span>ThemeAtlasRegion</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeContext"
+                      ><span>ThemeContext</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeDefinition"
+                      ><span>ThemeDefinition</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeImage"
+                      ><span>ThemeImage</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeImageLease"
+                      ><span>ThemeImageLease</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeLoadOptions"
+                      ><span>ThemeLoadOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeOverrides"
+                      ><span>ThemeOverrides</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ThemeTokens"
+                      ><span>ThemeTokens</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TweenEasing"
+                      ><span>TweenEasing</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TweenHandle"
+                      ><span>TweenHandle</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TweenOptions"
+                      ><span>TweenOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TweenOutput"
+                      ><span>TweenOutput</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TweenStatus"
+                      ><span>TweenStatus</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-TweenValue"
+                      ><span>TweenValue</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-Viewport"
+                      ><span>Viewport</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ViewportDriver"
+                      ><span>ViewportDriver</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ViewportLayout"
+                      ><span>ViewportLayout</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-ViewportMeasurement"
+                      ><span>ViewportMeasurement</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-WritableModel"
+                      ><span>WritableModel</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-WritableModelOptions"
+                      ><span>WritableModelOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="app.html#application-WritableSignal"
+                      ><span>WritableSignal</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="引擎与作用域">
+                  <a href="core.html">引擎与作用域 <span>↗</span></a>
+                </h2>
+                <code>core</code>
+              </header>
+              <p>固定步、系统调度、模块依赖、事件与作用域清理。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口-2">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="core.html#root-Cancellation"
+                      ><span>Cancellation</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-Engine"><span>Engine</span><small>类</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-EventBus"><span>EventBus</span><small>类</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-Scope"><span>Scope</span><small>类</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-SystemError"
+                      ><span>SystemError</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-CancellationSignal"
+                      ><span>CancellationSignal</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-Cleanup"><span>Cleanup</span><small>类型</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-EngineEvents"
+                      ><span>EngineEvents</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-EngineModule"
+                      ><span>EngineModule</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-EngineStatus"
+                      ><span>EngineStatus</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-System"><span>System</span><small>类型</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-SystemTiming"
+                      ><span>SystemTiming</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#root-UpdateContext"
+                      ><span>UpdateContext</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="scenes">scenes</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="core.html#scenes-SceneManager"
+                      ><span>SceneManager</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#scenes-Scene"><span>Scene</span><small>类型</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="core.html#scenes-SceneContext"
+                      ><span>SceneContext</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="实体与组件">
+                  <a href="ecs.html">实体与组件 <span>↗</span></a>
+                </h2>
+                <code>ecs</code>
+              </header>
+              <p>类型化 token、带代际的实体 handle、查询、资源与延迟命令。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口-3">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="ecs.html#root-component"><span>component</span><small>值</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="ecs.html#root-resource"><span>resource</span><small>值</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="ecs.html#root-World"><span>World</span><small>类</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="ecs.html#root-Entity"><span>Entity</span><small>类型</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="ecs.html#root-Token"><span>Token</span><small>类型</small></a>
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="浏览器运行">
+                  <a href="browser.html">浏览器运行 <span>↗</span></a>
+                </h2>
+                <code>browser</code>
+              </header>
+              <p>requestAnimationFrame 驱动、可见性与增量 DOM 工具。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口-4">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="browser.html#root-browserModule"
+                      ><span>browserModule</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="browser.html#root-runBrowser"
+                      ><span>runBrowser</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="browser.html#root-BrowserDriver"
+                      ><span>BrowserDriver</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="dom">dom</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="browser.html#dom-createKeyedList"
+                      ><span>createKeyedList</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="browser.html#dom-setText"><span>setText</span><small>函数</small></a>
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="2d-渲染">
+                  <a href="renderer-2d.html">2D 渲染 <span>↗</span></a>
+                </h2>
+                <code>renderer-2d</code>
+              </header>
+              <p>Canvas、形状、精灵、变换、相机与动画。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口-5">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#root-Position2D"
+                      ><span>Position2D</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#root-Shape2D"
+                      ><span>Shape2D</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#root-Canvas2D"
+                      ><span>Canvas2D</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#root-Point"><span>Point</span><small>类型</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#root-Stroke"
+                      ><span>Stroke</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="module">module</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#module-Renderer2D"
+                      ><span>Renderer2D</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#module-canvas2DModule"
+                      ><span>canvas2DModule</span><small>函数</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="features">features</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-Animation2D"
+                      ><span>Animation2D</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-identity"
+                      ><span>identity</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-Sprite2D"
+                      ><span>Sprite2D</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-Transform2D"
+                      ><span>Transform2D</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-animationModule"
+                      ><span>animationModule</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-createTransformResolver"
+                      ><span>createTransformResolver</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-inverse"
+                      ><span>inverse</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-multiply"
+                      ><span>multiply</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-transformPoint"
+                      ><span>transformPoint</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-Camera2D"
+                      ><span>Camera2D</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-Animation"
+                      ><span>Animation</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-Matrix2D"
+                      ><span>Matrix2D</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-Sprite"
+                      ><span>Sprite</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-SpriteFrame"
+                      ><span>SpriteFrame</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#features-Transform"
+                      ><span>Transform</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="collision">collision</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#collision-Collider2D"
+                      ><span>Collider2D</span><small>值</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#collision-collisionModule"
+                      ><span>collisionModule</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#collision-detectCollisions"
+                      ><span>detectCollisions</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#collision-Collider"
+                      ><span>Collider</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="renderer-2d.html#collision-CollisionPair"
+                      ><span>CollisionPair</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="键盘与指针">
+                  <a href="input.html">键盘与指针 <span>↗</span></a>
+                </h2>
+                <code>input</code>
+              </header>
+              <p>键盘状态、指针捕获和模块化输入接入。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口-6">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="input.html#root-bindPointer"
+                      ><span>bindPointer</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="input.html#root-KeyboardInput"
+                      ><span>KeyboardInput</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="input.html#root-PointerCancelReason"
+                      ><span>PointerCancelReason</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="input.html#root-PointerHandlers"
+                      ><span>PointerHandlers</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="module-2">module</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="input.html#module-Keyboard"><span>Keyboard</span><small>值</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="input.html#module-keyboardModule"
+                      ><span>keyboardModule</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="input.html#module-pointerModule"
+                      ><span>pointerModule</span><small>函数</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="资源缓存">
+                  <a href="assets.html">资源缓存 <span>↗</span></a>
+                </h2>
+                <code>assets</code>
+              </header>
+              <p>共享加载、引用持有、取消与释放。应用资源组另见 app/application。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口-7">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="assets.html#root-AssetCache"
+                      ><span>AssetCache</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="assets.html#root-AssetStatus"
+                      ><span>AssetStatus</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="module-3">module</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="assets.html#module-assetModule"
+                      ><span>assetModule</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="assets.html#module-AssetModule"
+                      ><span>AssetModule</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="网络客户端">
+                  <a href="net.html">网络客户端 <span>↗</span></a>
+                </h2>
+                <code>net</code>
+              </header>
+              <p>连接、消息解析、限流与房间目录，不包含游戏协议。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口-8">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="net.html#root-BrowserConnection"
+                      ><span>BrowserConnection</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="net.html#root-RateLimit"><span>RateLimit</span><small>类</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="net.html#root-RoomDirectory"
+                      ><span>RoomDirectory</span><small>类</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="net.html#root-ConnectionErrorKind"
+                      ><span>ConnectionErrorKind</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="net.html#root-ConnectionFailure"
+                      ><span>ConnectionFailure</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="net.html#root-ConnectionOptions"
+                      ><span>ConnectionOptions</span><small>类型</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="net.html#root-Decoder"><span>Decoder</span><small>类型</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="net.html#root-Peer"><span>Peer</span><small>类型</small></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="module-4">module</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="net.html#module-networkModule"
+                      ><span>networkModule</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="net.html#module-NetworkModule"
+                      ><span>NetworkModule</span><small>类型</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="网络服务端">
+                  <a href="net-server.html">网络服务端 <span>↗</span></a>
+                </h2>
+                <code>net-server</code>
+              </header>
+              <p>Node WebSocket 承载与连接管理，业务权限由服务端验证。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口-9">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="net-server.html#root-WebSocketHost"
+                      ><span>WebSocketHost</span><small>类</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="api-category" data-api-category="">
+              <header>
+                <h2 id="cli-与构建工具">
+                  <a href="tooling.html">CLI 与构建工具 <span>↗</span></a>
+                </h2>
+                <code>tooling</code>
+              </header>
+              <p>项目检查、三文件编译、Vite 插件；仅作为开发依赖。</p>
+              <div class="api-subgroup">
+                <h3 id="根入口-10">根入口</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="tooling.html#root-default"><span>default</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="tooling.html#root-jingchuanchu"
+                      ><span>jingchuanchu</span><small>函数</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="vite">vite</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="tooling.html#vite-default"><span>default</span><small>函数</small></a>
+                  </li>
+                  <li data-api-item="">
+                    <a href="tooling.html#vite-jingchuanchu"
+                      ><span>jingchuanchu</span><small>函数</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="api-subgroup">
+                <h3 id="project">project</h3>
+                <ul>
+                  <li data-api-item="">
+                    <a href="tooling.html#project-checkApplicationProject"
+                      ><span>checkApplicationProject</span><small>函数</small></a
+                    >
+                  </li>
+                  <li data-api-item="">
+                    <a href="tooling.html#project-loadProjectConfig"
+                      ><span>loadProjectConfig</span><small>函数</small></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </article>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

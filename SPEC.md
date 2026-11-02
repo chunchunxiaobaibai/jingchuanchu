@@ -1,8 +1,10 @@
 # 下一阶段实施规格：网页 2D 游戏应用框架
 
-状态：T01—T44 自动实施与交付检查已完成，实际结果见 tasks/todo.md；H01—H04 浏览器/设备/性能验收仍未执行。本次发布任务将包版本统一为 0.5.0-rc.1，并交付 GitHub 预发布；不发布 npm、不替换历史标签或附件。本文是当前源码的规格入口，历史附件不自动获得新模型。
+状态：T01—T44 自动实施与交付检查已完成，实际结果见 tasks/todo.md；H01—H04 尚未全部验收，已执行的有限浏览器/性能检查见 [性能迭代记录](artifacts/performance/iterations/README.md)。既有发布任务将包版本统一为 0.5.0-rc.1，并交付 GitHub 预发布；不发布 npm、不替换历史标签或附件。本文是当前源码的规格入口，历史附件不自动获得新模型。
 
-这是当前源码应用模型的唯一规格入口；执行顺序见 [plan](tasks/plan.md)，完成状态见 [todo](tasks/todo.md)。各模块只定义自己的契约，公共约束不重复抄写。现有 0.4.0 用法见 [使用手册](docs/development/application-suite.md)。
+这是当前源码应用模型的唯一规格入口；执行顺序见 [plan](tasks/plan.md)，完成状态见 [todo](tasks/todo.md)。各模块只定义自己的契约，公共约束不重复抄写。当前开发用法统一见 [HTML 手册](docs/index.html)。
+
+2026-11-02 性能迭代沿用当前架构，局部优化规格见 [性能规格](tasks/performance-spec.md)，执行顺序见 plan 的 P01—P06，状态由 todo 记录。此任务不授权发布，不以历史发布任务的描述作为推送依据。
 
 ## 产品目标与边界
 
@@ -14,24 +16,24 @@
 
 ## 能力地图与规格
 
-| 模块 ID              | 规格                                               | 依赖                                                              |
-| -------------------- | -------------------------------------------------- | ----------------------------------------------------------------- |
-| reactive-core        | [响应式](docs/specs/reactive-core.md)              | 现有 core/Scope                                                   |
-| component-model      | [组件与模板](docs/specs/component-model.md)        | reactive-core                                                     |
-| state-store          | [业务 Store](docs/specs/state-store.md)            | reactive-core                                                     |
-| application-services | [应用与作用域](docs/specs/application-services.md) | component-model、state-store                                      |
-| page-router          | [页面路由](docs/specs/page-router.md)              | application-services                                              |
-| asset-loading        | [资源加载](docs/specs/asset-loading.md)            | 现有 assets、Scope                                                |
-| theme-assets         | [主题](docs/specs/theme-assets.md)                 | asset-loading、reactive-core                                      |
-| viewport-input       | [画布适配与输入](docs/specs/viewport-input.md)     | 现有 renderer/input、Scope                                        |
-| game-feedback        | [计时与缓动](docs/specs/game-feedback.md)          | 现有固定步、Scope                                                 |
-| audio                | [音频](docs/specs/audio.md)                        | asset-loading、Scope                                              |
-| save-data            | [保存恢复](docs/specs/save-data.md)                | state-store、可替换存储接口                                       |
-| canvas-host          | [页面内游戏](docs/specs/canvas-host.md)            | application-services、theme-assets、viewport-input、game-feedback |
-| auth-session         | [认证会话](docs/specs/auth-session.md)             | application-services、state-store、后端适配                       |
-| access-policy        | [权限](docs/specs/access-policy.md)                | auth-session；由 app 接到路由                                     |
-| project-tooling      | [CLI 与构建](docs/specs/project-tooling.md)        | 各运行模块的公开契约                                              |
-| reference-game       | [参考游戏与交付](docs/specs/reference-game.md)     | 默认单机能力；认证另用接入示例验证                                |
+| 模块 ID              | 规格                                                 | 依赖                                                              |
+| -------------------- | ---------------------------------------------------- | ----------------------------------------------------------------- |
+| reactive-core        | [响应式](docs/specs/reactive-core.html)              | 现有 core/Scope                                                   |
+| component-model      | [组件与模板](docs/specs/component-model.html)        | reactive-core                                                     |
+| state-store          | [业务 Store](docs/specs/state-store.html)            | reactive-core                                                     |
+| application-services | [应用与作用域](docs/specs/application-services.html) | component-model、state-store                                      |
+| page-router          | [页面路由](docs/specs/page-router.html)              | application-services                                              |
+| asset-loading        | [资源加载](docs/specs/asset-loading.html)            | 现有 assets、Scope                                                |
+| theme-assets         | [主题](docs/specs/theme-assets.html)                 | asset-loading、reactive-core                                      |
+| viewport-input       | [画布适配与输入](docs/specs/viewport-input.html)     | 现有 renderer/input、Scope                                        |
+| game-feedback        | [计时与缓动](docs/specs/game-feedback.html)          | 现有固定步、Scope                                                 |
+| audio                | [音频](docs/specs/audio.html)                        | asset-loading、Scope                                              |
+| save-data            | [保存恢复](docs/specs/save-data.html)                | state-store、可替换存储接口                                       |
+| canvas-host          | [页面内游戏](docs/specs/canvas-host.html)            | application-services、theme-assets、viewport-input、game-feedback |
+| auth-session         | [认证会话](docs/specs/auth-session.html)             | application-services、state-store、后端适配                       |
+| access-policy        | [权限](docs/specs/access-policy.html)                | auth-session；由 app 接到路由                                     |
+| project-tooling      | [CLI 与构建](docs/specs/project-tooling.html)        | 各运行模块的公开契约                                              |
+| reference-game       | [参考游戏与交付](docs/specs/reference-game.html)     | 默认单机能力；认证另用接入示例验证                                |
 
 通用组件与 Store 的运行时不依赖 Router、主题或具体游戏；组件的路由上下文通过通用 owner 槽注入，Router 类型可使用 type-only 引用。Router 不导入具体认证 Provider。应用装配守卫与服务。既有 core/ecs 不反向依赖 app 或构建工具。上述 ID 是规划单元，不要求新增同等数量的 npm 包。
 
@@ -41,7 +43,7 @@
 
 新增 defineComponent、definePage、defineApplication、mountApplication、bootstrapApplication 及各规格定义的类型/函数；本次固定这一组名称，后续变动先更新规格和调用示例。组件构造采用 setup，生命周期沿用明确的八个钩子；setup 是实例构造函数，不另造第二套生命周期。
 
-新模板已成为当前源码 CLI 的默认开发方式；新指南见 [应用开发](docs/development/application-framework.md)。0.4.0 Release 不替换、不移动标签；本次授权发布使用 0.5.0-rc.1，GitHub 标记为预发布，npm 不发布。旧项目主动迁移，新生成项目不再附带旧 UI 范式作教学代码。
+新模板已成为当前源码 CLI 的默认开发方式；新指南见 [应用开发](docs/guide/quick-start.html)。0.4.0 Release 不替换、不移动标签；本次授权发布使用 0.5.0-rc.1，GitHub 标记为预发布，npm 不发布。旧项目主动迁移，新生成项目不再附带旧 UI 范式作教学代码。
 
 ## 业务目录与命名
 

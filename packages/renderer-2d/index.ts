@@ -1,7 +1,17 @@
-import type { World } from '@xiaobaibaifqy/jingchuanchu-ecs';
+import type { Entity, World } from '@xiaobaibaifqy/jingchuanchu-ecs';
 import { Position2D, Shape2D, type Point, type Stroke } from './components.js';
 export { Position2D, Shape2D, type Point, type Stroke } from './components.js';
-import { Transform2D, Sprite2D, Camera2D, createTransformResolver, multiply } from './features.js';
+import {
+  Transform2D,
+  Sprite2D,
+  Camera2D,
+  createTransformResolver,
+  multiply,
+  type Sprite,
+} from './features.js';
+type DrawItem = { entity: Entity; layer: number } & (
+  { shape: NonNullable<typeof Shape2D.__type>; position: Point } | { sprite: Sprite }
+);
 export class Canvas2D {
   readonly context: CanvasRenderingContext2D;
   private logicalWidth: number;
@@ -91,22 +101,29 @@ export class Canvas2D {
   drawWorld(world: World, camera?: Camera2D): void {
     const resolve = createTransformResolver(world);
     const view = camera?.matrix;
-    const shapes = Array.from(world.query(Position2D, Shape2D), (entity) => ({
-      entity,
-      shape: world.require(entity, Shape2D),
-      position: world.require(entity, Position2D),
-    }));
+    // Build the final queue directly: intermediate maps and object spreads used
+    // to copy every shape multiple times on every frame. Keep the three passes
+    // in this order so stable sorting preserves existing equal-layer behavior.
+    const items: DrawItem[] = [];
+    for (const entity of world.query(Position2D, Shape2D)) {
+      const shape = world.require(entity, Shape2D);
+      items.push({
+        entity,
+        shape,
+        position: world.require(entity, Position2D),
+        layer: shape.layer,
+      });
+    }
     for (const entity of world.query(Transform2D, Shape2D))
-      if (!world.has(entity, Position2D))
-        shapes.push({ entity, shape: world.require(entity, Shape2D), position: { x: 0, y: 0 } });
-    const sprites = Array.from(world.query(Sprite2D), (entity) => ({
-      entity,
-      sprite: world.require(entity, Sprite2D),
-    }));
-    const items = [
-      ...shapes.map((item) => ({ ...item, layer: item.shape.layer })),
-      ...sprites.map((item) => ({ ...item, layer: item.sprite.layer ?? 0 })),
-    ].sort((a, b) => a.layer - b.layer);
+      if (!world.has(entity, Position2D)) {
+        const shape = world.require(entity, Shape2D);
+        items.push({ entity, shape, position: { x: 0, y: 0 }, layer: shape.layer });
+      }
+    for (const entity of world.query(Sprite2D)) {
+      const sprite = world.require(entity, Sprite2D);
+      items.push({ entity, sprite, layer: sprite.layer ?? 0 });
+    }
+    items.sort((a, b) => a.layer - b.layer);
     for (const item of items) {
       const ctx = this.context;
       const transformed = !!camera || world.has(item.entity, Transform2D) || 'sprite' in item;

@@ -72,3 +72,68 @@ test('query snapshots do not visit recycled entities; resources and disposal wor
   assert.equal(world.size, 0);
   assert.throws(() => world.create());
 });
+
+test('active intersections keep snapshot order while checking current component membership', () => {
+  const world = new World(),
+    A = component<number>('A'),
+    B = component<boolean>('B');
+  const entities = Array.from({ length: 4 }, () => world.create());
+  for (const entity of entities) {
+    world.set(entity, A, 1);
+    world.set(entity, B, true);
+  }
+  const iterator = world.query(A, B);
+  assert.equal(iterator.next().value, entities[0]);
+  world.remove(entities[1]!, B);
+  world.remove(entities[2]!, B);
+  world.set(entities[2]!, B, true);
+  world.destroy(entities[3]!);
+  const replacement = world.create();
+  world.set(replacement, A, 1);
+  world.set(replacement, B, true);
+  assert.deepEqual([...iterator], [entities[2]]);
+  assert.deepEqual([...world.query(A, A)], [...world.query(A)]);
+  assert.deepEqual([...world.query(component('missing'))], []);
+  world.dispose();
+});
+
+test('unfiltered queries snapshot at first next and do not follow index recycling or later creation', () => {
+  const world = new World(),
+    first = world.create();
+  const iterator = world.query();
+  const second = world.create();
+  assert.equal(iterator.next().value, first);
+  world.destroy(second);
+  world.create();
+  world.create();
+  assert.equal(iterator.next().done, true);
+  const active = world.query();
+  assert.equal(active.next().value, first);
+  world.dispose();
+  assert.equal(active.next().done, true);
+  assert.throws(() => world.query().next(), /World is disposed/);
+});
+
+test('require distinguishes stored undefined from missing slots and preserves stale-handle errors', () => {
+  const world = new World();
+  const Value = component<number | boolean | undefined>('Value');
+  const a = world.create(),
+    b = world.create();
+  assert.throws(() => world.require(a, Value), /Missing component: Value/);
+  world.set(a, Value, undefined);
+  assert.equal(world.require(a, Value), undefined);
+  assert.throws(() => world.require(b, Value), /Missing component: Value/);
+  world.set(b, Value, false);
+  world.remove(a, Value);
+  assert.throws(() => world.require(a, Value), /Missing component: Value/);
+  assert.equal(world.require(b, Value), false);
+  world.set(a, Value, 0);
+  assert.equal(world.require(a, Value), 0);
+  world.destroy(a);
+  const replacement = world.create();
+  world.set(replacement, Value, undefined);
+  assert.throws(() => world.require(a, Value), /Stale or destroyed entity/);
+  assert.equal(world.require(replacement, Value), undefined);
+  world.dispose();
+  assert.throws(() => world.require(b, Value), /World is disposed/);
+});

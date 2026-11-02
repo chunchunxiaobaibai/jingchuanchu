@@ -1,0 +1,51 @@
+{
+  "url": "http://127.0.0.1:49189/#/play/meadow",
+  "errors": [
+    "Application D:/codexproject/xiaobaifqy-engine/templates/browser/src/app/app-shell.ts: runtime failed: effect#215(v): effect failed",
+    "Application D:/codexproject/xiaobaifqy-engine/templates/browser/src/app/app-shell.ts: runtime failed: effect#215(v): effect failed"
+  ],
+  "causes": [
+    {
+      "message": "Application D:/codexproject/xiaobaifqy-engine/templates/browser/src/app/app-shell.ts: runtime failed: effect#215(v): effect failed",
+      "stack": "ApplicationError: Application D:/codexproject/xiaobaifqy-engine/templates/browser/src/app/app-shell.ts: runtime failed: effect#215(v): effect failed\n    at me (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:102925)\n    at u (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:105244)\n    at Q (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11231)\n    at O (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:32799)\n    at Q (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11231)\n    at Object.u [as onError] (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:15208)\n    at ar (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11790)",
+      "cause": {
+        "message": "effect#215(v): effect failed",
+        "stack": "Error: effect#215(v): effect failed\n    at Object.u [as onError] (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:15159)\n    at ar (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11790)",
+        "cause": {
+          "message": "Component game-canvas: onMount failed: GameCanvas create failed: Viewport requires a canvas container and document window, or an injected driver",
+          "stack": "ComponentError: Component game-canvas: onMount failed: GameCanvas create failed: Viewport requires a canvas container and document window, or an injected driver\n    at w (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:32999)\n    at Bt (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39169)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35767\n    at ge (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:12752)\n    at R (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35760)\n    at Object.F [as createView] (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:36521)\n    at A (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:29797)\n    at v (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:27480)\n    at Object.run (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:15519)\n    at ar (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11773)",
+          "cause": {
+            "message": "GameCanvas create failed: Viewport requires a canvas container and document window, or an injected driver",
+            "stack": "CanvasHostError: GameCanvas create failed: Viewport requires a canvas container and document window, or an injected driver\n    at ut (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:33650)\n    at Object.start (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:35422)\n    at Object.onMount (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:35864)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39196\n    at w (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:32847)\n    at Bt (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39169)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35767\n    at ge (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:12752)\n    at R (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35760)\n    at Object.F [as createView] (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:36521)",
+            "cause": {
+              "message": "Viewport requires a canvas container and document window, or an injected driver",
+              "stack": "Error: Viewport requires a canvas container and document window, or an injected driver\n    at Ce (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:4357)\n    at ut (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:32659)\n    at Object.start (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:35422)\n    at Object.onMount (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:35864)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39196\n    at w (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:32847)\n    at Bt (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39169)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35767\n    at ge (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:12752)\n    at R (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35760)"
+            }
+          }
+        }
+      }
+    },
+    {
+      "message": "Application D:/codexproject/xiaobaifqy-engine/templates/browser/src/app/app-shell.ts: runtime failed: effect#215(v): effect failed",
+      "stack": "ApplicationError: Application D:/codexproject/xiaobaifqy-engine/templates/browser/src/app/app-shell.ts: runtime failed: effect#215(v): effect failed\n    at me (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:102925)\n    at u (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:105244)\n    at Q (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11231)\n    at O (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:32799)\n    at Q (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11231)\n    at Object.u [as onError] (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:15208)\n    at ar (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11790)",
+      "cause": {
+        "message": "effect#215(v): effect failed",
+        "stack": "Error: effect#215(v): effect failed\n    at Object.u [as onError] (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:15159)\n    at ar (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11790)",
+        "cause": {
+          "message": "Component game-canvas: onMount failed: GameCanvas create failed: Viewport requires a canvas container and document window, or an injected driver",
+          "stack": "ComponentError: Component game-canvas: onMount failed: GameCanvas create failed: Viewport requires a canvas container and document window, or an injected driver\n    at w (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:32999)\n    at Bt (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39169)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35767\n    at ge (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:12752)\n    at R (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35760)\n    at Object.F [as createView] (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:36521)\n    at A (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:29797)\n    at v (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:27480)\n    at Object.run (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:15519)\n    at ar (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:11773)",
+          "cause": {
+            "message": "GameCanvas create failed: Viewport requires a canvas container and document window, or an injected driver",
+            "stack": "CanvasHostError: GameCanvas create failed: Viewport requires a canvas container and document window, or an injected driver\n    at ut (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:33650)\n    at Object.start (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:35422)\n    at Object.onMount (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:35864)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39196\n    at w (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:32847)\n    at Bt (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39169)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35767\n    at ge (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:12752)\n    at R (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35760)\n    at Object.F [as createView] (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:36521)",
+            "cause": {
+              "message": "Viewport requires a canvas container and document window, or an injected driver",
+              "stack": "Error: Viewport requires a canvas container and document window, or an injected driver\n    at Ce (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:4357)\n    at ut (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:32659)\n    at Object.start (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:35422)\n    at Object.onMount (http://127.0.0.1:49189/assets/play-page-BA1lB7bx.js:1:35864)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39196\n    at w (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:32847)\n    at Bt (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:39169)\n    at http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35767\n    at ge (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:12752)\n    at R (http://127.0.0.1:49189/assets/index-BvPMi64C.js:2:35760)"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "body": "林间初光\n\n点击画布后用方向键或 WASD 移动，也可点选目标或使用下方按钮。Esc 暂停/继续。\n\n启用并试听声音\n\n声音尚未启用，可点击启用并试听。\n\n林间初光\n微光\n0\n剩余时间\n30 秒\n暂停\n向左\n向上\n向下\n向右\n返回选关",
+  "canvases": []
+}

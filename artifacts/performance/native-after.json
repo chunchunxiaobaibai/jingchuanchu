@@ -1,0 +1,100 @@
+{
+  "node": "v24.12.0",
+  "platform": "win32",
+  "arch": "x64",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+  "samples": 21,
+  "framesPerSample": 30,
+  "units": "milliseconds per iteration; p95 is over batch averages, not individual frames",
+  "scope": "Node JS traversal/update/layer-sort/mock Canvas submission only",
+  "sink": 7732660403,
+  "results": [
+    {
+      "size": 100,
+      "movement": {
+        "native": {
+          "medianMs": 0.000996666666666594,
+          "p95Ms": 0.005543333333333559,
+          "minMs": 0.0004933333333331309
+        },
+        "engine": {
+          "medianMs": 0.01226333333333353,
+          "p95Ms": 0.019143333333333127,
+          "minMs": 0.009580000000000173
+        },
+        "engineOverNative": 12.304347826088053
+      },
+      "draw": {
+        "native": {
+          "medianMs": 0.006126666666667309,
+          "p95Ms": 0.008289999999999983,
+          "minMs": 0.005733333333333709
+        },
+        "engine": {
+          "medianMs": 0.029440000000000074,
+          "p95Ms": 0.041986666666666395,
+          "minMs": 0.02287999999999973
+        },
+        "engineOverNative": 4.805223068552283
+      }
+    },
+    {
+      "size": 1000,
+      "movement": {
+        "native": {
+          "medianMs": 0.005413333333333033,
+          "p95Ms": 0.02203999999999932,
+          "minMs": 0.004843333333333059
+        },
+        "engine": {
+          "medianMs": 0.0847799999999997,
+          "p95Ms": 0.13112000000000043,
+          "minMs": 0.07764666666666642
+        },
+        "engineOverNative": 15.661330049261897
+      },
+      "draw": {
+        "native": {
+          "medianMs": 0.07421666666666624,
+          "p95Ms": 0.1040833333333334,
+          "minMs": 0.06860666666666665
+        },
+        "engine": {
+          "medianMs": 0.21528333333333383,
+          "p95Ms": 0.25826666666666825,
+          "minMs": 0.19271666666666648
+        },
+        "engineOverNative": 2.9007410734336636
+      }
+    },
+    {
+      "size": 10000,
+      "movement": {
+        "native": {
+          "medianMs": 0.06812666666666398,
+          "p95Ms": 0.09461666666666511,
+          "minMs": 0.0526833333333343
+        },
+        "engine": {
+          "medianMs": 0.9591266666666683,
+          "p95Ms": 1.0994866666666667,
+          "minMs": 0.8800299999999993
+        },
+        "engineOverNative": 14.078579117331044
+      },
+      "draw": {
+        "native": {
+          "medianMs": 0.811566666666666,
+          "p95Ms": 1.275546666666666,
+          "minMs": 0.7778399999999995
+        },
+        "engine": {
+          "medianMs": 2.760063333333331,
+          "p95Ms": 4.227286666666669,
+          "minMs": 2.5764700000000023
+        },
+        "engineOverNative": 3.4009077093687106
+      }
+    }
+  ]
+}

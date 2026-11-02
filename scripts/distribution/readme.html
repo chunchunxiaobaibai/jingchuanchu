@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>镜川初 {{VERSION}} · 分发套件</title>
+    <link rel="stylesheet" href="docs/assets/docs.css" />
+  </head>
+  <body>
+    <main style="width: 960px; margin: 70px auto">
+      <p class="eyebrow">JINGCHUANCHU ENGINE · LOCAL BUNDLE</p>
+      <h1>镜川初 {{VERSION}}</h1>
+      <p>网页 2D 游戏开发套件 · MIT 授权 · Node.js ≥ 22.12.0</p>
+      <p><a class="button primary" href="docs/index.html">打开完整 HTML 文档 →</a></p>
+      <article>
+        <h2>运行参考游戏</h2>
+        <pre><code>cd starters/browser
+npm install
+npm run dev</code></pre>
+        <p>手动访问 Vite 终端显示的地址。执行 <code>npm run build</code> 输出游戏网页。</p>
+        <h2>接入现有项目</h2>
+        <pre><code>node /path/to/bundle/install.mjs --preset singleplayer --target /path/to/my-game</code></pre>
+        <p>
+          安装器校验摘要并补齐所需的内部依赖。预设为 core、singleplayer、client、server。详情见<a
+            href="docs/engineering/distribution.html"
+            >本地分发与版本维护</a
+          >。
+        </p>
+        <h2>保存与校验</h2>
+        <p>
+          保留目录结构；<code>manifest.json</code> 记录版本与源码来源，<code>SHA256SUMS</code>
+          记录包摘要。创建独立游戏请阅读<a href="docs/guide/quick-start.html">快速上手</a>。
+        </p>
+      </article>
+    </main>
+  </body>
+</html>

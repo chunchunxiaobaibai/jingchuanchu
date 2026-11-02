@@ -1,0 +1,236 @@
+[
+  {
+    "path": "guide/build-from-source.html",
+    "title": "从源码到独立游戏",
+    "section": "开发指南",
+    "description": "从可运行代码开始，理解模块边界与完整接入流程。"
+  },
+  {
+    "path": "guide/components.html",
+    "title": "组件、表单与页面",
+    "section": "开发指南",
+    "description": "从可运行代码开始，理解模块边界与完整接入流程。"
+  },
+  {
+    "path": "guide/gameplay.html",
+    "title": "场景与游戏循环",
+    "section": "开发指南",
+    "description": "从可运行代码开始，理解模块边界与完整接入流程。"
+  },
+  {
+    "path": "guide/services.html",
+    "title": "资源、音频与保存",
+    "section": "开发指南",
+    "description": "从可运行代码开始，理解模块边界与完整接入流程。"
+  },
+  {
+    "path": "guide/networking.html",
+    "title": "联网接入",
+    "section": "开发指南",
+    "description": "从可运行代码开始，理解模块边界与完整接入流程。"
+  },
+  {
+    "path": "guide/engine-modules.html",
+    "title": "自定义模块",
+    "section": "开发指南",
+    "description": "从可运行代码开始，理解模块边界与完整接入流程。"
+  },
+  {
+    "path": "guide/ecs.html",
+    "title": "ECS 与游戏循环",
+    "section": "开发指南",
+    "description": "从可运行代码开始，理解模块边界与完整接入流程。"
+  },
+  {
+    "path": "guide/rendering.html",
+    "title": "渲染、碰撞与引擎能力",
+    "section": "开发指南",
+    "description": "从可运行代码开始，理解模块边界与完整接入流程。"
+  },
+  {
+    "path": "engineering/browser-support.html",
+    "title": "浏览器功能接入",
+    "section": "工程与维护",
+    "description": "当前源码的构建方式、交付流程与验证边界。"
+  },
+  {
+    "path": "engineering/distribution.html",
+    "title": "分发与版本维护",
+    "section": "工程与维护",
+    "description": "当前源码的构建方式、交付流程与验证边界。"
+  },
+  {
+    "path": "guide/troubleshooting.html",
+    "title": "常见问题",
+    "section": "开发指南",
+    "description": "从可运行代码开始，理解模块边界与完整接入流程。"
+  },
+  {
+    "path": "api/application-contracts.html",
+    "title": "应用 API 使用契约",
+    "section": "API",
+    "description": "参数、返回结果、生命周期和使用约束。"
+  },
+  {
+    "path": "specs/access-policy.html",
+    "title": "access-policy：权限策略与路由集成",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/application-services.html",
+    "title": "application-services：应用和作用域",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/asset-loading.html",
+    "title": "asset-loading：分组资源加载与持有",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/audio.html",
+    "title": "audio：背景音乐、音效与音量",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/auth-session.html",
+    "title": "auth-session：可选账号会话适配",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/canvas-host.html",
+    "title": "canvas-host：页面内的 2D 游戏能力",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/component-model.html",
+    "title": "component-model：组件、模板与绑定",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/game-feedback.html",
+    "title": "game-feedback：游戏计时和反馈缓动",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/page-router.html",
+    "title": "page-router：导航、懒加载和预加载",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/project-tooling.html",
+    "title": "project-tooling：项目、代码生成和构建",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/reactive-core.html",
+    "title": "reactive-core：响应式基础",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/reference-game.html",
+    "title": "reference-game：完整轻量 2D 游戏与交付",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/save-data.html",
+    "title": "save-data：游戏进度和偏好",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/state-store.html",
+    "title": "state-store：按业务共享状态",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/theme-assets.html",
+    "title": "theme-assets：主题与语义资源",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "specs/viewport-input.html",
+    "title": "viewport-input：画布尺寸、坐标与输入动作",
+    "section": "模块契约",
+    "description": "模块边界、所有权、取消语义及直接验收要求。"
+  },
+  {
+    "path": "index.html",
+    "title": "为网页 2D 游戏而生。",
+    "section": "文档",
+    "description": "从第一个页面到完整游戏，在同一套指南里完成开发、查阅与交付。"
+  },
+  {
+    "path": "guide/quick-start.html",
+    "title": "快速上手",
+    "section": "开发指南",
+    "description": "创建一个独立的网页 2D 游戏，从当前源码到可部署网页。"
+  },
+  {
+    "path": "engineering/project-structure.html",
+    "title": "目录与文件归属",
+    "section": "工程与维护",
+    "description": "仓库、游戏和文档各有明确边界，每类内容只有一个主入口。"
+  },
+  {
+    "path": "engineering/architecture.html",
+    "title": "架构与能力地图",
+    "section": "工程与维护",
+    "description": "以应用组织界面，以 Engine 和 ECS 驱动玩法，按需接入浏览器能力。"
+  },
+  {
+    "path": "engineering/workflow.html",
+    "title": "规格与执行流程",
+    "section": "工程与维护",
+    "description": "规格定义契约，计划安排顺序，任务清单记录完成状态。"
+  },
+  {
+    "path": "engineering/validation.html",
+    "title": "检查与验收边界",
+    "section": "工程与维护",
+    "description": "区分类型、Node、打包和真实设备的证据，按改动选择检查。"
+  },
+  {
+    "path": "engineering/contributing.html",
+    "title": "参与开发",
+    "section": "工程与维护",
+    "description": "围绕具体问题修改源码，以可复现检查说明变化。"
+  },
+  {
+    "path": "engineering/changelog.html",
+    "title": "当前版本",
+    "section": "工程与维护",
+    "description": "0.5.0-rc.1 · 网页 2D 游戏应用框架。"
+  },
+  {
+    "path": "engineering/cli.html",
+    "title": "CLI 与项目配置",
+    "section": "工程与维护",
+    "description": "create、generate、add 与 check 的完整命令与边界。"
+  },
+  {
+    "path": "guide/reactivity.html",
+    "title": "响应式与模板语法",
+    "section": "开发指南",
+    "description": "signal、computed、effect 与原生 HTML 模板的日常用法。"
+  },
+  {
+    "path": "guide/authentication.html",
+    "title": "认证与权限接入",
+    "section": "开发指南",
+    "description": "可选同源账号会话、服务端协议、权限守卫与用户数据隔离。"
+  }
+]

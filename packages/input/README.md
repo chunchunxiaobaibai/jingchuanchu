@@ -1,41 +1,7 @@
 # @xiaobaibaifqy/jingchuanchu-input
 
-键盘与指针输入。/module 提供 keyboardModule、pointerModule 和 Keyboard 服务 token。
+Jingchuanchu (镜川初) TypeScript engine input module。版本 0.5.0-rc.1，MIT 授权。
 
-## 安装
+开发指南、参数及使用约束统一在配套套件的 docs/index.html；API 见 docs/api/input.html。源码仓库内打开 ../../docs/index.html。
 
-公共 npm 安装：
-
-```bash
-npm install @xiaobaibaifqy/jingchuanchu-input
-```
-
-也可通过镜川初分发套件的 install.mjs 选择模块，自动补齐内部依赖。本地 tgz 安装时需同时提供所需内部包。
-
-## 使用
-
-```ts
-import { Scope } from '@xiaobaibaifqy/jingchuanchu-core';
-import { KeyboardInput } from '@xiaobaibaifqy/jingchuanchu-input';
-const scope = new Scope();
-const input = new KeyboardInput(window, ['ArrowLeft', 'ArrowRight']);
-scope.own(() => input.dispose());
-console.log(input.isDown('ArrowRight'));
-scope.dispose();
-```
-
-包提供 ESM、TypeScript 声明与源码。TS >=5.4；浏览器功能需要对应浏览器 API，服务端开发使用 Node >=22.12。完整 API、模块组合和可运行模板在分发套件 docs/development 中。
-
-## 0.4.0 扩展
-
-原 KeyboardInput、bindPointer、keyboardModule 和 pointerModule 保留。配合场景管理时，把场景专用订阅登记到 SceneContext.scope，在退出时释放；共享输入由应用显式持有。
-
-本仓库 0.4.0 尚未上传 npm，新增能力请使用本地 tgz 或分发套件；公共包当前为 0.3.0。完整契约见分发套件 `docs/development/extensions-0.4.md`。
-
-PointerHandlers 可用 `cancel(event, reason)` 区分取消/失捕与正常 up，窗口失焦和 Scope 销毁会清理捕获。KeyboardInput 清理焦点和输入法组合状态，避免文字输入进入游戏按键。
-
-当前源码的 PointerHandlers 还可用 accept(event):boolean，在捕获指针前检查事件是否属于玩法区域；未提供时保留原行为。application 项目通常通过 GameCanvas/defineActions 使用输入，不给同一画布叠加手工绑定；对应使用方式在配套文档 application-gameplay.md。
-
-## 授权
-
-MIT，见 [LICENSE](LICENSE)。
+包提供编译后的 ESM 和 TypeScript 声明。请使用同一版本套件的配套依赖；浏览器项目只安装所需模块，tooling 作为开发依赖。

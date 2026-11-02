@@ -1,0 +1,202 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+  "devicePixelRatio": 1,
+  "viewport": {
+    "width": 1280,
+    "height": 900
+  },
+  "results": [
+    {
+      "round": 1,
+      "size": 1000,
+      "mode": "native",
+      "warmupFrames": 30,
+      "measuredFrames": 120,
+      "update": {
+        "medianMs": 0,
+        "p95Ms": 0.10000002384185791,
+        "maxMs": 0.19999998807907104
+      },
+      "drawSubmission": {
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.40000003576278687,
+        "maxMs": 0.5999999642372131
+      },
+      "frameInterval": {
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.800000000000182,
+        "maxMs": 16.90000000000009
+      },
+      "intervalsOver25Ms": 0,
+      "pixelHash": 663538005
+    },
+    {
+      "round": 1,
+      "size": 1000,
+      "mode": "engine",
+      "warmupFrames": 30,
+      "measuredFrames": 120,
+      "update": {
+        "medianMs": 0.10000002384185791,
+        "p95Ms": 0.30000001192092896,
+        "maxMs": 0.6000000238418579
+      },
+      "drawSubmission": {
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 1.199999988079071,
+        "maxMs": 2.300000011920929
+      },
+      "frameInterval": {
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.800000000000182,
+        "maxMs": 17.200000000000273
+      },
+      "intervalsOver25Ms": 0,
+      "pixelHash": 663538005
+    },
+    {
+      "round": 1,
+      "size": 10000,
+      "mode": "native",
+      "warmupFrames": 30,
+      "measuredFrames": 120,
+      "update": {
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.5,
+        "maxMs": 0.699999988079071
+      },
+      "drawSubmission": {
+        "medianMs": 2.600000023841858,
+        "p95Ms": 4.099999964237213,
+        "maxMs": 6.899999976158142
+      },
+      "frameInterval": {
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.800000000000182,
+        "maxMs": 16.900000000000546
+      },
+      "intervalsOver25Ms": 0,
+      "pixelHash": 1568900859
+    },
+    {
+      "round": 1,
+      "size": 10000,
+      "mode": "engine",
+      "warmupFrames": 30,
+      "measuredFrames": 120,
+      "update": {
+        "medianMs": 1,
+        "p95Ms": 2.199999988079071,
+        "maxMs": 2.800000011920929
+      },
+      "drawSubmission": {
+        "medianMs": 3,
+        "p95Ms": 5.5,
+        "maxMs": 9.699999988079071
+      },
+      "frameInterval": {
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.80000000000109,
+        "maxMs": 17
+      },
+      "intervalsOver25Ms": 0,
+      "pixelHash": 1568900859
+    },
+    {
+      "round": 2,
+      "size": 1000,
+      "mode": "engine",
+      "warmupFrames": 30,
+      "measuredFrames": 120,
+      "update": {
+        "medianMs": 0.10000002384185791,
+        "p95Ms": 0.30000001192092896,
+        "maxMs": 1
+      },
+      "drawSubmission": {
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 1,
+        "maxMs": 2.600000023841858
+      },
+      "frameInterval": {
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.80000000000109,
+        "maxMs": 16.900000000001455
+      },
+      "intervalsOver25Ms": 0,
+      "pixelHash": 663538005
+    },
+    {
+      "round": 2,
+      "size": 1000,
+      "mode": "native",
+      "warmupFrames": 30,
+      "measuredFrames": 120,
+      "update": {
+        "medianMs": 0,
+        "p95Ms": 0.10000002384185791,
+        "maxMs": 0.20000004768371582
+      },
+      "drawSubmission": {
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.5,
+        "maxMs": 0.699999988079071
+      },
+      "frameInterval": {
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.80000000000109,
+        "maxMs": 16.899999999999636
+      },
+      "intervalsOver25Ms": 0,
+      "pixelHash": 663538005
+    },
+    {
+      "round": 2,
+      "size": 10000,
+      "mode": "engine",
+      "warmupFrames": 30,
+      "measuredFrames": 120,
+      "update": {
+        "medianMs": 1,
+        "p95Ms": 1.9000000357627869,
+        "maxMs": 2.899999976158142
+      },
+      "drawSubmission": {
+        "medianMs": 3.300000011920929,
+        "p95Ms": 5.399999976158142,
+        "maxMs": 6
+      },
+      "frameInterval": {
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.80000000000291,
+        "maxMs": 16.900000000001455
+      },
+      "intervalsOver25Ms": 0,
+      "pixelHash": 1568900859
+    },
+    {
+      "round": 2,
+      "size": 10000,
+      "mode": "native",
+      "warmupFrames": 30,
+      "measuredFrames": 120,
+      "update": {
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.5,
+        "maxMs": 0.6000000238418579
+      },
+      "drawSubmission": {
+        "medianMs": 2.199999988079071,
+        "p95Ms": 3.300000011920929,
+        "maxMs": 3.700000047683716
+      },
+      "frameInterval": {
+        "medianMs": 16.69999999999709,
+        "p95Ms": 16.80000000000291,
+        "maxMs": 16.900000000001455
+      },
+      "intervalsOver25Ms": 0,
+      "pixelHash": 1568900859
+    }
+  ]
+}

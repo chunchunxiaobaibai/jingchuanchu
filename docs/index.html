@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280" />
+    <title>镜川初 · 网页 2D 游戏引擎</title>
+    <meta
+      name="description"
+      content="从第一个页面到完整游戏，在同一套指南里完成开发、查阅与交付。"
+    />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/docs.css" />
+    <script src="assets/theme.js"></script>
+    <script src="assets/search-index.js" defer></script>
+    <script src="assets/docs.js" defer></script>
+  </head>
+  <body data-base="" data-page="index.html" class="home-page">
+    <a class="skip-link" href="#main-content">跳转到内容</a>
+    <header class="topbar">
+      <a class="brand" href="index.html"
+        ><img src="assets/logo.svg" alt="" width="30" height="30" /><span
+          >镜川初<small>JINGCHUANCHU</small></span
+        ><span class="version">0.5.0-rc.1</span></a
+      ><button class="search-trigger" type="button" data-open-search>
+        <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
+      </button>
+      <nav aria-label="顶部导航">
+        <a href="guide/quick-start.html">指南</a><a href="api/index.html">API</a
+        ><a href="engineering/project-structure.html">工程</a>
+      </nav>
+      <span class="header-divider"></span
+      ><button id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换深浅主题">
+        ◐</button
+      ><a
+        class="source-link"
+        href="https://github.com/chunchunxiaobaibai/jingchuanchu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+    </header>
+    <aside class="sidebar" aria-label="文档导航">
+      <div class="sidebar-heading">开发者手册 <span>DOCS</span></div>
+      <nav>
+        <section>
+          <h2>开始</h2>
+          <a href="index.html" class="selected" aria-current="page">为网页 2D 游戏而生。</a
+          ><a href="guide/quick-start.html">快速上手</a
+          ><a href="guide/build-from-source.html">从源码到独立游戏</a>
+        </section>
+        <section>
+          <h2>应用开发</h2>
+          <a href="guide/reactivity.html">响应式与模板语法</a
+          ><a href="guide/components.html">组件、表单与页面</a
+          ><a href="guide/services.html">资源、音频与保存</a
+          ><a href="guide/authentication.html">认证与权限接入</a>
+        </section>
+        <section>
+          <h2>2D 游戏开发</h2>
+          <a href="guide/gameplay.html">场景与游戏循环</a><a href="guide/ecs.html">ECS 与游戏循环</a
+          ><a href="guide/rendering.html">渲染、碰撞与引擎能力</a
+          ><a href="guide/engine-modules.html">自定义模块</a
+          ><a href="guide/networking.html">联网接入</a>
+        </section>
+        <section>
+          <h2>工具与工程</h2>
+          <a href="engineering/cli.html">CLI 与项目配置</a
+          ><a href="engineering/project-structure.html">目录与文件归属</a
+          ><a href="engineering/architecture.html">架构与能力地图</a
+          ><a href="engineering/distribution.html">分发与版本维护</a
+          ><a href="engineering/browser-support.html">浏览器功能接入</a
+          ><a href="guide/troubleshooting.html">常见问题</a>
+        </section>
+        <section>
+          <h2>维护</h2>
+          <a href="engineering/contributing.html">参与开发</a
+          ><a href="engineering/validation.html">检查与验收边界</a
+          ><a href="engineering/workflow.html">规格与执行流程</a
+          ><a href="engineering/changelog.html">当前版本</a>
+        </section>
+        <details>
+          <summary>模块契约 <span>16</span></summary>
+          <a href="specs/access-policy.html">权限策略与路由集成</a
+          ><a href="specs/application-services.html">应用和作用域</a
+          ><a href="specs/asset-loading.html">分组资源加载与持有</a
+          ><a href="specs/audio.html">背景音乐、音效与音量</a
+          ><a href="specs/auth-session.html">可选账号会话适配</a
+          ><a href="specs/canvas-host.html">页面内的 2D 游戏能力</a
+          ><a href="specs/component-model.html">组件、模板与绑定</a
+          ><a href="specs/game-feedback.html">游戏计时和反馈缓动</a
+          ><a href="specs/page-router.html">导航、懒加载和预加载</a
+          ><a href="specs/project-tooling.html">项目、代码生成和构建</a
+          ><a href="specs/reactive-core.html">响应式基础</a
+          ><a href="specs/reference-game.html">完整轻量 2D 游戏与交付</a
+          ><a href="specs/save-data.html">游戏进度和偏好</a
+          ><a href="specs/state-store.html">按业务共享状态</a
+          ><a href="specs/theme-assets.html">主题与语义资源</a
+          ><a href="specs/viewport-input.html">画布尺寸、坐标与输入动作</a>
+        </details>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span> 网页 2D · 原生 TypeScript<small
+          >清晰构建，自由创造。</small
+        >
+      </div>
+    </aside>
+    <div class="workspace wide">
+      <main id="main-content" tabindex="-1">
+        <article data-doc-content>
+          <div class="hero">
+            <p class="eyebrow">JINGCHUANCHU ENGINE · 2D / WEB / TYPESCRIPT</p>
+            <h2 id="把想法-变成可以游玩的世界">把想法，变成<br /><span>可以游玩的世界。</span></h2>
+            <p>
+              以页面组织应用，以组件构建界面，以场景承载玩法。原生 TypeScript、HTML 和
+              CSS，让游戏开发保持清晰。
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="guide/quick-start.html">开始使用 <span>→</span></a
+              ><a class="button" href="api/index.html">查阅 API ↗</a>
+            </div>
+            <div class="hero-meta">
+              <span>0.5.0-rc.1</span><span>MIT 开源</span><span>10 个按需组合的包</span>
+            </div>
+          </div>
+          <div class="section-heading">
+            <h2 id="从这里-找到你的下一步">从这里，找到你的下一步</h2>
+            <span>THE DEVELOPER HANDBOOK</span>
+          </div>
+          <div class="entry-grid">
+            <a class="entry-card" href="guide/quick-start.html"
+              ><span class="card-number">01 / START</span>
+              <h3 id="快速上手">快速上手 <span>↗</span></h3>
+              <p>构建套件、创建独立项目，运行你的第一个 2D 游戏。</p>
+              <span class="card-foot">环境准备 · 创建 · 运行</span></a
+            ><a class="entry-card" href="guide/components.html"
+              ><span class="card-number">02 / LEARN</span>
+              <h3 id="开发指南">开发指南 <span>↗</span></h3>
+              <p>理解三文件组件、响应式状态、页面导航与游戏场景。</p>
+              <span class="card-foot">组件 · 路由 · 游戏能力</span></a
+            ><a class="entry-card" href="api/index.html"
+              ><span class="card-number">03 / REFERENCE</span>
+              <h3 id="api-参考">API 参考 <span>↗</span></h3>
+              <p>按能力与包入口检索函数、类型和完整的成员签名。</p>
+              <span class="card-foot">按包分类 · 即时过滤</span></a
+            ><a class="entry-card" href="engineering/project-structure.html"
+              ><span class="card-number">04 / STRUCTURE</span>
+              <h3 id="工程与维护">工程与维护 <span>↗</span></h3>
+              <p>清晰的目录职责、模块依赖、构建方式与验收边界。</p>
+              <span class="card-foot">目录 · 分发 · 维护</span></a
+            >
+          </div>
+          <section class="architecture-strip">
+            <div>
+              <span class="eyebrow">ONE CLEAR WORKFLOW</span>
+              <h2 id="一条完整的开发路径">一条完整的开发路径</h2>
+              <p>应用编排与游戏玩法各有归属，开发工具只在构建时参与。</p>
+            </div>
+            <ol>
+              <li>应用与页面<small>Application / Router / Component</small></li>
+              <li>游戏与场景<small>Store / GameCanvas / Scene</small></li>
+              <li>运行与渲染<small>Engine / ECS / Canvas 2D</small></li>
+            </ol>
+          </section>
+        </article>
+        <footer class="page-footer">
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+        </footer>
+      </main>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <form method="dialog" class="search-dialog-header">
+        <label id="search-title" for="doc-search">搜索文档</label
+        ><button type="submit" aria-label="关闭搜索">Esc</button>
+      </form>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="doc-search"
+          type="search"
+          autocomplete="off"
+          placeholder="搜索指南、函数、类型或关键词…"
+        />
+      </div>
+      <div id="search-results" aria-live="polite"></div>
+      <div class="search-dialog-footer">
+        <span>↑ ↓ 选择 · Enter 打开</span><span>镜川初文档</span>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
