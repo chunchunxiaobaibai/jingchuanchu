@@ -174,3 +174,20 @@
 - scripts 按 build、verify、benchmarks、assets、docs、distribution 分类，命令与文档引用同步更新；分发说明迁至 scripts/distribution/readme.html，套件使用 README.html 并携带独立文档站。根、包、模板和示例 README 收敛为入口及必要运行说明。
 - 实际检查：npm run typecheck；npm run docs:build；npm run docs:check（50 页、3407 个本地链接、605 条搜索记录、326 项 API）；必要文件 Prettier 与 JS 语法检查；CSS 解析/PC 布局静态检查；Node DOM 搜索/过滤/主题检查；本机 HTTP 文档/资源/状态码检查；独立临时复制的手册及分发 README 检查（51 个 HTML、3411 个本地链接）；git diff --check。
 - 未执行完整 dist:release、全量测试或真实浏览器/设备/视觉验收；未启动浏览器、Playwright、截图、推送或发布。Node DOM 与 HTTP 检查不代表真实浏览器界面通过。
+
+## 2026-11-07：0.5.0 生产级落地迭代
+
+新增 bulkQuery API、Transform 帧缓存、性能监测面板与跨浏览器测试，作为 0.5.0 正式版交付。保留现有全部公开 API；新增能力通过新入口引入。实测性能数据见 artifacts/performance/final-0.5.0.json；变更详情见 CHANGELOG.md。
+
+| 状态 | 任务 | 结果 |
+| ---- | ---- | ---- |
+| [x]  | ECS bulkQuery API | `World.bulkQuery()` 新增热路径只读迭代接口，承诺遍历期间不增删；实测 10k 查询相对 P06 改善约 4–8%（迭代器协议有固定开销），含修改检测与 9 个单元测试 |
+| [x]  | 渲染管线集成 bulkQuery | `Canvas2D.drawWorld()` 三条热路径替换为 bulkQuery；微基准改善约 5%，真实游戏场景待人工验证 |
+| [x]  | Transform 帧缓存 | `TransformFrameCache` 帧内复用已计算矩阵，渲染与碰撞可共享同一缓存；稀疏碰撞相对 P06 改善约 16% |
+| [x]  | 运行时性能采集 | `PerformanceMonitor` 帧级采集 FPS/query 数/碰撞对/drawCall/内存；<1ms/帧开销；9 个单元测试通过 |
+| [x]  | 调试性能面板 | `createPerfPanel` 悬浮调试 UI；`defineApplication({ debug: { perfPanel: true } })` 启用，生产默认关闭；10 个单元测试通过 |
+| [x]  | 桌面浏览器测试矩阵 | Playwright 配置 Chromium/Firefox/WebKit；8 个完整游戏流程场景；GitHub Actions CI 工作流；需手动执行（`npm run test:e2e`） |
+| [x]  | Node 端内存耐久测试 | `npm run test:endurance`：100 个引擎生命周期循环，实测堆增长 2.09 MB < 10 MB 阈值 |
+| [x]  | ActionSampler 与碰撞微优化 | ActionSampler 按需冻结替代 structuredClone；碰撞检测稀疏分布改善约 16%（含在 Transform 缓存收益内） |
+
+本轮最终全量验证：typecheck 0 errors；384/384 单元测试；耐久测试 2.09 MB；热路径基准见 artifacts/performance/final-0.5.0.json。未执行 H01—H04 或设备验收；浏览器 E2E 测试框架已就绪，待人工授权执行。

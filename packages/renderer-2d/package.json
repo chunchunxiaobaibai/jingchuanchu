@@ -1,6 +1,6 @@
 {
   "name": "@xiaobaibaifqy/jingchuanchu-renderer-2d",
-  "version": "0.5.0-rc.1",
+  "version": "0.5.0",
   "description": "Jingchuanchu (镜川初) TypeScript engine renderer-2d module",
   "type": "module",
   "license": "MIT",
@@ -49,8 +49,8 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-core": "^0.5.0-rc.1",
-    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.5.0-rc.1"
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.5.0",
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.5.0"
   },
   "publishConfig": {
     "access": "public",

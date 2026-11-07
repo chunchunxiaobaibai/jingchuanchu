@@ -17,6 +17,21 @@
 
 前轮绘制队列优化与条件模板文档修复不重复实施。继续优化渲染缓存、改调度算法或新增 ECS API 不属于本轮范围，只有新证据与明确规格才另立任务。
 
+## 2026-11-07 生产级落地：0.5.0 正式版
+
+在 P06 基础上补齐开发者工具与测试覆盖，不改现有架构与公开 API。完成状态见 todo 的「0.5.0 生产级落地迭代」章节；基准数据见 artifacts/performance/final-0.5.0.json。
+
+| 顺序 | 任务 | 主要范围 | 验证与产物 |
+| ---- | ---- | -------- | ---------- |
+| G01  | ECS bulkQuery API | ecs/index.ts、tests/ecs-bulk-query.test.ts | 16 个 ECS 测试；热路径基准对比 |
+| G02  | 渲染管线集成 bulkQuery | renderer-2d/index.ts、rendering-updates.test.ts | 功能回归 + 微基准 |
+| G03  | Transform 帧缓存 | renderer-2d/features.ts、collision.ts、index.ts | renderer/collision 定向测试；基准 |
+| G04  | 运行时性能采集 | app/runtime/performance-monitor.ts | 9 个单元测试；<1ms/帧开销验证 |
+| G05  | 调试性能面板 | app/runtime/perf-panel.ts、application.ts | 10 个单元测试 |
+| G06  | 桌面浏览器测试矩阵 | tests/e2e/browser-matrix.test.ts、playwright.config.ts | 类型检查；框架验证（执行需服务器） |
+| G07  | Node 端内存耐久测试 | scripts/verify/endurance-check.ts | npm run test:endurance；2.09 MB < 10 MB |
+| G08  | ActionSampler 与碰撞微优化 | app/runtime/input-actions.ts、renderer-2d/collision.ts | 输入/碰撞定向测试；热路径对比 |
+
 ## 实施原则
 
 以最小功能闭环逐步实现：先让一个有输入/输出/model 的组件可编译、可挂载，再扩展 Store 和页面；Canvas、主题和游戏常用能力随后接入，最后验证完整默认项目。旧入口和模板在新默认项目切换前保持可用。

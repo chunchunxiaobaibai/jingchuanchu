@@ -1,6 +1,6 @@
 {
   "name": "@xiaobaibaifqy/jingchuanchu-ecs",
-  "version": "0.5.0-rc.1",
+  "version": "0.5.0",
   "description": "Jingchuanchu (镜川初) TypeScript engine ecs module",
   "type": "module",
   "license": "MIT",

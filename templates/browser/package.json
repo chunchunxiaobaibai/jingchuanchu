@@ -11,13 +11,13 @@
     "check:structure": "node scripts/check-project.mjs"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-app": "^0.5.0-rc.1",
-    "@xiaobaibaifqy/jingchuanchu-renderer-2d": "^0.5.0-rc.1",
-    "@xiaobaibaifqy/jingchuanchu-core": "^0.5.0-rc.1",
-    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.5.0-rc.1"
+    "@xiaobaibaifqy/jingchuanchu-app": "^0.5.0",
+    "@xiaobaibaifqy/jingchuanchu-renderer-2d": "^0.5.0",
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.5.0",
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.5.0"
   },
   "devDependencies": {
-    "@xiaobaibaifqy/jingchuanchu-tooling": "^0.5.0-rc.1",
+    "@xiaobaibaifqy/jingchuanchu-tooling": "^0.5.0",
     "typescript": "^5.9.0",
     "vite": "^7.1.0"
   },

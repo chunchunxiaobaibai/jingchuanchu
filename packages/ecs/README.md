@@ -1,6 +1,6 @@
 # @xiaobaibaifqy/jingchuanchu-ecs
 
-Jingchuanchu (镜川初) TypeScript engine ecs module。版本 0.5.0-rc.1，MIT 授权。
+Jingchuanchu (镜川初) TypeScript engine ecs module。版本 0.5.0，MIT 授权。
 
 开发指南、参数及使用约束统一在配套套件的 docs/index.html；API 见 docs/api/ecs.html。源码仓库内打开 ../../docs/index.html。
 

@@ -1,6 +1,6 @@
 {
   "name": "@xiaobaibaifqy/jingchuanchu-app",
-  "version": "0.5.0-rc.1",
+  "version": "0.5.0",
   "description": "Jingchuanchu typed application, scene, input and view runtime",
   "type": "module",
   "license": "MIT",
@@ -34,12 +34,12 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-core": "^0.5.0-rc.1",
-    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.5.0-rc.1",
-    "@xiaobaibaifqy/jingchuanchu-browser": "^0.5.0-rc.1",
-    "@xiaobaibaifqy/jingchuanchu-input": "^0.5.0-rc.1",
-    "@xiaobaibaifqy/jingchuanchu-assets": "^0.5.0-rc.1",
-    "@xiaobaibaifqy/jingchuanchu-renderer-2d": "^0.5.0-rc.1"
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.5.0",
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.5.0",
+    "@xiaobaibaifqy/jingchuanchu-browser": "^0.5.0",
+    "@xiaobaibaifqy/jingchuanchu-input": "^0.5.0",
+    "@xiaobaibaifqy/jingchuanchu-assets": "^0.5.0",
+    "@xiaobaibaifqy/jingchuanchu-renderer-2d": "^0.5.0"
   },
   "publishConfig": {
     "access": "public",
