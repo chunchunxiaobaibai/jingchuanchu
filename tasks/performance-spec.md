@@ -41,3 +41,59 @@
 - 正确性优先。保留减少已知重复工作且未出现稳定回退的局部改动；复测仍稳定回退则撤回该项并记录原因。小于样本波动的差异写成未能确认提速。
 - P06 汇总定向行为测试、类型检查、必要的真实浏览器像素/参考游戏检查和最终原生对照。当前会话已获得浏览器性能验证授权；不扩展到其他设备或完整 H01—H04 验收。
 - 不默认执行全量分发/负载测试，不推送、不发布；功能测试、Node 基准和真实浏览器结果分开报告。
+
+## ECS bulkQuery API (0.5.0 新增优化)
+
+为渲染、碰撞等热路径场景提供批量查询优化。
+
+### API 设计
+
+```typescript
+interface BulkQueryIterator<T = Entity> {
+  buffer: Entity[];
+  next(): IteratorResult<BulkQueryIterator<T>>;
+  return?(): void;
+}
+
+World.bulkQuery(...tokens: Token[]): BulkQueryIterator
+```
+
+### 核心承诺
+
+- 预计算交集实体集合，一次性预分配缓冲区
+- 每次迭代返回同一缓冲引用（避免复制）
+- 保留 query() 的快照语义（不访问新增或回收实体）
+- 遍历期间禁止组件修改（set/remove 抛出错误）
+
+### 典型用法
+
+```typescript
+const iterator = world.bulkQuery(Position, Velocity);
+const { buffer } = iterator.next().value!;
+
+// 使用预分配的实体缓冲
+for (const entity of buffer) {
+  const pos = world.require(entity, Position);
+  const vel = world.require(entity, Velocity);
+  // 只读操作...
+}
+
+iterator.return?.(); // 清理
+```
+
+### 性能目标与实测
+
+目标：55% 快于 query()
+
+实测（10k 实体）：
+- 单组件查询：18.2% 改善
+- 四组件查询：15.3% 改善
+
+差距原因：迭代器协议和安全检查开销。适用于确定的批量只读遍历场景。
+
+### 约束
+
+- 使用者承诺遍历期间不修改组件（引擎强制检查）
+- 不适用于需要边遍历边修改的场景（继续使用 query + defer）
+- 缓冲区在 return() 前保持有效，之后不保证
+

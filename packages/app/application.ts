@@ -64,9 +64,15 @@ export type {
   ApplicationDefinition,
   ApplicationInstance,
   ApplicationStatus,
+  ApplicationDebugOptions,
   ApplicationRouterOptions,
   ApplicationRouterContext,
 } from './runtime/application.js';
+
+export { createPerfPanel } from './runtime/perf-panel.js';
+export type { PerfPanel, PerfPanelOptions } from './runtime/perf-panel.js';
+export { PerformanceMonitor } from './runtime/performance-monitor.js';
+export type { PerformanceMetrics } from './runtime/performance-monitor.js';
 
 export { defineRoutes, createRouteMatcher } from './runtime/router/matcher.js';
 export { createMemoryHistoryDriver } from './runtime/router/history.js';

@@ -11,6 +11,19 @@ export interface Transform {
   parent?: Entity;
 }
 export const Transform2D = component<Transform>('Transform2D');
+/** Frame-level cache for resolved Transform matrices to avoid redundant computation. */
+export class TransformFrameCache {
+  private cache = new Map<Entity, Matrix2D>();
+  get(entity: Entity): Matrix2D | undefined {
+    return this.cache.get(entity);
+  }
+  set(entity: Entity, matrix: Matrix2D): void {
+    this.cache.set(entity, matrix);
+  }
+  clear(): void {
+    this.cache.clear();
+  }
+}
 export const identity: Matrix2D = [1, 0, 0, 1, 0, 0];
 export function multiply(a: Matrix2D, b: Matrix2D): Matrix2D {
   return [
@@ -56,12 +69,17 @@ function local(value: Transform): Matrix2D {
   return [c * x, s * x, -s * y, c * y, value.x, value.y];
 }
 /** Resolver cache lives for one drawing/collision traversal, so direct component edits remain visible next time. */
-export function createTransformResolver(world: World): (entity: Entity) => Matrix2D {
-  const cache = new Map<Entity, Matrix2D>();
+export function createTransformResolver(
+  world: World,
+  cache?: TransformFrameCache,
+): (entity: Entity) => Matrix2D {
+  const localCache = new Map<Entity, Matrix2D>();
   const visiting = new Set<Entity>();
   const resolve = (entity: Entity): Matrix2D => {
     if (!world.isAlive(entity)) throw new Error('Stale transform parent');
-    const found = cache.get(entity);
+    const frameResult = cache?.get(entity);
+    if (frameResult) return frameResult;
+    const found = localCache.get(entity);
     if (found) return found;
     if (visiting.has(entity)) throw new Error('Transform parent cycle');
     visiting.add(entity);
@@ -70,7 +88,8 @@ export function createTransformResolver(world: World): (entity: Entity) => Matri
     let matrix = local(value ?? position);
     if (value?.parent) matrix = multiply(resolve(value.parent), matrix);
     visiting.delete(entity);
-    cache.set(entity, matrix);
+    localCache.set(entity, matrix);
+    cache?.set(entity, matrix);
     return matrix;
   };
   return resolve;

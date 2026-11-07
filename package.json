@@ -1,6 +1,6 @@
 {
   "name": "jingchuanchu-engine",
-  "version": "0.5.0-rc.1",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -19,6 +19,8 @@
     "test:distribution": "npm run dist:release && tsx scripts/distribution/verify.ts",
     "test:api": "tsx scripts/verify/api.ts",
     "test:2d": "tsx scripts/verify/2d.ts",
+    "test:endurance": "tsx --conditions=source scripts/verify/endurance-check.ts",
+    "test:e2e:endurance": "playwright test tests/e2e/endurance.test.ts --project=chromium --timeout=600000",
     "benchmark": "tsx --conditions=source scripts/benchmarks/core.ts",
     "benchmark:native": "tsx --conditions=source scripts/benchmarks/native.ts",
     "benchmark:hot-paths": "tsx --conditions=source scripts/benchmarks/hot-paths.ts",

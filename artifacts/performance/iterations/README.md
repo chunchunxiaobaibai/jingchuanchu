@@ -2,6 +2,40 @@
 
 规格：[performance-spec](../../../tasks/performance-spec.md)；顺序：[plan](../../../tasks/plan.md)；状态：[todo](../../../tasks/todo.md)。起点包含上轮绘制队列与条件模板修复，不能把上轮收益重复计算进本轮。
 
+## 0.5.0 bulkQuery 渲染集成（2026-11-07）
+
+在渲染管线 (`packages/renderer-2d/index.ts` 的 `Canvas2D.drawWorld`) 中将热路径的 `query()` 替换为 `bulkQuery()`，覆盖：
+
+- Position2D + Shape2D 查询（每帧最热）
+- Transform2D + Shape2D 查询（次热）
+- Sprite2D 查询（次热）
+
+所有查询为纯只读遍历，符合 bulkQuery 的约束条件。
+
+### 性能验证
+
+运行 `npm run benchmark:hot-paths -- artifacts/performance/post-bulkquery-rendering.json` 的结果与 p06-final.json 对比：
+
+| 操作                | P06 final ms | Post-bulkQuery ms | 变化    |
+| ------------------- | ------------ | ----------------- | ------- |
+| query:10000:0       | 0.34230      | 0.35066           | +2.4%   |
+| query:10000:1       | 0.35076      | 0.33252           | -5.2%   |
+| query:10000:4       | 0.54309      | 0.54492           | +0.3%   |
+| require:10000       | 0.34103      | 0.32949           | -3.4%   |
+| collision:1000:sparse | 0.23700    | 0.23984           | +1.2%   |
+| collision:1000:same-x | 0.98138    | 1.01768           | +3.7%   |
+
+注：基准测量变化在样本波动范围内（~5%）。bulkQuery 在渲染管线集成后，整体性能保持在 P06 水平，没有稳定回退。
+
+### 实际检查
+
+- 类型检查通过：`npm run typecheck` ✓
+- 渲染测试通过：`tests/rendering-updates.test.ts` 3/3 ✓
+- ECS 测试通过：`tests/ecs.test.ts` + `tests/ecs-bulk-query.test.ts` 16/16 ✓
+- 渲染器测试通过：`tests/renderer.test.ts` 2/2 ✓
+
+渲染行为保持不变：混合图层、直接编辑、实体销毁、查询交集语义均正确。
+
 ## 实施结果与边界
 
 P01—P06 已完成。运行时代码只改现有 World/SparseSet、ActionSampler 和 detectCollisions，保持包、公开函数与签名。没有新增 ECS 遍历 API、改变实体存储、替换调度/响应式/渲染后端，也没有引入对象池、空间索引或跨帧组件缓存。diagnostics 默认值与工作量保持原样。
