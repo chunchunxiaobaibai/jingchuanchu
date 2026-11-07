@@ -21,7 +21,7 @@
       <a class="brand" href="../index.html"
         ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
           >镜川初<small>JINGCHUANCHU</small></span
-        ><span class="version">0.5.0-rc.1</span></a
+        ><span class="version">0.5.0</span></a
       ><button class="search-trigger" type="button" data-open-search>
         <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
       </button>
@@ -579,12 +579,9 @@
           </section>
           <section class="api-entry">
             <h2 id="application">@xiaobaibaifqy/jingchuanchu-app/application</h2>
-            <p><span class="tag">220 项导出</span></p>
+            <p><span class="tag">226 项导出</span></p>
             <div class="symbol-index">
-              <a href="#application-GameCanvas">GameCanvas</a
-              ><a href="#application-RouteLink">RouteLink</a
-              ><a href="#application-RouterOutlet">RouterOutlet</a
-              ><a href="#application-batch">batch</a
+              <a href="#application-batch">batch</a
               ><a href="#application-bindAccessRouter">bindAccessRouter</a
               ><a href="#application-bootstrapApplication">bootstrapApplication</a
               ><a href="#application-computed">computed</a
@@ -594,6 +591,7 @@
               ><a href="#application-createGameClock">createGameClock</a
               ><a href="#application-createLocalStorageAdapter">createLocalStorageAdapter</a
               ><a href="#application-createMemoryHistoryDriver">createMemoryHistoryDriver</a
+              ><a href="#application-createPerfPanel">createPerfPanel</a
               ><a href="#application-createRouteMatcher">createRouteMatcher</a
               ><a href="#application-createRouter">createRouter</a
               ><a href="#application-createViewport">createViewport</a
@@ -630,6 +628,7 @@
               ><a href="#application-ComponentError">ComponentError</a
               ><a href="#application-GameClockError">GameClockError</a
               ><a href="#application-GameSceneError">GameSceneError</a
+              ><a href="#application-PerformanceMonitor">PerformanceMonitor</a
               ><a href="#application-RouteError">RouteError</a
               ><a href="#application-SaveError">SaveError</a
               ><a href="#application-SaveService">SaveService</a
@@ -650,6 +649,7 @@
               ><a href="#application-ActionSnapshot">ActionSnapshot</a
               ><a href="#application-ApplicationAssetOptions">ApplicationAssetOptions</a
               ><a href="#application-ApplicationAudioOptions">ApplicationAudioOptions</a
+              ><a href="#application-ApplicationDebugOptions">ApplicationDebugOptions</a
               ><a href="#application-ApplicationDefinition">ApplicationDefinition</a
               ><a href="#application-ApplicationInstance">ApplicationInstance</a
               ><a href="#application-ApplicationOptions">ApplicationOptions</a
@@ -735,6 +735,9 @@
               ><a href="#application-NavigationResult">NavigationResult</a
               ><a href="#application-OutputDefinition">OutputDefinition</a
               ><a href="#application-PageDefinition">PageDefinition</a
+              ><a href="#application-PerformanceMetrics">PerformanceMetrics</a
+              ><a href="#application-PerfPanel">PerfPanel</a
+              ><a href="#application-PerfPanelOptions">PerfPanelOptions</a
               ><a href="#application-PreparedRoutePage">PreparedRoutePage</a
               ><a href="#application-ReadonlyData">ReadonlyData</a
               ><a href="#application-ReadSignal">ReadSignal</a
@@ -798,56 +801,11 @@
               ><a href="#application-ViewportMeasurement">ViewportMeasurement</a
               ><a href="#application-WritableModel">WritableModel</a
               ><a href="#application-WritableModelOptions">WritableModelOptions</a
-              ><a href="#application-WritableSignal">WritableSignal</a>
+              ><a href="#application-WritableSignal">WritableSignal</a
+              ><a href="#application-GameCanvas">GameCanvas</a
+              ><a href="#application-RouteLink">RouteLink</a
+              ><a href="#application-RouterOutlet">RouterOutlet</a>
             </div>
-            <section class="api-symbol">
-              <h3 id="application-GameCanvas">
-                <code>GameCanvas</code><span class="tag">值</span>
-              </h3>
-              <p>
-                Explicitly register before using &lt;game-canvas&gt;. Give the game-canvas host
-                display:block and an explicit CSS size.
-              </p>
-              <p class="source-location">packages/app/runtime/game-canvas.ts:40</p>
-              <details class="import-hint">
-                <summary>导入方式</summary>
-                <pre><code>import { GameCanvas } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
-              </details>
-              <div class="code-block">
-                <div class="code-label">TypeScript · 公开签名</div>
-                <pre><code>const GameCanvas: ComponentDefinition&lt;{ readonly scene: InputDefinition&lt;GameCanvasScene&gt; &amp; { readonly required: true; }; readonly options: InputDefinition&lt;GameCanvasOptions&gt; &amp; { readonly required: true; }; readonly props: InputDefinition&lt;unknown&gt; &amp; { readonly required: false; }; }, { readonly ready: OutputDefinition&lt;GameCanvasHandle&gt;; readonly error: OutputDefinition&lt;CanvasHostError&gt;; readonly statusChanged: OutputDefinition&lt;GameCanvasStatus&gt;; }, {}, { game: GameCanvasHandle; start: (canvas: HTMLCanvasElement) =&gt; void; update: () =&gt; void; activate(): void; deactivate(): void; destroy(): void; }&gt; &amp; { readonly selector: "game-canvas"; };</code></pre>
-              </div>
-            </section>
-            <section class="api-symbol">
-              <h3 id="application-RouteLink"><code>RouteLink</code><span class="tag">值</span></h3>
-              <p class="source-location">packages/app/runtime/router/components.ts:18</p>
-              <details class="import-hint">
-                <summary>导入方式</summary>
-                <pre><code>import { RouteLink } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
-              </details>
-              <div class="code-block">
-                <div class="code-label">TypeScript · 公开签名</div>
-                <pre><code>const RouteLink: ComponentDefinition&lt;{ readonly to: InputDefinition&lt;RouteTarget&gt; &amp; { readonly required: true; }; readonly replace: InputDefinition&lt;boolean&gt; &amp; { readonly required: false; }; readonly target: InputDefinition&lt;string&gt; &amp; { readonly required: false; }; readonly download: InputDefinition&lt;string | null&gt; &amp; { readonly required: false; }; }, { readonly navigated: OutputDefinition&lt;NavigationResult&gt;; }, {}, { href: ReadSignal&lt;string&gt;; target: ReadSignal&lt;string&gt;; current: ReadSignal&lt;"page" | null&gt;; }&gt; &amp; { readonly selector: "route-link"; };</code></pre>
-              </div>
-            </section>
-            <section class="api-symbol">
-              <h3 id="application-RouterOutlet">
-                <code>RouterOutlet</code><span class="tag">值</span>
-              </h3>
-              <p>
-                Register explicitly in a root/layout's components before using
-                &lt;router-outlet&gt;.
-              </p>
-              <p class="source-location">packages/app/runtime/router/components.ts:8</p>
-              <details class="import-hint">
-                <summary>导入方式</summary>
-                <pre><code>import { RouterOutlet } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
-              </details>
-              <div class="code-block">
-                <div class="code-label">TypeScript · 公开签名</div>
-                <pre><code>const RouterOutlet: ComponentDefinition&lt;{}, {}, {}, {}&gt; &amp; { readonly selector: "router-outlet"; };</code></pre>
-              </div>
-            </section>
             <section class="api-symbol">
               <h3 id="application-batch"><code>batch</code><span class="tag">函数</span></h3>
               <p class="source-location">packages/app/runtime/scheduler.ts:63</p>
@@ -879,7 +837,7 @@
               <h3 id="application-bootstrapApplication">
                 <code>bootstrapApplication</code><span class="tag">函数</span>
               </h3>
-              <p class="source-location">packages/app/runtime/application.ts:461</p>
+              <p class="source-location">packages/app/runtime/application.ts:466</p>
               <details class="import-hint">
                 <summary>导入方式</summary>
                 <pre><code>import { bootstrapApplication } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
@@ -1003,6 +961,24 @@
               </div>
             </section>
             <section class="api-symbol">
+              <h3 id="application-createPerfPanel">
+                <code>createPerfPanel</code><span class="tag">函数</span>
+              </h3>
+              <p>
+                创建性能面板。 面板采用深色背景、绿色 monospace 文字，显示：
+                FPS、Query、Coll、Draw、Ent、Heap。
+              </p>
+              <p class="source-location">packages/app/runtime/perf-panel.ts:31</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { createPerfPanel } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>function createPerfPanel(options?: PerfPanelOptions): PerfPanel;</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
               <h3 id="application-createRouteMatcher">
                 <code>createRouteMatcher</code><span class="tag">函数</span>
               </h3>
@@ -1065,7 +1041,7 @@
               <h3 id="application-defineApplication">
                 <code>defineApplication</code><span class="tag">函数</span>
               </h3>
-              <p class="source-location">packages/app/runtime/application.ts:142</p>
+              <p class="source-location">packages/app/runtime/application.ts:147</p>
               <details class="import-hint">
                 <summary>导入方式</summary>
                 <pre><code>import { defineApplication } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
@@ -1259,7 +1235,7 @@ function model&lt;T = undefined&gt;(): ModelDefinition&lt;T | undefined&gt; &amp
               <h3 id="application-mountApplication">
                 <code>mountApplication</code><span class="tag">函数</span>
               </h3>
-              <p class="source-location">packages/app/runtime/application.ts:223</p>
+              <p class="source-location">packages/app/runtime/application.ts:228</p>
               <details class="import-hint">
                 <summary>导入方式</summary>
                 <pre><code>import { mountApplication } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
@@ -1686,6 +1662,33 @@ function writableModel&lt;T&gt;(options: WritableModelOptions&lt;T&gt;): Writabl
   message: string;
   stack?: string;
   cause?: unknown;
+}</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
+              <h3 id="application-PerformanceMonitor">
+                <code>PerformanceMonitor</code><span class="tag">类</span>
+              </h3>
+              <p>
+                性能采集器。 在渲染循环中使用： - World.query() 后调用 recordQuery() -
+                Canvas.drawImage() 后调用 recordDrawCall() - detectCollisions() 后调用
+                recordCollisionPair(对数) - 引擎 advance 后调用 finishFrame()
+              </p>
+              <p class="source-location">packages/app/runtime/performance-monitor.ts:32</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { PerformanceMonitor } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>class PerformanceMonitor {
+  constructor();
+  recordQuery: () =&gt; void;
+  recordCollisionPair: (count?: number) =&gt; void;
+  recordDrawCall: () =&gt; void;
+  setEntityCount: (count: number) =&gt; void;
+  finishFrame: () =&gt; PerformanceMetrics;
+  reset: () =&gt; void;
 }</code></pre>
               </div>
             </section>
@@ -2128,10 +2131,27 @@ function writableModel&lt;T&gt;(options: WritableModelOptions&lt;T&gt;): Writabl
               </div>
             </section>
             <section class="api-symbol">
+              <h3 id="application-ApplicationDebugOptions">
+                <code>ApplicationDebugOptions</code><span class="tag">类型</span>
+              </h3>
+              <p class="source-location">packages/app/runtime/application.ts:90</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { type ApplicationDebugOptions } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 类型定义</div>
+                <pre><code>interface ApplicationDebugOptions {
+  /** 显示调试性能面板（悬浮窗）。true 使用默认配置，或传入位置和透明度选项。 */
+  perfPanel?: boolean | import('./perf-panel.js').PerfPanelOptions;
+}</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
               <h3 id="application-ApplicationDefinition">
                 <code>ApplicationDefinition</code><span class="tag">类型</span>
               </h3>
-              <p class="source-location">packages/app/runtime/application.ts:107</p>
+              <p class="source-location">packages/app/runtime/application.ts:112</p>
               <details class="import-hint">
                 <summary>导入方式</summary>
                 <pre><code>import { type ApplicationDefinition } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
@@ -2154,7 +2174,7 @@ function writableModel&lt;T&gt;(options: WritableModelOptions&lt;T&gt;): Writabl
               <h3 id="application-ApplicationInstance">
                 <code>ApplicationInstance</code><span class="tag">类型</span>
               </h3>
-              <p class="source-location">packages/app/runtime/application.ts:117</p>
+              <p class="source-location">packages/app/runtime/application.ts:122</p>
               <details class="import-hint">
                 <summary>导入方式</summary>
                 <pre><code>import { type ApplicationInstance } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
@@ -2182,7 +2202,7 @@ function writableModel&lt;T&gt;(options: WritableModelOptions&lt;T&gt;): Writabl
               <h3 id="application-ApplicationOptions">
                 <code>ApplicationOptions</code><span class="tag">类型</span>
               </h3>
-              <p class="source-location">packages/app/runtime/application.ts:90</p>
+              <p class="source-location">packages/app/runtime/application.ts:94</p>
               <details class="import-hint">
                 <summary>导入方式</summary>
                 <pre><code>import { type ApplicationOptions } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
@@ -2204,6 +2224,7 @@ function writableModel&lt;T&gt;(options: WritableModelOptions&lt;T&gt;): Writabl
   readonly routes?: R;
   readonly router?: ApplicationRouterOptions&lt;Extract&lt;R, readonly RouteDefinition[]&gt;&gt;;
   readonly inputs?: Partial&lt;InputValues&lt;I, M&gt;&gt;;
+  readonly debug?: ApplicationDebugOptions;
   readonly onError?: (error: ApplicationError) =&gt; void;
 }</code></pre>
               </div>
@@ -3741,6 +3762,77 @@ function writableModel&lt;T&gt;(options: WritableModelOptions&lt;T&gt;): Writabl
               </div>
             </section>
             <section class="api-symbol">
+              <h3 id="application-PerformanceMetrics">
+                <code>PerformanceMetrics</code><span class="tag">类型</span>
+              </h3>
+              <p>运行时性能采集系统。 通过无显著开销的计数，捕获帧级别的关键性能指标。</p>
+              <p class="source-location">packages/app/runtime/performance-monitor.ts:6</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { type PerformanceMetrics } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 类型定义</div>
+                <pre><code>interface PerformanceMetrics {
+  /** 帧率（每秒帧数） */
+  fps: number;
+  /** 本帧 ECS query 调用数 */
+  queries: number;
+  /** 碰撞检测对数 */
+  collision: number;
+  /** Canvas drawImage 调用数 */
+  drawCalls: number;
+  /** 活跃实体数 */
+  entities: number;
+  /** 内存使用（单位字节） */
+  memory: {
+    heap: number;
+    external: number;
+  };
+}</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
+              <h3 id="application-PerfPanel">
+                <code>PerfPanel</code><span class="tag">类型</span>
+              </h3>
+              <p class="source-location">packages/app/runtime/perf-panel.ts:17</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { type PerfPanel } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 类型定义</div>
+                <pre><code>interface PerfPanel {
+  /** 更新面板内容 */
+  update(metrics: PerformanceMetrics): void;
+  /** 挂载到指定容器 */
+  mount(container: HTMLElement): void;
+  /** 从 DOM 卸载 */
+  unmount(): void;
+}</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
+              <h3 id="application-PerfPanelOptions">
+                <code>PerfPanelOptions</code><span class="tag">类型</span>
+              </h3>
+              <p class="source-location">packages/app/runtime/perf-panel.ts:10</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { type PerfPanelOptions } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 类型定义</div>
+                <pre><code>interface PerfPanelOptions {
+  /** 面板位置，默认 'top-right' */
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  /** 透明度（0–1），默认 0.85 */
+  opacity?: number;
+}</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
               <h3 id="application-PreparedRoutePage">
                 <code>PreparedRoutePage</code><span class="tag">类型</span>
               </h3>
@@ -4878,6 +4970,54 @@ function writableModel&lt;T&gt;(options: WritableModelOptions&lt;T&gt;): Writabl
 }</code></pre>
               </div>
             </section>
+            <section class="api-symbol">
+              <h3 id="application-GameCanvas">
+                <code>GameCanvas</code><span class="tag">值</span>
+              </h3>
+              <p>
+                Explicitly register before using &lt;game-canvas&gt;. Give the game-canvas host
+                display:block and an explicit CSS size.
+              </p>
+              <p class="source-location">packages/app/runtime/game-canvas.ts:40</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { GameCanvas } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>const GameCanvas: ComponentDefinition&lt;{ readonly scene: InputDefinition&lt;GameCanvasScene&gt; &amp; { readonly required: true; }; readonly options: InputDefinition&lt;GameCanvasOptions&gt; &amp; { readonly required: true; }; readonly props: InputDefinition&lt;unknown&gt; &amp; { readonly required: false; }; }, { readonly ready: OutputDefinition&lt;GameCanvasHandle&gt;; readonly error: OutputDefinition&lt;CanvasHostError&gt;; readonly statusChanged: OutputDefinition&lt;GameCanvasStatus&gt;; }, {}, { game: GameCanvasHandle; start: (canvas: HTMLCanvasElement) =&gt; void; update: () =&gt; void; activate(): void; deactivate(): void; destroy(): void; }&gt; &amp; { readonly selector: "game-canvas"; };</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
+              <h3 id="application-RouteLink"><code>RouteLink</code><span class="tag">值</span></h3>
+              <p class="source-location">packages/app/runtime/router/components.ts:18</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { RouteLink } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>const RouteLink: ComponentDefinition&lt;{ readonly to: InputDefinition&lt;RouteTarget&gt; &amp; { readonly required: true; }; readonly replace: InputDefinition&lt;boolean&gt; &amp; { readonly required: false; }; readonly target: InputDefinition&lt;string&gt; &amp; { readonly required: false; }; readonly download: InputDefinition&lt;string | null&gt; &amp; { readonly required: false; }; }, { readonly navigated: OutputDefinition&lt;NavigationResult&gt;; }, {}, { href: ReadSignal&lt;string&gt;; target: ReadSignal&lt;string&gt;; current: ReadSignal&lt;"page" | null&gt;; }&gt; &amp; { readonly selector: "route-link"; };</code></pre>
+              </div>
+            </section>
+            <section class="api-symbol">
+              <h3 id="application-RouterOutlet">
+                <code>RouterOutlet</code><span class="tag">值</span>
+              </h3>
+              <p>
+                Register explicitly in a root/layout's components before using
+                &lt;router-outlet&gt;.
+              </p>
+              <p class="source-location">packages/app/runtime/router/components.ts:8</p>
+              <details class="import-hint">
+                <summary>导入方式</summary>
+                <pre><code>import { RouterOutlet } from '@xiaobaibaifqy/jingchuanchu-app/application';</code></pre>
+              </details>
+              <div class="code-block">
+                <div class="code-label">TypeScript · 公开签名</div>
+                <pre><code>const RouterOutlet: ComponentDefinition&lt;{}, {}, {}, {}&gt; &amp; { readonly selector: "router-outlet"; };</code></pre>
+              </div>
+            </section>
           </section>
         </article>
         <nav class="page-turn" aria-label="相邻章节">
@@ -4886,7 +5026,7 @@ function writableModel&lt;T&gt;(options: WritableModelOptions&lt;T&gt;): Writabl
           ><a href="../api/core.html"><small>下一篇 →</small><strong>引擎与作用域</strong></a>
         </nav>
         <footer class="page-footer">
-          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0</span>
         </footer>
       </main>
       <aside class="outline" aria-label="本页目录">

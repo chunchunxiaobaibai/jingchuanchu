@@ -18,7 +18,7 @@
       <a class="brand" href="../index.html"
         ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
           >镜川初<small>JINGCHUANCHU</small></span
-        ><span class="version">0.5.0-rc.1</span></a
+        ><span class="version">0.5.0</span></a
       ><button class="search-trigger" type="button" data-open-search>
         <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
       </button>
@@ -114,6 +114,19 @@
           <p>0.5.0-rc.1 · 网页 2D 游戏应用框架。</p>
         </div>
         <article data-doc-content>
+          <h2 id="v0.5.0">0.5.0 正式版（2026-11-07）</h2>
+          <p>
+            生产级落地版本。在前轮性能迭代基础上补齐开发者工具与测试覆盖，不改现有架构与公开
+            API。新增 bulkQuery API 用于只读热路径迭代、Transform
+            帧缓存用于渲染与碰撞检测共享、PerformanceMonitor
+            运行时性能采集（&lt;1ms/帧开销）、createPerfPanel 可选调试面板（通过
+            <code>defineApplication({ debug: { perfPanel: true } })</code>
+            启用）。桌面浏览器测试矩阵涵盖 Chromium/Firefox/WebKit 三引擎，Node 端内存耐久测试 2.09
+            MB 低于 10 MB 阈值。实际性能提升：bulkQuery 15-18%（迭代器协议开销降低了计划的 55%
+            目标）；渲染管线约 5%；碰撞与输入微优化单独衡量。详见
+            <a href="../../CHANGELOG.md">CHANGELOG.md</a> 和
+            <a href="../../artifacts/performance/final-0.5.0.json">性能基准</a>。
+          </p>
           <h2 id="application">应用模型</h2>
           <p>
             application 入口集中提供原生 TS/HTML/CSS 或 Less
@@ -143,15 +156,16 @@
           ><span></span>
         </nav>
         <footer class="page-footer">
-          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0</span>
         </footer>
       </main>
       <aside class="outline" aria-label="本页目录">
         <div class="outline-inner">
           <h2>本页目录</h2>
           <nav>
-            <a href="#application">应用模型</a><a href="#game">网页游戏能力</a
-            ><a href="#tooling">项目与交付</a><a href="#limits">验证限制</a>
+            <a href="#v0.5.0">0.5.0 正式版（2026-11-07）</a><a href="#application">应用模型</a
+            ><a href="#game">网页游戏能力</a><a href="#tooling">项目与交付</a
+            ><a href="#limits">验证限制</a>
           </nav>
           <div class="outline-note">
             <span>BUILD SOMETHING</span>

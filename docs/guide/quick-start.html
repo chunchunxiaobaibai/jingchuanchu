@@ -18,7 +18,7 @@
       <a class="brand" href="../index.html"
         ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
           >镜川初<small>JINGCHUANCHU</small></span
-        ><span class="version">0.5.0-rc.1</span></a
+        ><span class="version">0.5.0</span></a
       ><button class="search-trigger" type="button" data-open-search>
         <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
       </button>
@@ -122,7 +122,7 @@
             <strong>开始之前</strong>
             <p>
               需要 Node.js ≥ 22.12.0、npm、Git 和 tar，并具备基础 TypeScript、HTML、CSS
-              与命令行知识。以下命令使用当前仓库版本 0.5.0-rc.1。Windows 与 WSL 请分别安装依赖。
+              与命令行知识。以下命令使用当前仓库版本 0.5.0。Windows 与 WSL 请分别安装依赖。
             </p>
           </aside>
           <h2 id="build">1. 构建引擎套件</h2>
@@ -134,7 +134,7 @@ npm run dist:release</code></pre>
           </div>
           <p>
             这会检查类型、构建并打包 10 个工作区包、检查模板，并生成本地套件。套件目录位于
-            <code>dist/releases/jingchuanchu-engine-0.5.0-rc.1/</code>。详细过程见<a
+            <code>dist/releases/jingchuanchu-engine-0.5.0/</code>。详细过程见<a
               href="build-from-source.html"
               >从源码到独立游戏</a
             >。
@@ -143,7 +143,7 @@ npm run dist:release</code></pre>
           <p>继续在引擎仓库执行，目标目录必须不存在或为空：</p>
           <div class="code-block">
             <div class="code-label">终端 · 引擎仓库</div>
-            <pre><code>node packages/tooling/dist/cli.mjs create ../my-game --preset singleplayer --style css --bundle ./dist/releases/jingchuanchu-engine-0.5.0-rc.1</code></pre>
+            <pre><code>node packages/tooling/dist/cli.mjs create ../my-game --preset singleplayer --style css --bundle ./dist/releases/jingchuanchu-engine-0.5.0</code></pre>
           </div>
           <p>
             CLI 校验本地包摘要、解析内部依赖并复制到游戏的 <code>vendor/</code>，使用相对
@@ -158,7 +158,7 @@ npm install
 npm run dev</code></pre>
             <p>或先在单独的工具目录安装配套 CLI，再创建保存 vendor 的独立项目：</p>
             <pre><code>npm init -y
-npm install --save-dev /path/to/bundle/packages/xiaobaibaifqy-jingchuanchu-tooling-0.5.0-rc.1.tgz
+npm install --save-dev /path/to/bundle/packages/xiaobaibaifqy-jingchuanchu-tooling-0.5.0.tgz
 npx --no-install jingchuanchu create ./my-game --bundle /path/to/bundle</code></pre>
           </details>
           <h2 id="run">3. 安装与运行</h2>
@@ -257,7 +257,7 @@ npm run preview</code></pre>
           >
         </nav>
         <footer class="page-footer">
-          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0</span>
         </footer>
       </main>
       <aside class="outline" aria-label="本页目录">

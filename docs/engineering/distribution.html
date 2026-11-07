@@ -18,7 +18,7 @@
       <a class="brand" href="../index.html"
         ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
           >镜川初<small>JINGCHUANCHU</small></span
-        ><span class="version">0.5.0-rc.1</span></a
+        ><span class="version">0.5.0</span></a
       ><button class="search-trigger" type="button" data-open-search>
         <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
       </button>
@@ -117,9 +117,9 @@
         <article data-doc-content>
           <h2 id="交付给其他开发者">交付给其他开发者</h2>
           <p>
-            本文描述当前源码的本地分发归档。当前预发布版本为
-            0.5.0-rc.1；交付时记录源码快照和归档摘要。不需要 npm 账号、作用域权限或引擎仓库访问权。
-            把 <code>jingchuanchu-engine-0.5.0-rc.1.tar.gz</code> 与对应
+            本文描述当前源码的本地分发归档。当前正式版本为
+            0.5.0；交付时记录源码快照和归档摘要。不需要 npm 账号、作用域权限或引擎仓库访问权。 把
+            <code>jingchuanchu-engine-0.5.0.tar.gz</code> 与对应
             <code>.sha256</code> 文件一起交给使用者。解压后打开 README.html 和
             docs/index.html，选择安装模块或运行 starter。
           </p>
@@ -145,9 +145,9 @@ npm run dist:release</code></pre>
           <div class="code-block">
             <div class="code-label">text</div>
             <pre><code>dist/releases/
-  jingchuanchu-engine-0.5.0-rc.1/          可直接查看与使用的目录
-  jingchuanchu-engine-0.5.0-rc.1.tar.gz    交付归档
-  jingchuanchu-engine-0.5.0-rc.1.tar.gz.sha256</code></pre>
+  jingchuanchu-engine-0.5.0/          可直接查看与使用的目录
+  jingchuanchu-engine-0.5.0.tar.gz    交付归档
+  jingchuanchu-engine-0.5.0.tar.gz.sha256</code></pre>
           </div>
           <p>
             生产机器需要 Node &gt;=22.12、npm、tar，构建与测试使用仓库锁文件。归档不包含
@@ -158,7 +158,7 @@ npm run dist:release</code></pre>
           <p>生成套件后，在 PowerShell 执行（替换自己的项目路径）：</p>
           <div class="code-block">
             <div class="code-label">powershell</div>
-            <pre><code>node "E:\CodexProject\xiaobaifqy-engine\dist\releases\jingchuanchu-engine-0.5.0-rc.1\install.mjs" --preset singleplayer --target "E:\MyGame"</code></pre>
+            <pre><code>node "E:\CodexProject\xiaobaifqy-engine\dist\releases\jingchuanchu-engine-0.5.0\install.mjs" --preset singleplayer --target "E:\MyGame"</code></pre>
           </div>
           <p>
             <code>core</code> 只安装内核；<code>singleplayer</code> 安装网页单机模块；<code
@@ -181,11 +181,11 @@ npm run dist:release</code></pre>
           </p>
           <div class="code-block">
             <div class="code-label">powershell</div>
-            <pre><code>npm install ./vendor/xiaobaibaifqy-jingchuanchu-ecs-0.5.0-rc.1.tgz ./vendor/xiaobaibaifqy-jingchuanchu-core-0.5.0-rc.1.tgz</code></pre>
+            <pre><code>npm install ./vendor/xiaobaibaifqy-jingchuanchu-ecs-0.5.0.tgz ./vendor/xiaobaibaifqy-jingchuanchu-core-0.5.0.tgz</code></pre>
           </div>
           <p>
             网页单机还需 browser、renderer-2d、input、assets；网络客户端再加 net，服务端再加 net 和
-            net-server。一次安装全部选中包，避免内部 <code>^0.5.0-rc.1</code> 依赖去公共 registry
+            net-server。一次安装全部选中包，避免内部 <code>^0.5.0</code> 依赖去公共 registry
             查找尚未发布的版本。保存 <code>vendor/</code>、<code>package.json</code> 和
             <code>package-lock.json</code>；升级引擎后重新打包并安装同一版本的全部选中包。
           </p>
@@ -222,8 +222,8 @@ npm run dist:release</code></pre>
           </p>
           <h2 id="维护版本">维护版本</h2>
           <p>
-            root 和所有引擎包使用同一版本，内部依赖范围跟随版本；当前源码版本为 0.5.0-rc.1，作为
-            GitHub 预发布交付，npm 发布仍是独立操作。 改变 API 时更新 CHANGELOG、API
+            root 和所有引擎包使用同一版本，内部依赖范围跟随版本；当前源码版本为 0.5.0，作为 GitHub
+            正式发布交付，npm 发布仍是独立操作。 改变 API 时更新 CHANGELOG、API
             参考、模板与消费测试，重新生成包，不直接修改已生成的 dist。 外部项目应保存
             lockfile；升级时更新引擎包及其内部依赖，并运行自己游戏的类型检查、逻辑测试和浏览器验证。
           </p>
@@ -246,7 +246,7 @@ npm run dist:release</code></pre>
           >
         </nav>
         <footer class="page-footer">
-          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0-rc.1</span>
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0</span>
         </footer>
       </main>
       <aside class="outline" aria-label="本页目录">
