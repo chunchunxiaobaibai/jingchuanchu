@@ -1,0 +1,85 @@
+name: E2E Desktop Browser Tests
+
+on:
+  push:
+    branches: [dev, main, feat/0.5.0-production-optimization]
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  e2e-tests:
+    name: E2E Tests - ${{ matrix.browser }}
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.12.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npm run test:e2e:install
+        continue-on-error: true
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run E2E tests - ${{ matrix.browser }}
+        run: npm run test:e2e:${{ matrix.browser }}
+        env:
+          TEST_URL: 'http://localhost:5173'
+          CI: true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 30
+
+      - name: Upload test videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-videos-${{ matrix.browser }}
+          path: test-results/videos/
+          retention-days: 7
+
+      - name: Report test results
+        if: always()
+        run: |
+          if [ -f test-results/e2e-results.json ]; then
+            echo "### E2E Test Results - ${{ matrix.browser }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat test-results/e2e-results.json | jq '.stats' >> $GITHUB_STEP_SUMMARY
+          fi
+
+  e2e-summary:
+    name: E2E Test Summary
+    if: always()
+    needs: e2e-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.e2e-tests.result }}" = "failure" ]; then
+            echo "## ❌ E2E Tests Failed" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "## ✅ E2E Tests Passed" >> $GITHUB_STEP_SUMMARY
+          fi
