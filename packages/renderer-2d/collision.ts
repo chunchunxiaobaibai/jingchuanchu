@@ -1,6 +1,6 @@
 import { component, type Entity, type World } from '@xiaobaibaifqy/jingchuanchu-ecs';
 import type { EngineModule } from '@xiaobaibaifqy/jingchuanchu-core';
-import { createTransformResolver } from './features.js';
+import { createTransformResolver, type TransformFrameCache } from './features.js';
 export type Collider = (
   { kind: 'rect'; width: number; height: number } | { kind: 'circle'; radius: number }
 ) & { offsetX?: number; offsetY?: number; group?: number; mask?: number };
@@ -34,8 +34,8 @@ function intersects(a: Bounds, b: Bounds): boolean {
   return (circle.centerX - x) ** 2 + (circle.centerY - y) ** 2 <= circle.radius! ** 2;
 }
 /** Rectangles use world-space AABBs; transformed circles use a conservative enclosing circle. */
-export function detectCollisions(world: World): CollisionPair[] {
-  const resolve = createTransformResolver(world);
+export function detectCollisions(world: World, cache?: TransformFrameCache): CollisionPair[] {
+  const resolve = createTransformResolver(world, cache);
   const bounds: Bounds[] = [];
   for (const entity of world.query(Collider2D)) {
     const collider = world.require(entity, Collider2D),

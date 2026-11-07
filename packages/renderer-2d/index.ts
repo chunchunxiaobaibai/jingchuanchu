@@ -6,9 +6,11 @@ import {
   Sprite2D,
   Camera2D,
   createTransformResolver,
+  TransformFrameCache,
   multiply,
   type Sprite,
 } from './features.js';
+export { Transform2D, Sprite2D, Camera2D, TransformFrameCache, type Sprite } from './features.js';
 type DrawItem = { entity: Entity; layer: number } & (
   { shape: NonNullable<typeof Shape2D.__type>; position: Point } | { sprite: Sprite }
 );
@@ -18,6 +20,7 @@ export class Canvas2D {
   private logicalHeight: number;
   private pixelRatio = 1;
   private initialized = false;
+  private frameCache = new TransformFrameCache();
   get width(): number {
     return this.logicalWidth;
   }
@@ -99,13 +102,18 @@ export class Canvas2D {
     ctx.stroke();
   }
   drawWorld(world: World, camera?: Camera2D): void {
-    const resolve = createTransformResolver(world);
+    this.frameCache.clear();
+    const resolve = createTransformResolver(world, this.frameCache);
     const view = camera?.matrix;
     // Build the final queue directly: intermediate maps and object spreads used
     // to copy every shape multiple times on every frame. Keep the three passes
     // in this order so stable sorting preserves existing equal-layer behavior.
     const items: DrawItem[] = [];
-    for (const entity of world.query(Position2D, Shape2D)) {
+
+    // Use bulkQuery for hot-path queries (Position2D + Shape2D)
+    const posShapeIterator = world.bulkQuery(Position2D, Shape2D);
+    const { buffer: posShapeBuffer } = posShapeIterator.next().value!;
+    for (const entity of posShapeBuffer) {
       const shape = world.require(entity, Shape2D);
       items.push({
         entity,
@@ -114,15 +122,27 @@ export class Canvas2D {
         layer: shape.layer,
       });
     }
-    for (const entity of world.query(Transform2D, Shape2D))
+    posShapeIterator.return?.();
+
+    // Use bulkQuery for Transform2D + Shape2D
+    const transformShapeIterator = world.bulkQuery(Transform2D, Shape2D);
+    const { buffer: transformShapeBuffer } = transformShapeIterator.next().value!;
+    for (const entity of transformShapeBuffer)
       if (!world.has(entity, Position2D)) {
         const shape = world.require(entity, Shape2D);
         items.push({ entity, shape, position: { x: 0, y: 0 }, layer: shape.layer });
       }
-    for (const entity of world.query(Sprite2D)) {
+    transformShapeIterator.return?.();
+
+    // Use bulkQuery for Sprite2D
+    const spriteIterator = world.bulkQuery(Sprite2D);
+    const { buffer: spriteBuffer } = spriteIterator.next().value!;
+    for (const entity of spriteBuffer) {
       const sprite = world.require(entity, Sprite2D);
       items.push({ entity, sprite, layer: sprite.layer ?? 0 });
     }
+    spriteIterator.return?.();
+
     items.sort((a, b) => a.layer - b.layer);
     for (const item of items) {
       const ctx = this.context;
