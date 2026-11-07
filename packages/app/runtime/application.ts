@@ -87,6 +87,10 @@ export class ApplicationError extends Error {
     this.name = 'ApplicationError';
   }
 }
+export interface ApplicationDebugOptions {
+  /** 显示调试性能面板（悬浮窗）。true 使用默认配置，或传入位置和透明度选项。 */
+  perfPanel?: boolean | import('./perf-panel.js').PerfPanelOptions;
+}
 export interface ApplicationOptions<
   I extends InputMap,
   O extends OutputMap,
@@ -102,6 +106,7 @@ export interface ApplicationOptions<
   readonly routes?: R;
   readonly router?: ApplicationRouterOptions<Extract<R, readonly RouteDefinition[]>>;
   readonly inputs?: Partial<InputValues<I, M>>;
+  readonly debug?: ApplicationDebugOptions;
   readonly onError?: (error: ApplicationError) => void;
 }
 export interface ApplicationDefinition<
