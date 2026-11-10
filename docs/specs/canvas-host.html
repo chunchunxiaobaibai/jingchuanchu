@@ -257,6 +257,48 @@
             Store/退出取消），tests/game-canvas-types.ts（切换
             props、虚拟动作和值、只读状态），其余内部生命周期测试仍保留各自范围。这里不代表真实设备或实际游玩已通过。
           </p>
+          <h2 id="webgl2-后端-规划">WebGL 2 后端（规划）</h2>
+          <p>
+            在现有 renderer-2d 包增加子入口
+            <code>@xiaobaibaifqy/jingchuanchu-renderer-2d/webgl2</code>， 导出
+            <code>createWebGL2Renderer</code> 工厂。页面通过
+            <code>GameCanvasOptions.createRenderer</code> 显式传入，沿用 CanvasRuntimeRenderer 的
+            canvas/resize/toPoint/clear/drawWorld/dispose 契约。宿主和视口共用工厂返回的实例，
+            Canvas 2D 继续作为缺省后端，现有 Canvas2D、canvas2DModule、组件和包入口保留。 页面
+            DOM、ECS、碰撞和资源加载沿用现有模型。
+          </p>
+          <p>
+            首版的共享绘制范围为静态 HTMLImageElement/ImageBitmap 精灵、有效图集帧和实色矩形。
+            矩形接受 #RRGGBB 和 #RRGGBBAA，清屏背景接受不透明的
+            #RRGGBB。保持逻辑尺寸、DPR、指针映射、相机和父子变换、
+            锚点、翻转、透明度及同层稳定顺序。两个后端跑通后收敛共用的世界遍历、变换和排序， 保留
+            Canvas 2D 现有绘制语义。圆形、自由路径、直接访问 context、动态 Canvas/视频纹理 留在
+            Canvas 2D。WebGL 遇到超出已声明范围的绘制数据或纹理上传失败时提供可定位的渲染错误。
+          </p>
+          <p>
+            WebGL 后端持有着色器、缓冲与按图片来源复用的纹理。GPU 句柄不进入 ECS、资源服务或应用
+            Store。成功绘制后释放当前世界已不引用的纹理，渲染器退出时释放余下资源和监听。
+            运行中丢失上下文时跳过 GPU 绘制，保留场景状态；
+            恢复后以当前缓冲尺寸重建程序、缓冲与纹理，再绘制当前世界。重新初始化失败走宿主错误路径。
+            挂载时无法创建 WebGL 2 上下文时报告创建失败。后端切换需要用新 Canvas 重新挂载，
+            首版采用显式重新挂载的 Canvas 2D 回退。
+            <a href="https://html.spec.whatwg.org/multipage/canvas.html#dom-canvas-getcontext-dev"
+              >HTML Canvas 规范</a
+            >
+            <a href="https://registry.khronos.org/webgl/specs/latest/1.0/#5.15.3"
+              >WebGL 上下文恢复规范</a
+            >
+          </p>
+          <p>
+            先用同一参考场景对照绘制语义与宿主行为，再合并相邻且纹理、着色程序、混合等状态兼容的绘制项。
+            层级和透明叠放顺序优先于批次数。用同一场景、设备、浏览器、分辨率和 DPR 比较两种后端，
+            分开记录首次纹理上传的耗时及计时口径、预热后的 p95 帧间隔，以及 WebGL 实际提交批次数。
+            对照包含普通负载和精灵密集负载，画面通过浏览器验收后再依据测量决定后续覆盖范围。
+          </p>
+          <p>
+            W1（规划）：使用 Node 注入或模拟验证创建失败、DPR 更新、绘制顺序、恢复和资源释放。
+            真实像素、实际 GPU 绘制和性能数据由独立浏览器验收记录。
+          </p>
         </article>
         <nav class="page-turn" aria-label="相邻章节"><span></span><span></span></nav>
         <footer class="page-footer">
@@ -271,7 +313,8 @@
             ><a href="#宿主控制器-内部">宿主控制器（内部）</a
             ><a href="#canvas-运行实例-内部">Canvas 运行实例（内部）</a
             ><a href="#页面输入前提">页面输入前提</a><a href="#页面组合">页面组合</a
-            ><a href="#直接验收">直接验收</a><a href="#已实现的组件入口">已实现的组件入口</a>
+            ><a href="#直接验收">直接验收</a><a href="#已实现的组件入口">已实现的组件入口</a
+            ><a href="#webgl2-后端-规划">WebGL 2 后端（规划）</a>
           </nav>
           <div class="outline-note">
             <span>BUILD SOMETHING</span>
