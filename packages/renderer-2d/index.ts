@@ -1,19 +1,9 @@
-import type { Entity, World } from '@xiaobaibaifqy/jingchuanchu-ecs';
-import { Position2D, Shape2D, type Point, type Stroke } from './components.js';
+import type { World } from '@xiaobaibaifqy/jingchuanchu-ecs';
+import type { Point, Stroke } from './components.js';
+import { TransformFrameCache, type Camera2D } from './features.js';
+import { visitWorldDrawItems } from './draw-world.js';
 export { Position2D, Shape2D, type Point, type Stroke } from './components.js';
-import {
-  Transform2D,
-  Sprite2D,
-  Camera2D,
-  createTransformResolver,
-  TransformFrameCache,
-  multiply,
-  type Sprite,
-} from './features.js';
 export { Transform2D, Sprite2D, Camera2D, TransformFrameCache, type Sprite } from './features.js';
-type DrawItem = { entity: Entity; layer: number } & (
-  { shape: NonNullable<typeof Shape2D.__type>; position: Point } | { sprite: Sprite }
-);
 export class Canvas2D {
   readonly context: CanvasRenderingContext2D;
   private logicalWidth: number;
@@ -102,61 +92,17 @@ export class Canvas2D {
     ctx.stroke();
   }
   drawWorld(world: World, camera?: Camera2D): void {
-    this.frameCache.clear();
-    const resolve = createTransformResolver(world, this.frameCache);
-    const view = camera?.matrix;
-    // Build the final queue directly: intermediate maps and object spreads used
-    // to copy every shape multiple times on every frame. Keep the three passes
-    // in this order so stable sorting preserves existing equal-layer behavior.
-    const items: DrawItem[] = [];
-
-    // Use bulkQuery for hot-path queries (Position2D + Shape2D)
-    const posShapeIterator = world.bulkQuery(Position2D, Shape2D);
-    const { buffer: posShapeBuffer } = posShapeIterator.next().value!;
-    for (const entity of posShapeBuffer) {
-      const shape = world.require(entity, Shape2D);
-      items.push({
-        entity,
-        shape,
-        position: world.require(entity, Position2D),
-        layer: shape.layer,
-      });
-    }
-    posShapeIterator.return?.();
-
-    // Use bulkQuery for Transform2D + Shape2D
-    const transformShapeIterator = world.bulkQuery(Transform2D, Shape2D);
-    const { buffer: transformShapeBuffer } = transformShapeIterator.next().value!;
-    for (const entity of transformShapeBuffer)
-      if (!world.has(entity, Position2D)) {
-        const shape = world.require(entity, Shape2D);
-        items.push({ entity, shape, position: { x: 0, y: 0 }, layer: shape.layer });
-      }
-    transformShapeIterator.return?.();
-
-    // Use bulkQuery for Sprite2D
-    const spriteIterator = world.bulkQuery(Sprite2D);
-    const { buffer: spriteBuffer } = spriteIterator.next().value!;
-    for (const entity of spriteBuffer) {
-      const sprite = world.require(entity, Sprite2D);
-      items.push({ entity, sprite, layer: sprite.layer ?? 0 });
-    }
-    spriteIterator.return?.();
-
-    items.sort((a, b) => a.layer - b.layer);
-    for (const item of items) {
+    visitWorldDrawItems(world, this.frameCache, camera, (item, matrix) => {
       const ctx = this.context;
-      const transformed = !!camera || world.has(item.entity, Transform2D) || 'sprite' in item;
-      if (transformed) {
-        const matrix = view ? multiply(view, resolve(item.entity)) : resolve(item.entity);
+      if (matrix) {
         ctx.save();
         ctx.transform(...matrix);
       }
       try {
         if ('shape' in item) {
           const { shape, position } = item;
-          const x = transformed ? 0 : position.x,
-            y = transformed ? 0 : position.y;
+          const x = matrix ? 0 : position.x,
+            y = matrix ? 0 : position.y;
           ctx.fillStyle = shape.color;
           if (shape.kind === 'rect') ctx.fillRect(x, y, shape.width, shape.height);
           else {
@@ -166,7 +112,7 @@ export class Canvas2D {
           }
         } else {
           const sprite = item.sprite;
-          if (sprite.width <= 0 || sprite.height <= 0) continue;
+          if (sprite.width <= 0 || sprite.height <= 0) return;
           ctx.globalAlpha = Math.max(0, Math.min(1, sprite.opacity ?? 1));
           ctx.scale(sprite.flipX ? -1 : 1, sprite.flipY ? -1 : 1);
           const x = -(sprite.anchorX ?? 0) * sprite.width,
@@ -187,8 +133,8 @@ export class Canvas2D {
           } else ctx.drawImage(sprite.image, x, y, sprite.width, sprite.height);
         }
       } finally {
-        if (transformed) ctx.restore();
+        if (matrix) ctx.restore();
       }
-    }
+    });
   }
 }

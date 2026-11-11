@@ -56,9 +56,11 @@ ${
   selection.length > 2
     ? `import { browserModule } from '@xiaobaibaifqy/jingchuanchu-browser';
 import { canvas2DModule } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/module';
+import { createWebGL2Renderer, type WebGL2Renderer } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/webgl2';
+const webgl2: (canvas: HTMLCanvasElement) => WebGL2Renderer = createWebGL2Renderer;
 import { keyboardModule } from '@xiaobaibaifqy/jingchuanchu-input/module';
 import { assetModule } from '@xiaobaibaifqy/jingchuanchu-assets/module';
-if (![browserModule, canvas2DModule, keyboardModule, assetModule].every(value => typeof value === 'function')) throw new Error('Missing public module');
+if (![browserModule, canvas2DModule, webgl2, keyboardModule, assetModule].every(value => typeof value === 'function')) throw new Error('Missing public module');
 import { Transform2D, Sprite2D, Animation2D, Camera2D, animationModule } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/features';
 import { Collider2D, detectCollisions } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/collision';
 import { AssetCache } from '@xiaobaibaifqy/jingchuanchu-assets';

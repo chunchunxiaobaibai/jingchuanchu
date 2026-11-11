@@ -3,9 +3,12 @@ import test from 'node:test';
 import { Window } from 'happy-dom';
 import { Scope } from '@xiaobaibaifqy/jingchuanchu-core';
 import { Canvas2D, Position2D, Shape2D } from '@xiaobaibaifqy/jingchuanchu-renderer-2d';
+import { createWebGL2Renderer } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/webgl2';
 import { defineGameScene, defineActions } from '@xiaobaibaifqy/jingchuanchu-app/application';
 import { ComponentOwner } from '../packages/app/runtime/component-owner.js';
 import { createCanvasRuntime } from '../packages/app/runtime/canvas-runtime.js';
+import { CanvasHostError } from '../packages/app/runtime/canvas-host.js';
+import { mockWebGL2 } from './fixtures/webgl2.js';
 
 function fixture() {
   const window = new Window(),
@@ -43,6 +46,7 @@ function fixture() {
     },
   };
   Object.defineProperty(canvas, 'getContext', {
+    configurable: true,
     value: () => {
       contexts++;
       return context;
@@ -253,4 +257,85 @@ test('external Engine disposal closes Canvas runtime and permits clean remount w
   f.scope.dispose();
   f.owner.dispose();
   assert.equal(f.stats().released, 2);
+});
+
+test('Canvas runtime uses the selected WebGL 2 renderer for viewport, frames and errors', async () => {
+  const f = fixture();
+  f.runtime.dispose();
+  const scope = new Scope();
+  const errors: CanvasHostError[] = [];
+  const webgl = mockWebGL2(f.canvas);
+  const contexts: string[] = [];
+  let available = false;
+  Object.defineProperty(f.canvas, 'getContext', {
+    value(kind: string) {
+      contexts.push(kind);
+      return available ? webgl.gl : null;
+    },
+  });
+  const options = {
+    ...f.options,
+    scope,
+    createRenderer: createWebGL2Renderer,
+    onError: (error: CanvasHostError) => {
+      errors.push(error);
+    },
+  };
+  try {
+    assert.throws(
+      () => createCanvasRuntime(options),
+      /GameCanvas create failed.*WebGL 2 is unavailable/,
+    );
+    available = true;
+    const runtime = createCanvasRuntime(options);
+    await runtime.controller.switchTo(
+      defineGameScene({
+        id: 'webgl',
+        setup(c) {
+          const entity = c.create();
+          c.world.set(entity, Position2D, { x: 5, y: 5 });
+          c.world.set(entity, Shape2D, {
+            kind: 'rect',
+            width: 10,
+            height: 10,
+            color: '#112233',
+            layer: 0,
+          });
+        },
+      }),
+      {},
+    );
+    f.frame(0);
+    assert.deepEqual(contexts, ['webgl2', 'webgl2']);
+    assert.deepEqual(runtime.viewport.toGamePoint({ clientX: 110, clientY: 70 }), {
+      x: 50,
+      y: 25,
+      inside: true,
+    });
+    assert.equal(webgl.submissions.length, 1);
+    webgl.state.lost = true;
+    f.canvas.dispatchEvent(
+      new f.window.Event('webglcontextlost', { cancelable: true }) as unknown as Event,
+    );
+    f.frame(100);
+    assert.equal(runtime.controller.engine.status, 'running');
+    assert.equal(webgl.submissions.length, 1);
+    webgl.state.lost = false;
+    webgl.state.failLink = true;
+    f.canvas.dispatchEvent(new f.window.Event('webglcontextrestored') as unknown as Event);
+    f.frame(200);
+    assert.equal(errors.length, 1);
+    assert.equal(errors[0]!.operation, 'frame');
+    const systemError = errors[0]!.cause;
+    assert.ok(systemError instanceof Error);
+    assert.match(systemError.message, /canvas-renderer/);
+    assert.match(String(systemError.cause), /Cannot restore WebGL 2 renderer/);
+    assert.equal(runtime.controller.engine.status, 'stopped');
+  } finally {
+    scope.dispose();
+    f.scope.dispose();
+    f.owner.dispose();
+  }
+  assert.equal(f.canvas.width, 0);
+  assert.equal(f.canvas.height, 0);
 });

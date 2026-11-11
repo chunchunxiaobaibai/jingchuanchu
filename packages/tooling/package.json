@@ -1,6 +1,6 @@
 {
   "name": "@xiaobaibaifqy/jingchuanchu-tooling",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Jingchuanchu component compiler and project generator",
   "type": "module",
   "license": "MIT",

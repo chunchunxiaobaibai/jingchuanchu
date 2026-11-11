@@ -213,7 +213,7 @@
     "path": "engineering/changelog.html",
     "title": "当前版本",
     "section": "工程与维护",
-    "description": "0.5.0-rc.1 · 网页 2D 游戏应用框架。"
+    "description": "记录当前与历史版本的功能、升级方式和验证范围。"
   },
   {
     "path": "engineering/cli.html",

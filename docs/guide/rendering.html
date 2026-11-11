@@ -18,7 +18,7 @@
       <a class="brand" href="../index.html"
         ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
           >镜川初<small>JINGCHUANCHU</small></span
-        ><span class="version">0.5.0</span></a
+        ><span class="version">0.6.0</span></a
       ><button class="search-trigger" type="button" data-open-search>
         <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
       </button>
@@ -115,6 +115,34 @@
           <p>从可运行代码开始，理解模块边界与完整接入流程。</p>
         </div>
         <article data-doc-content>
+          <h2 id="webgl2">为现有游戏启用 WebGL 2</h2>
+          <p>
+            0.6.0 的默认后端仍为 Canvas
+            2D。升级已有游戏时，将直接使用的引擎包及其内部依赖替换为同一套件中的 0.6.0
+            版本，先用现有 Canvas 2D 配置验证游戏流程。
+          </p>
+          <div class="code-block">
+            <div class="code-label">ts</div>
+            <pre><code>import { createWebGL2Renderer } from '@xiaobaibaifqy/jingchuanchu-renderer-2d/webgl2';
+
+const gameCanvasOptions = {
+  width: 960,
+  height: 600,
+  background: '#182031',
+  createRenderer: createWebGL2Renderer,
+};</code></pre>
+          </div>
+          <p>
+            将选项传给 <code>GameCanvas</code>。WebGL 2
+            支持静态图片精灵、图集帧和实色矩形与圆形。直接操作 Canvas 2D 上下文、自由路径、动态
+            Canvas 或视频纹理的场景继续使用 Canvas 2D。
+          </p>
+          <p>
+            创建 WebGL 2 失败时，用新 Canvas 重新挂载，省略
+            <code>createRenderer</code>
+            以选择默认后端。合批效果取决于相邻绘制项能否复用同一纹理，密集场景可用真实资源分布进行复测。
+          </p>
+          <p>参数、颜色格式和资源生命周期见 <a href="../api/renderer-2d.html">渲染器 API</a>。</p>
           <h2 id="调度-诊断与错误">调度、诊断与错误</h2>
           <p>
             <code>System</code> 新增 <code>before?: readonly string[]</code>、<code
@@ -370,14 +398,15 @@ await scenes.switchTo({
           >
         </nav>
         <footer class="page-footer">
-          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0</span>
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.6.0</span>
         </footer>
       </main>
       <aside class="outline" aria-label="本页目录">
         <div class="outline-inner">
           <h2>本页目录</h2>
           <nav>
-            <a href="#调度-诊断与错误">调度、诊断与错误</a><a href="#资源与取消">资源与取消</a
+            <a href="#webgl2">为现有游戏启用 WebGL 2</a
+            ><a href="#调度-诊断与错误">调度、诊断与错误</a><a href="#资源与取消">资源与取消</a
             ><a href="#transform-camera-sprite-animation">Transform、Camera、Sprite、Animation</a
             ><a href="#场景生命周期">场景生命周期</a><a href="#基础碰撞">基础碰撞</a
             ><a href="#网络可选策略">网络可选策略</a>

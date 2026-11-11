@@ -8,10 +8,10 @@
     "start": "tsx server.ts"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.5.0",
-    "@xiaobaibaifqy/jingchuanchu-core": "^0.5.0",
-    "@xiaobaibaifqy/jingchuanchu-net": "^0.5.0",
-    "@xiaobaibaifqy/jingchuanchu-net-server": "^0.5.0"
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.6.0",
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.6.0",
+    "@xiaobaibaifqy/jingchuanchu-net": "^0.6.0",
+    "@xiaobaibaifqy/jingchuanchu-net-server": "^0.6.0"
   },
   "devDependencies": {
     "typescript": "^5.9.0",

@@ -1,6 +1,6 @@
 {
   "name": "@xiaobaibaifqy/jingchuanchu-renderer-2d",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Jingchuanchu (镜川初) TypeScript engine renderer-2d module",
   "type": "module",
   "license": "MIT",
@@ -37,6 +37,14 @@
       },
       "types": "./dist/collision.d.ts",
       "default": "./dist/collision.js"
+    },
+    "./webgl2": {
+      "source": {
+        "types": "./webgl2.ts",
+        "default": "./webgl2.ts"
+      },
+      "types": "./dist/webgl2.d.ts",
+      "default": "./dist/webgl2.js"
     }
   },
   "files": [
@@ -49,8 +57,8 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@xiaobaibaifqy/jingchuanchu-core": "^0.5.0",
-    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.5.0"
+    "@xiaobaibaifqy/jingchuanchu-core": "^0.6.0",
+    "@xiaobaibaifqy/jingchuanchu-ecs": "^0.6.0"
   },
   "publishConfig": {
     "access": "public",

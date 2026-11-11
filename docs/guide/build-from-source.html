@@ -18,7 +18,7 @@
       <a class="brand" href="../index.html"
         ><img src="../assets/logo.svg" alt="" width="30" height="30" /><span
           >镜川初<small>JINGCHUANCHU</small></span
-        ><span class="version">0.5.0</span></a
+        ><span class="version">0.6.0</span></a
       ><button class="search-trigger" type="button" data-open-search>
         <span aria-hidden="true">⌕</span> 搜索文档 <kbd>Ctrl K</kbd>
       </button>
@@ -118,7 +118,7 @@
         <article data-doc-content>
           <p>
             适用于希望自行构建、研究或修改镜川初的开发者。本文默认当前源码的 application
-            模型；当前正式版本为 0.5.0。构建与消费本地包无需 npm 登录。完整使用教程见
+            模型；当前正式版本为 0.6.0。构建与消费本地包无需 npm 登录。完整使用教程见
             <a href="../guide/quick-start.html">应用总览</a>。
           </p>
           <p>
@@ -159,14 +159,14 @@ npm run dist:release</code></pre>
             执行类型检查、编译与打包各包、模板结构/组件/类型检查，最后生成分发归档；不会自动打开浏览器，也不会推送
             GitHub 或发布 npm。
           </p>
-          <p>0.5.0 的主要产物为：</p>
+          <p>0.6.0 的主要产物为：</p>
           <div class="code-block">
             <div class="code-label">text</div>
             <pre><code>packages/&lt;模块&gt;/dist/                       编译后的 ESM、声明及开发工具
 dist/packages/*.tgz                         10 个包的本地安装包
-dist/releases/jingchuanchu-engine-0.5.0/    解压形式的完整套件
-dist/releases/jingchuanchu-engine-0.5.0.tar.gz
-dist/releases/jingchuanchu-engine-0.5.0.tar.gz.sha256</code></pre>
+dist/releases/jingchuanchu-engine-0.6.0/    解压形式的完整套件
+dist/releases/jingchuanchu-engine-0.6.0.tar.gz
+dist/releases/jingchuanchu-engine-0.6.0.tar.gz.sha256</code></pre>
           </div>
           <p>
             该命令自动生成 tar.gz，不默认生成 ZIP。历史 Release 的
@@ -206,7 +206,7 @@ dist/releases/jingchuanchu-engine-0.5.0.tar.gz.sha256</code></pre>
           <p>继续在引擎仓库根目录执行：</p>
           <div class="code-block">
             <div class="code-label">bash</div>
-            <pre><code>node packages/tooling/dist/cli.mjs create ../my-game --preset singleplayer --style css --bundle ./dist/releases/jingchuanchu-engine-0.5.0</code></pre>
+            <pre><code>node packages/tooling/dist/cli.mjs create ../my-game --preset singleplayer --style css --bundle ./dist/releases/jingchuanchu-engine-0.6.0</code></pre>
           </div>
           <p>
             my-game
@@ -281,7 +281,7 @@ npm run preview</code></pre>
           >
         </nav>
         <footer class="page-footer">
-          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.5.0</span>
+          <span>镜川初 · Jingchuanchu Engine</span><span>MIT License · 0.6.0</span>
         </footer>
       </main>
       <aside class="outline" aria-label="本页目录">

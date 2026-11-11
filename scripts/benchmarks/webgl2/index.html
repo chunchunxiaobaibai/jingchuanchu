@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Canvas 2D 与 WebGL 2 对照</title>
+  </head>
+  <body>
+    <form>
+      <label
+        >后端
+        <select name="backend">
+          <option value="canvas2d">Canvas 2D</option>
+          <option value="webgl2">WebGL 2</option>
+        </select>
+      </label>
+      <label
+        >负载
+        <select name="workload">
+          <option value="ordinary">普通（160 个精灵）</option>
+          <option value="dense">密集（10000 个精灵）</option>
+        </select>
+      </label>
+      <button type="submit">运行</button>
+    </form>
+    <div id="surface"></div>
+    <pre id="result" aria-live="polite"></pre>
+    <script type="module" src="./workload.ts"></script>
+  </body>
+</html>
