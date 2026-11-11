@@ -72,9 +72,13 @@ for (const directory of await readdir('packages')) {
     dependencies: manifest.dependencies,
   });
 }
-for (const file of ['LICENSE', 'SPEC.md']) await cp(file, join(output, file));
+for (const file of ['CHANGELOG.md', 'LICENSE', 'SPEC.md']) await cp(file, join(output, file));
 await cp('docs', join(output, 'docs'), { recursive: true });
-await cp('tasks', join(output, 'tasks'), { recursive: true }); // Specifications link to their implementation records.
+const taskRecords = resolve('tasks');
+await cp(taskRecords, join(output, 'tasks'), {
+  recursive: true,
+  filter: (path) => path !== join(taskRecords, 'handoff.md'),
+});
 await cp('artifacts/performance', join(output, 'artifacts/performance'), { recursive: true });
 await cp('templates/browser', join(output, 'starters/browser'), {
   recursive: true,
